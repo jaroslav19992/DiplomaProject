@@ -15,6 +15,8 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 400, 300));
         primaryStage.setResizable(false);
         primaryStage.show();
+
+        System.out.println("admin".hashCode()+" "+"admin".hashCode());
     }
 
 
