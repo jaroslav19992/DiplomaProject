@@ -62,25 +62,33 @@ public class LoginWindowController {
             if (checker.isAccessGained()) {
 
                 //Open main program window
-                Parent root = null;
-                try {
-                    root = FXMLLoader.load(Main.class.getResource("MainProgramWindow/MainWindow.fxml"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Stage stage = new Stage();
-                assert root != null;
-                stage.setScene(new Scene(root));
-                stage.show();
-
+                openNewWindow("MainProgramWindow/MainWindow.fxml");
                 //Hide LogIn window
                 login_pane.getScene().getWindow().hide();
+
             } else {
                 login_text_field.clear();
                 password_text_field.clear();
                 invalid_data_label.setVisible(true);
             }
         });
+    }
+
+    /**
+     * Opens new window from fxml
+     * @param fxmlFileLocation location of window fxml file
+     */
+    private void openNewWindow(String fxmlFileLocation) {
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(Main.class.getResource(fxmlFileLocation));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        assert root != null;
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     /**
