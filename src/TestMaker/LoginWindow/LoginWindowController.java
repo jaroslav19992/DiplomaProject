@@ -1,14 +1,11 @@
 package TestMaker.LoginWindow;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 import TestMaker.Main;
 import TestMaker.UserDataChecker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,21 +14,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class LoginWindowController {
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private TextField password_text_field;
 
     @FXML
     private Button login_button;
+
+    @FXML
+    private Label error_label;
 
     @FXML
     private TextField login_text_field;
@@ -43,34 +38,43 @@ public class LoginWindowController {
     private Pane login_pane;
 
     @FXML
-    private Label invalid_data_label;
+    private Label login_label;
 
     @FXML
-    private Label login_label;
+    private Button register_button;
 
     @FXML
     void initialize() {
         //Hide invalid sing in data label
-        invalid_data_label.setVisible(false);
+        error_label.setVisible(false);
         //Enter pressed listener
         setGlobalEventHandler(login_pane);
+
 
         login_button.setOnAction(event -> {
             /* LogIn and Password Checker from DB */
             UserDataChecker checker = new UserDataChecker(login_text_field.getText().hashCode(), password_text_field.getText().hashCode());
 
-            if (checker.isAccessGained()) {
+            if (!checker.isAccessGained()) {
 
                 //Open main program window
                 openNewWindow("MainProgramWindow/MainWindow.fxml");
                 //Hide LogIn window
                 login_pane.getScene().getWindow().hide();
+                error_label.setVisible(false);
 
             } else {
                 login_text_field.clear();
                 password_text_field.clear();
-                invalid_data_label.setVisible(true);
+                error_label.setText("Не правильний логін та/або пароль");
+                error_label.setVisible(true);
             }
+        });
+
+        //Open registration window
+        register_button.setOnAction(event -> {
+           openNewWindow("SingUpWindow/SingUpWindow.fxml");
+           login_pane.getScene().getWindow().hide();
         });
     }
 
