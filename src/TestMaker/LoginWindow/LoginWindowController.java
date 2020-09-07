@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import TestMaker.Main;
 import TestMaker.UserDataChecker;
+import TestMaker.WindowTools;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,6 +17,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+
+import static TestMaker.WindowTools.*;
 
 public class LoginWindowController {
 
@@ -50,19 +53,16 @@ public class LoginWindowController {
         //Enter pressed listener
         setGlobalEventHandler(login_pane);
 
-
         login_button.setOnAction(event -> {
             /* LogIn and Password Checker from DB */
             UserDataChecker checker = new UserDataChecker(login_text_field.getText().hashCode(), password_text_field.getText().hashCode());
 
             if (!checker.isAccessGained()) {
-
                 //Open main program window
-                openNewWindow("MainProgramWindow/MainWindow.fxml");
+                openNewWindow("MainProgramWindow/MainWindow.fxml", false);
                 //Hide LogIn window
                 login_pane.getScene().getWindow().hide();
                 error_label.setVisible(false);
-
             } else {
                 login_text_field.clear();
                 password_text_field.clear();
@@ -73,26 +73,9 @@ public class LoginWindowController {
 
         //Open registration window
         register_button.setOnAction(event -> {
-           openNewWindow("SingUpWindow/SingUpWindow.fxml");
+           openNewWindow("SingUpWindow/SingUpWindow.fxml", false);
            login_pane.getScene().getWindow().hide();
         });
-    }
-
-    /**
-     * Opens new window from fxml
-     * @param fxmlFileLocation location of window fxml file
-     */
-    private void openNewWindow(String fxmlFileLocation) {
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(Main.class.getResource(fxmlFileLocation));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Stage stage = new Stage();
-        assert root != null;
-        stage.setScene(new Scene(root));
-        stage.show();
     }
 
     /**

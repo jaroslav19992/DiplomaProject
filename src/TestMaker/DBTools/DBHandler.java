@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 public class DBHandler extends Configs {
     Connection dbConnection;
 
-    public Connection getDbConnection() throws ClassNotFoundException, SQLException {
+    public Connection getDbConnection() throws SQLException {
         String connectionString = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
 
         dbConnection = DriverManager.getConnection(connectionString, dbUser, dbPassword);
@@ -31,8 +31,8 @@ public class DBHandler extends Configs {
             preparedStatement.setString(6, accessToken);
 
             preparedStatement.executeUpdate();
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException throwable) {
+            throwable.printStackTrace();
         }
     }
 }

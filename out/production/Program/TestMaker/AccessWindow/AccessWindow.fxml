@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.AccessWindow.AccessWindowController">
+   <children>
+      <StackPane layoutY="-5.0" prefHeight="200.0" prefWidth="400.0">
+         <children>
+            <Label text=" Перевірка ключа доступу вчителя" StackPane.alignment="TOP_CENTER">
+               <StackPane.margin>
+                  <Insets top="30.0" />
+               </StackPane.margin>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="accessKey_textField" promptText="Ключ доступу">
+               <StackPane.margin>
+                  <Insets bottom="-50.0" left="30.0" right="30.0" />
+               </StackPane.margin>
+            </TextField>
+            <Button fx:id="accept_button" mnemonicParsing="false" text="Ввести" StackPane.alignment="BOTTOM_CENTER">
+               <StackPane.margin>
+                  <Insets bottom="15.0" />
+               </StackPane.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Label fx:id="error_label" alignment="CENTER" text="Не вірний ключ доступу" textFill="RED" StackPane.alignment="CENTER">
+               <StackPane.margin>
+                  <Insets bottom="40.0" />
+               </StackPane.margin>
+               <effect>
+                  <Glow />
+               </effect>
+            </Label>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>
