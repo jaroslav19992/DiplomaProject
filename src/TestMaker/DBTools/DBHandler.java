@@ -21,7 +21,7 @@ public class DBHandler extends Configs {
         String insertString = "INSERT INTO " + Constants.USERS_INFO_TABLE_NAME + " (" + Constants.USER_NAME_HASH + ", "
                 + Constants.PASSWORD_HASH + ", " + Constants.FIRST_NAME + ", " + Constants.LAST_NAME + ", " + Constants.EMAIL
                 + ", " + Constants.ACCESS_TOKEN + ")" + " VALUES (?,?,?,?,?,?)";
-        try {
+       /* try {
             PreparedStatement preparedStatement = getDbConnection().prepareStatement(insertString);
             preparedStatement.setInt(1, username.hashCode());
             preparedStatement.setInt(2, password.hashCode());
@@ -31,8 +31,18 @@ public class DBHandler extends Configs {
             preparedStatement.setString(6, accessToken);
 
             preparedStatement.executeUpdate();
+            System.out.println("user " + username + " singed up");
         } catch (SQLException throwable) {
             throwable.printStackTrace();
-        }
+        }*/
+        System.out.println("user " + username + " singed up");
+
     }
+
+    /*public void pullDataToDatabase(String username, String password, String firstName,
+                                   String lastName, String eMail, String accessToken) {
+        DBHandler dbHandler = new DBHandler();
+//                dbHandler.singUpNewUser(username, password, firstName, lastName, eMail, accessToken);
+
+    }*/
 }

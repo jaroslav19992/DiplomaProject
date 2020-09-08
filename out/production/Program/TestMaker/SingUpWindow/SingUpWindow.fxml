@@ -7,18 +7,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="531.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.SingUpWindow.SingUpWindowController">
+<AnchorPane fx:id="main_pane" prefHeight="531.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.SingUpWindow.SingUpWindowController">
    <children>
       <Label layoutX="232.0" layoutY="21.0" text="Реєстрація" textAlignment="CENTER">
          <font>
             <Font size="28.0" />
          </font>
       </Label>
-      <TextField fx:id="firstName_textField" layoutX="50.0" layoutY="140.0" AnchorPane.leftAnchor="50.0" />
-      <TextField fx:id="email_textField" layoutX="50.0" layoutY="303.0" AnchorPane.leftAnchor="50.0" />
-      <TextField fx:id="lastName" layoutX="50.0" layoutY="223.0" AnchorPane.leftAnchor="50.0" />
-      <TextField fx:id="userName_textField" layoutX="363.0" layoutY="143.0" AnchorPane.rightAnchor="50.0" />
-      <TextField fx:id="password_textField" layoutX="363.0" layoutY="226.0" AnchorPane.rightAnchor="50.0" />
+      <TextField fx:id="firstName_textField" layoutX="50.0" layoutY="140.0" promptText="Ваше ім'я" text="test" AnchorPane.leftAnchor="50.0" />
+      <TextField fx:id="email_textField" layoutX="50.0" layoutY="303.0" promptText="Ваш e-mail" text="test@test.com" AnchorPane.leftAnchor="50.0" />
+      <TextField fx:id="lastName_textField" layoutX="50.0" layoutY="223.0" promptText="Ваша фамілія" text="test" AnchorPane.leftAnchor="50.0" />
+      <TextField fx:id="userName_textField" layoutX="363.0" layoutY="143.0" promptText="Логін коричтувача" text="LoginTest" AnchorPane.rightAnchor="50.0" />
+      <TextField fx:id="password_textField" layoutX="363.0" layoutY="226.0" promptText="Пароль" text="password" AnchorPane.rightAnchor="50.0" />
       <Button fx:id="SingUpButton" layoutX="179.0" layoutY="462.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="242.0" text="Увійти в систему" AnchorPane.bottomAnchor="14.0">
          <font>
             <Font size="24.0" />
@@ -30,7 +30,7 @@
       <Label layoutX="402.0" layoutY="123.0" text="Логін для входу" />
       <Label fx:id="password_label" layoutX="431.0" layoutY="203.0" text="Пароль" />
       <Label fx:id="passwordRepeat_label" layoutX="395.0" layoutY="282.0" text="Повторіть пароль" />
-      <TextField fx:id="passwordRepeat_textField" layoutX="363.0" layoutY="305.0" AnchorPane.rightAnchor="50.0" />
+      <TextField fx:id="passwordRepeat_textField" layoutX="363.0" layoutY="305.0" promptText="Повтор паролю" text="password" AnchorPane.rightAnchor="50.0" />
       <StackPane layoutY="61.0" prefHeight="64.0" prefWidth="600.0" AnchorPane.bottomAnchor="406.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="61.0">
          <children>
             <Label fx:id="error_label" alignment="CENTER" prefHeight="52.0" prefWidth="572.0" text="Error" textAlignment="CENTER" textFill="RED" wrapText="true" StackPane.alignment="CENTER">
@@ -50,6 +50,6 @@
             <RadioButton fx:id="radioButton_teacher" mnemonicParsing="false" text="Вчитель" toggleGroup="$access_level" StackPane.alignment="CENTER_LEFT" />
          </children>
       </StackPane>
-      <Label fx:id="acces_level_lavel" layoutX="250.0" layoutY="377.0" text="Рівень доступу" AnchorPane.rightAnchor="248.0" />
+      <Label fx:id="accessLevel_label" layoutX="250.0" layoutY="377.0" text="Рівень доступу" AnchorPane.rightAnchor="248.0" />
    </children>
 </AnchorPane>

@@ -16,6 +16,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import static TestMaker.WindowTools.*;
@@ -59,7 +60,7 @@ public class LoginWindowController {
 
             if (!checker.isAccessGained()) {
                 //Open main program window
-                openNewWindow("MainProgramWindow/MainWindow.fxml", false);
+                openNewWindow("MainProgramWindow/MainWindow.fxml", false, Modality.NONE);
                 //Hide LogIn window
                 login_pane.getScene().getWindow().hide();
                 error_label.setVisible(false);
@@ -73,7 +74,7 @@ public class LoginWindowController {
 
         //Open registration window
         register_button.setOnAction(event -> {
-           openNewWindow("SingUpWindow/SingUpWindow.fxml", false);
+           openNewWindow("SingUpWindow/SingUpWindow.fxml", false, Modality.NONE);
            login_pane.getScene().getWindow().hide();
         });
     }
