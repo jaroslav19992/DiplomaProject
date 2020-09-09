@@ -27,14 +27,14 @@ public class AccessWindowController {
         accept_button.setOnAction(event -> {
             if (isAccessGained(accessKey_textField.getText())) {
                 //gain access, close window, register user, open main program window
-                SingUpWindowController swc = new SingUpWindowController();
                 DBHandler dbHandler = new DBHandler();
 
                 //TODO: розібратися з цьою хуйньою сука
-                dbHandler.singUpNewUser(swc.userName_textField.getText(), swc.password_textField.getText(), swc.firstName_textField.getText(),
-                        swc.lastName_textField.getText(), swc.email_textField.getText(), Constants.PUPIL_ACCESS_TOKEN);
+                dbHandler.singUpNewUser(UserInfoTransfer.userName, UserInfoTransfer.password, UserInfoTransfer.firstName,
+                        UserInfoTransfer.lastName, UserInfoTransfer.email, UserInfoTransfer.accessToken);
 
                 accessKey_textField.getScene().getWindow().hide();
+
             } else {
                 error_label.setVisible(true);
             }

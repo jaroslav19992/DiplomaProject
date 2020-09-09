@@ -19,7 +19,6 @@ public class Main extends Application {
         System.out.println("admin".hashCode()+" "+"admin".hashCode());
     }
 
-
     public static void main(String[] args) {
         launch(args);
     }

@@ -2,6 +2,7 @@ package TestMaker.SingUpWindow;
 
 
 import TestMaker.AccessWindow.AccessWindowController;
+import TestMaker.AccessWindow.UserInfoTransfer;
 import TestMaker.DBTools.Constants;
 import TestMaker.DBTools.DBHandler;
 import com.sun.org.apache.xpath.internal.operations.Mod;
@@ -75,7 +76,14 @@ public class SingUpWindowController {
 
                 //If teacher access chose
                 if (radioButton_teacher.isSelected()) {
-                    //give control to access window
+                    //give control to access window and transfer user data
+                    UserInfoTransfer.userName = userName_textField.getText();
+                    UserInfoTransfer.password = password_textField.getText();
+                    UserInfoTransfer.firstName = firstName_textField.getText();
+                    UserInfoTransfer.lastName = lastName_textField.getText();
+                    UserInfoTransfer.email = email_textField.getText();
+                    UserInfoTransfer.accessToken = Constants.TEACHER_ACCESS_TOKEN;
+
                     openNewWindow("AccessWindow/AccessWindow.fxml", false, Modality.APPLICATION_MODAL);
 
                 //If pupil access token
