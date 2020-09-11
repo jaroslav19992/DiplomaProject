@@ -1,12 +1,13 @@
 package TestMaker.AccessWindow;
 
-import TestMaker.DBTools.Constants;
+
 import TestMaker.DBTools.DBHandler;
 import TestMaker.SingUpWindow.SingUpWindowController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
 
 public class AccessWindowController {
 
@@ -14,10 +15,16 @@ public class AccessWindowController {
     private Label error_label;
 
     @FXML
+    private Button cancel_button;
+
+    @FXML
     private TextField accessKey_textField;
 
     @FXML
     private Button accept_button;
+
+    @FXML
+    private StackPane main_pane;
 
     private final String teacherAccessKey = "THISISTEACHERACCESSKEY"; //TODO: this is shit...
 
@@ -29,20 +36,24 @@ public class AccessWindowController {
                 //gain access, close window, register user, open main program window
                 DBHandler dbHandler = new DBHandler();
 
-                //TODO: розібратися з цьою хуйньою сука
                 dbHandler.singUpNewUser(UserInfoTransfer.userName, UserInfoTransfer.password, UserInfoTransfer.firstName,
                         UserInfoTransfer.lastName, UserInfoTransfer.email, UserInfoTransfer.accessToken);
 
-                accessKey_textField.getScene().getWindow().hide();
-
+                UserInfoTransfer.isRegisterAccessGained = true;
+                main_pane.getScene().getWindow().hide();
             } else {
                 error_label.setVisible(true);
             }
+        });
+        //set up close button
+        cancel_button.setOnAction(event1 -> {
+            main_pane.getScene().getWindow().hide();
         });
     }
 
     /**
      * Check for correct access key
+     *
      * @param userAccessKey - key that user insert into key field
      * @return is key is correct
      */

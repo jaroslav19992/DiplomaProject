@@ -7,4 +7,5 @@ public class UserInfoTransfer {
     public static String lastName;
     public static String email;
     public static String accessToken;
+    public static boolean isRegisterAccessGained = false;
 }

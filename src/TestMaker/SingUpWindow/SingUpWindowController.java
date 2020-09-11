@@ -7,10 +7,15 @@ import TestMaker.DBTools.Constants;
 import TestMaker.DBTools.DBHandler;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.fxml.FXML;
+import javafx.fxml.LoadException;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import static TestMaker.WindowTools.*;
 
@@ -60,6 +65,9 @@ public class SingUpWindowController {
     private Button SingUpButton;
 
     @FXML
+    private Button back_button;
+
+    @FXML
     private AnchorPane main_pane;
 
     @FXML
@@ -77,14 +85,12 @@ public class SingUpWindowController {
                 //If teacher access chose
                 if (radioButton_teacher.isSelected()) {
                     //give control to access window and transfer user data
-                    UserInfoTransfer.userName = userName_textField.getText();
-                    UserInfoTransfer.password = password_textField.getText();
-                    UserInfoTransfer.firstName = firstName_textField.getText();
-                    UserInfoTransfer.lastName = lastName_textField.getText();
-                    UserInfoTransfer.email = email_textField.getText();
-                    UserInfoTransfer.accessToken = Constants.TEACHER_ACCESS_TOKEN;
-
-                    openNewWindow("AccessWindow/AccessWindow.fxml", false, Modality.APPLICATION_MODAL);
+                    getUserInfo();
+                    openNewWindowAndWait("AccessWindow/AccessWindow.fxml", false, Modality.APPLICATION_MODAL);
+                    if (UserInfoTransfer.isRegisterAccessGained) {
+                        openNewWindow("MainProgramWindow/MainWindow.fxml", false, Modality.NONE);
+                        main_pane.getScene().getWindow().hide();
+                    }
 
                 //If pupil access token
                 } else {
@@ -98,9 +104,20 @@ public class SingUpWindowController {
             }
         });
 
-        /*windowStage.setOnCloseRequest(e -> {
+        back_button.setOnAction(event -> {
             openNewWindow("LoginWindow/LoginWindow.fxml", false, Modality.NONE);
-        });*/
+            main_pane.getScene().getWindow().hide();
+        });
+    }
+
+    //get user info snd give it to transfer info class
+    private void getUserInfo() {
+        UserInfoTransfer.userName = userName_textField.getText();
+        UserInfoTransfer.password = password_textField.getText();
+        UserInfoTransfer.firstName = firstName_textField.getText();
+        UserInfoTransfer.lastName = lastName_textField.getText();
+        UserInfoTransfer.email = email_textField.getText();
+        UserInfoTransfer.accessToken = Constants.TEACHER_ACCESS_TOKEN;
     }
 
     /**
