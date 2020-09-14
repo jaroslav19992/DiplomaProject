@@ -42,7 +42,7 @@
       </StackPane>
       <StackPane layoutX="211.0" layoutY="398.0" prefHeight="31.0" prefWidth="180.0">
          <children>
-            <RadioButton fx:id="radioButton_pupil" mnemonicParsing="false" text="Учень" StackPane.alignment="CENTER_RIGHT">
+            <RadioButton fx:id="radioButton_pupil" mnemonicParsing="false" selected="true" text="Учень" StackPane.alignment="CENTER_RIGHT">
                <toggleGroup>
                   <ToggleGroup fx:id="access_level" />
                </toggleGroup>

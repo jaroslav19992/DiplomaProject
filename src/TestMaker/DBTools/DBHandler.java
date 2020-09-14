@@ -1,15 +1,12 @@
 package TestMaker.DBTools;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.DriverManager;
+import java.sql.*;
 
 public class DBHandler extends Configs {
     Connection dbConnection;
 
     public Connection getDbConnection() throws SQLException {
-        String connectionString = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
+        String connectionString = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName+ "?serverTimezone=UTC";
 
         dbConnection = DriverManager.getConnection(connectionString, dbUser, dbPassword);
 
@@ -21,7 +18,7 @@ public class DBHandler extends Configs {
         String insertString = "INSERT INTO " + Constants.USERS_INFO_TABLE_NAME + " (" + Constants.USER_NAME_HASH + ", "
                 + Constants.PASSWORD_HASH + ", " + Constants.FIRST_NAME + ", " + Constants.LAST_NAME + ", " + Constants.EMAIL
                 + ", " + Constants.ACCESS_TOKEN + ")" + " VALUES (?,?,?,?,?,?)";
-       /* try {
+        try {
             PreparedStatement preparedStatement = getDbConnection().prepareStatement(insertString);
             preparedStatement.setInt(1, username.hashCode());
             preparedStatement.setInt(2, password.hashCode());
@@ -34,15 +31,24 @@ public class DBHandler extends Configs {
             System.out.println("user " + username + " singed up");
         } catch (SQLException throwable) {
             throwable.printStackTrace();
-        }*/
+        }
         System.out.println("user " + username + " singed up");
-
     }
 
-    /*public void pullDataToDatabase(String username, String password, String firstName,
-                                   String lastName, String eMail, String accessToken) {
-        DBHandler dbHandler = new DBHandler();
-//                dbHandler.singUpNewUser(username, password, firstName, lastName, eMail, accessToken);
-
-    }*/
+    /**
+     * Send SQL query to DB and returns result set
+     * @param SQLQuery string
+     * @return set of data from db
+     */
+    public ResultSet executeSQLQuery(String SQLQuery ) {
+        ResultSet resultSet = null;
+        try {
+            Connection connection = getDbConnection();
+            Statement statement = connection.createStatement();
+            resultSet = statement.executeQuery(SQLQuery);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return resultSet;
+    }
 }

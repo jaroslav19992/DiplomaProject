@@ -1,21 +1,15 @@
 package TestMaker.SingUpWindow;
 
 
-import TestMaker.AccessWindow.AccessWindowController;
-import TestMaker.AccessWindow.UserInfoTransfer;
+import TestMaker.UserInfoTransfer;
 import TestMaker.DBTools.Constants;
 import TestMaker.DBTools.DBHandler;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.fxml.FXML;
-import javafx.fxml.LoadException;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 
 import static TestMaker.WindowTools.*;
 
@@ -72,35 +66,46 @@ public class SingUpWindowController {
 
     @FXML
     public void initialize() {
-//        Stage windowStage = (Stage) main_pane.getScene().getWindow();
         error_label.setVisible(false);
 
         //Register button click
         SingUpButton.setOnAction(event -> {
 
-            if (checkForCorrectInfo()) {
-                DBHandler dbHandler = new DBHandler();
-                error_label.setVisible(false);
+            try {
+                if (checkForCorrectInfo()) {
+                    DBHandler dbHandler = new DBHandler();
+                    error_label.setVisible(false);
 
-                //If teacher access chose
-                if (radioButton_teacher.isSelected()) {
-                    //give control to access window and transfer user data
-                    getUserInfo();
-                    openNewWindowAndWait("AccessWindow/AccessWindow.fxml", false, Modality.APPLICATION_MODAL);
-                    if (UserInfoTransfer.isRegisterAccessGained) {
+                    //If teacher access chose
+                    if (radioButton_teacher.isSelected()) {
+                        //give control to access window and transfer user data
+                        getUserInfo();
+                        openNewWindowAndWait("AccessWindow/AccessWindow.fxml", false, Modality.APPLICATION_MODAL);
+                        if (UserInfoTransfer.isRegisterAccessGained) {
+                            openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
+                            main_pane.getScene().getWindow().hide();
+                        }
+
+                    //If pupil access token
+                    } else {
+                        dbHandler.singUpNewUser(userName_textField.getText(), password_textField.getText(), firstName_textField.getText(),
+                                lastName_textField.getText(), email_textField.getText(), Constants.PUPIL_ACCESS_TOKEN);
                         openNewWindow("MainProgramWindow/MainWindow.fxml", false, Modality.NONE);
+
+                        //close registration window
                         main_pane.getScene().getWindow().hide();
                     }
-
-                //If pupil access token
-                } else {
-                    dbHandler.singUpNewUser(userName_textField.getText(), password_textField.getText(), firstName_textField.getText(),
-                            lastName_textField.getText(), email_textField.getText(), Constants.PUPIL_ACCESS_TOKEN);
-                    openNewWindow("MainProgramWindow/MainWindow.fxml", false, Modality.NONE);
-
-                    //close registration window
-                    main_pane.getScene().getWindow().hide();
+                    //debug user info
+                    System.out.println("Sing UP user with user data:\n" +
+                            "User_name: " + UserInfoTransfer.userName +" \n" +
+                            "Password: " + UserInfoTransfer.password +" \n" +
+                            "First_name: " + UserInfoTransfer.firstName +" \n" +
+                            "Last_name: " + UserInfoTransfer.lastName +" \n" +
+                            "E-mail: " + UserInfoTransfer.email +" \n" +
+                            "Access_token: " + UserInfoTransfer.accessToken);
                 }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
         });
 
@@ -125,16 +130,19 @@ public class SingUpWindowController {
      *
      * @return is user can register
      */
-    private boolean checkForCorrectInfo() {
-        //empty fields check
+    private boolean checkForCorrectInfo() throws SQLException {
+        DBHandler dbHandler = new DBHandler();
+        /*-------------------------------Empty fields check-----------------------------*/
         if (email_textField.getText().equals("") || password_textField.getText().equals("") || firstName_textField.getText().equals("") ||
                 lastName_textField.getText().equals("") || userName_textField.getText().equals("")) {
             error_label.setText("Заповніть усі поля");
             error_label.setVisible(true);
             return false;
         }
+        /*-------------------------------Empty fields check-----------------------------*/
 
-        //password check
+
+        /*-------------------------------Password check-----------------------------*/
         if (!password_textField.getText().equals(passwordRepeat_textField.getText())) {
             error_label.setText("Паролі не зпівпадають");
             error_label.setVisible(true);
@@ -155,7 +163,10 @@ public class SingUpWindowController {
             error_label.setVisible(true);
             return false;
         }
-        //username check
+        /*-------------------------------Password check-----------------------------*/
+
+
+        /*-------------------------------Username check-----------------------------*/
         if (!validateText(userName_textField.getText())) {
             error_label.setText("Логін не повинен містити символи  \" / \\ [ ] : ; | = , + * ? < >");
             error_label.setVisible(true);
@@ -171,13 +182,38 @@ public class SingUpWindowController {
             error_label.setVisible(true);
             return false;
         }
+        /*-------------------------------Username check-----------------------------*/
 
-        //e-mail check
+
+        /*-------------------------------E-mail check-----------------------------*/
         if (!email_textField.getText().contains("@") || !email_textField.getText().contains(".")) {
             error_label.setText("Не вірний формат E-mail");
             error_label.setVisible(true);
             return false;
         }
+        /*-------------------------------E-mail check-----------------------------*/
+
+        /*----------------------------Check if no user data duplicates-----------------------------*/
+        //create queries
+        String SQLQueryForUsername = "SELECT " + Constants.USER_NAME_HASH + " FROM usersInfo WHERE " + Constants.USER_NAME_HASH + " = "
+                + userName_textField.getText().hashCode();
+        String SQLQueryForEmail = "SELECT " + Constants.EMAIL + " FROM usersInfo WHERE " + Constants.EMAIL + " = "
+                + "\"" + email_textField.getText() + "\"";
+
+        //username check
+        if (dbHandler.executeSQLQuery(SQLQueryForUsername).next()) {
+            error_label.setText("Користувач з таким ім'ям уже існує");
+            error_label.setVisible(true);
+            return false;
+        }
+        //e-mail check
+        if (dbHandler.executeSQLQuery(SQLQueryForEmail).next()) {
+            error_label.setText("Даний E-mail уже використовується");
+            error_label.setVisible(true);
+            return false;
+        }
+        /*----------------------------Check if no user data duplicates-----------------------------*/
+
         return true;
     }
 
