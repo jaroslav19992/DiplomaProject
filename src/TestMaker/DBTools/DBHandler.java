@@ -49,6 +49,7 @@ public class DBHandler extends Configs {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        System.out.println("Execute SQL query: " + SQLQuery);
         return resultSet;
     }
 }

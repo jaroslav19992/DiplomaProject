@@ -1,6 +1,6 @@
 package TestMaker;
 
-public class UserInfoTransfer {
+public class UserDataTransfer {
     public static String userName;
     public static String password;
     public static String firstName;

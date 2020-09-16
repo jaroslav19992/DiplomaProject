@@ -1,7 +1,7 @@
 package TestMaker.SingUpWindow;
 
 
-import TestMaker.UserInfoTransfer;
+import TestMaker.UserDataTransfer;
 import TestMaker.DBTools.Constants;
 import TestMaker.DBTools.DBHandler;
 import javafx.fxml.FXML;
@@ -81,7 +81,7 @@ public class SingUpWindowController {
                         //give control to access window and transfer user data
                         getUserInfo();
                         openNewWindowAndWait("AccessWindow/AccessWindow.fxml", false, Modality.APPLICATION_MODAL);
-                        if (UserInfoTransfer.isRegisterAccessGained) {
+                        if (UserDataTransfer.isRegisterAccessGained) {
                             openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
                             main_pane.getScene().getWindow().hide();
                         }
@@ -97,12 +97,12 @@ public class SingUpWindowController {
                     }
                     //debug user info
                     System.out.println("Sing UP user with user data:\n" +
-                            "User_name: " + UserInfoTransfer.userName +" \n" +
-                            "Password: " + UserInfoTransfer.password +" \n" +
-                            "First_name: " + UserInfoTransfer.firstName +" \n" +
-                            "Last_name: " + UserInfoTransfer.lastName +" \n" +
-                            "E-mail: " + UserInfoTransfer.email +" \n" +
-                            "Access_token: " + UserInfoTransfer.accessToken);
+                            "User_name: " + UserDataTransfer.userName +" \n" +
+                            "Password: " + UserDataTransfer.password +" \n" +
+                            "First_name: " + UserDataTransfer.firstName +" \n" +
+                            "Last_name: " + UserDataTransfer.lastName +" \n" +
+                            "E-mail: " + UserDataTransfer.email +" \n" +
+                            "Access_token: " + UserDataTransfer.accessToken);
                 }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -117,12 +117,12 @@ public class SingUpWindowController {
 
     //get user info snd give it to transfer info class
     private void getUserInfo() {
-        UserInfoTransfer.userName = userName_textField.getText();
-        UserInfoTransfer.password = password_textField.getText();
-        UserInfoTransfer.firstName = firstName_textField.getText();
-        UserInfoTransfer.lastName = lastName_textField.getText();
-        UserInfoTransfer.email = email_textField.getText();
-        UserInfoTransfer.accessToken = Constants.TEACHER_ACCESS_TOKEN;
+        UserDataTransfer.userName = userName_textField.getText();
+        UserDataTransfer.password = password_textField.getText();
+        UserDataTransfer.firstName = firstName_textField.getText();
+        UserDataTransfer.lastName = lastName_textField.getText();
+        UserDataTransfer.email = email_textField.getText();
+        UserDataTransfer.accessToken = Constants.TEACHER_ACCESS_TOKEN;
     }
 
     /**

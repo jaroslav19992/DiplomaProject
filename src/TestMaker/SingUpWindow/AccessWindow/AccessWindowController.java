@@ -2,7 +2,7 @@ package TestMaker.SingUpWindow.AccessWindow;
 
 
 import TestMaker.DBTools.DBHandler;
-import TestMaker.UserInfoTransfer;
+import TestMaker.UserDataTransfer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -36,10 +36,10 @@ public class AccessWindowController {
                 //gain access, close window, register user, open main program window
                 DBHandler dbHandler = new DBHandler();
 
-                dbHandler.singUpNewUser(UserInfoTransfer.userName, UserInfoTransfer.password, UserInfoTransfer.firstName,
-                        UserInfoTransfer.lastName, UserInfoTransfer.email, UserInfoTransfer.accessToken);
+                dbHandler.singUpNewUser(UserDataTransfer.userName, UserDataTransfer.password, UserDataTransfer.firstName,
+                        UserDataTransfer.lastName, UserDataTransfer.email, UserDataTransfer.accessToken);
 
-                UserInfoTransfer.isRegisterAccessGained = true;
+                UserDataTransfer.isRegisterAccessGained = true;
                 main_pane.getScene().getWindow().hide();
             } else {
                 error_label.setVisible(true);

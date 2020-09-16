@@ -1,14 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.shape.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.*?>
+<?import java.lang.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.MainWindowController">
-   <children>
-      <Label fx:id="nahui_text_field" layoutX="550.0" layoutY="325.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="71.0" prefWidth="180.0" text="ахахахаах нахуй блять я твой рот іпал" wrapText="true" />
-   </children>
-</AnchorPane>
+<SplitPane fx:id="main_splitPane" dividerPositions="0.24569640062597808" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="480.0" minWidth="640.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.MainWindowController">
+   <items>
+      <AnchorPane fx:id="leftSide_anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="201.0">
+         <children>
+            <VBox fx:id="leftSide_vBox" layoutX="37.0" layoutY="74.0" prefHeight="398.0" prefWidth="174.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <StackPane fx:id="userInfo_stackPane" prefHeight="50.0">
+                     <children>
+                        <Label fx:id="userInfo_label" text="Особиста інформація">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="userinfo_icon">
+                           <image>
+                              <Image url="@../../Images/icons/user32.png" />
+                           </image>
+                           <StackPane.margin>
+                              <Insets right="200.0" />
+                           </StackPane.margin>
+                        </ImageView>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" top="20.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </StackPane>
+                  <StackPane fx:id="tests_stackPane" prefHeight="50.0">
+                     <children>
+                        <Label fx:id="tests_label" text="Тести">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="tests_icon">
+                           <image>
+                              <Image url="@../../Images/icons/linedpapercheck32.png" />
+                           </image>
+                           <StackPane.margin>
+                              <Insets right="200.0" />
+                           </StackPane.margin>
+                        </ImageView>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" top="20.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </StackPane>
+                  <StackPane fx:id="settings_stackPane" prefHeight="50.0">
+                     <children>
+                        <Label fx:id="settings_label" text="Налаштування">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="settings_icon">
+                           <image>
+                              <Image url="@../../Images/icons/spanner32.png" />
+                           </image>
+                           <StackPane.margin>
+                              <Insets right="200.0" />
+                           </StackPane.margin>
+                        </ImageView>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" top="20.0" />
+                     </padding>
+                  </StackPane>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="rightSide_anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+   </items>
+</SplitPane>

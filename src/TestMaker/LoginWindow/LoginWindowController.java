@@ -3,7 +3,7 @@ package TestMaker.LoginWindow;
 import java.io.File;
 import java.net.MalformedURLException;
 
-import TestMaker.UserInfoTransfer;
+import TestMaker.UserDataTransfer;
 import TestMaker.UserDataChecker;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -69,15 +69,18 @@ public class LoginWindowController {
         }
         imageView.setImage(passwordIsHiddenImage);
 
+/*----------------------------Login button action-----------------------------*/
         login_button.setOnAction(event -> {
             loginButtonAction();
         });
+/*----------------------------Login button action-----------------------------*/
 
         //Open registration window
         register_button.setOnAction(event -> {
            openNewWindow("SingUpWindow/SingUpWindow.fxml", false, Modality.NONE);
            login_pane.getScene().getWindow().hide();
         });
+
 
         //Password visibility
         passwordVisibility(passwordIsShownImage, passwordIsHiddenImage);
@@ -89,6 +92,7 @@ public class LoginWindowController {
         password_textField.setOnKeyReleased(event -> {
             password_passwordField.setText(password_textField.getText());
         });
+
     }
 
     /**
@@ -116,14 +120,14 @@ public class LoginWindowController {
      * What is happens when login button is pressed
      */
     private void loginButtonAction() {
-        UserInfoTransfer.userName = userName_textField.getText();
-        UserInfoTransfer.password = password_passwordField.getText();
+        UserDataTransfer.userName = userName_textField.getText();
+        UserDataTransfer.password = password_passwordField.getText();
         /* LogIn and Password Checker from DB */
         UserDataChecker checker = new UserDataChecker(userName_textField.getText().hashCode(),
                 password_passwordField.getText().hashCode());
 
         if (checker.isAccessGained()) {
-            UserInfoTransfer.accessToken = "";
+            UserDataTransfer.accessToken = "";
             //Open main program window
             openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
             //Hide LogIn window
@@ -153,8 +157,10 @@ public class LoginWindowController {
 
     //get user info snd give it to transfer info class
     private void getUserInfo() {
-        UserInfoTransfer.userName = userName_textField.getText();
-        UserInfoTransfer.password = password_passwordField.getText();
+        UserDataTransfer.userName = userName_textField.getText();
+        UserDataTransfer.password = password_passwordField.getText();
     }
+
+
 }
 
