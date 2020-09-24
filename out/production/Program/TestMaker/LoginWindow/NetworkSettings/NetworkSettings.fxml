@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.LoginWindow.NetworkSettings.NetworkSettingsController">
+   <children>
+      <StackPane layoutY="2.0" prefHeight="500.0" prefWidth="500.0">
+         <children>
+            <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" StackPane.alignment="BOTTOM_CENTER">
+               <children>
+                  <Button fx:id="ok_button" mnemonicParsing="false" text="OK" />
+                  <Button fx:id="apply_button" mnemonicParsing="false" text="Застосувати" />
+                  <Button fx:id="cancel_button" cancelButton="true" mnemonicParsing="false" text="Відміна" />
+                  <Button fx:id="resetToDefaults_button" mnemonicParsing="false" text="За замовчанням" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding>
+            </HBox>
+            <Label text="Хост">
+               <StackPane.margin>
+                  <Insets bottom="310.0" />
+               </StackPane.margin>
+            </Label>
+            <TextField fx:id="host_textField" promptText="locatlhost\192.168.1.155 і тд.">
+               <StackPane.margin>
+                  <Insets bottom="260.0" left="50.0" right="50.0" />
+               </StackPane.margin>
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor>
+            </TextField>
+            <Label text="Порт">
+               <StackPane.margin>
+                  <Insets bottom="180.0" />
+               </StackPane.margin>
+            </Label>
+            <TextField fx:id="port_textField" promptText="По замовчанню: 3306">
+               <StackPane.margin>
+                  <Insets bottom="130.0" left="50.0" right="50.0" />
+               </StackPane.margin>
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor>
+            </TextField>
+            <Label text="Користувач">
+               <StackPane.margin>
+                  <Insets bottom="50.0" />
+               </StackPane.margin>
+            </Label>
+            <TextField fx:id="user_textField" promptText="root/client і тд.">
+               <StackPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </StackPane.margin>
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor>
+            </TextField>
+            <Label text="Пароль">
+               <StackPane.margin>
+                  <Insets bottom="-80.0" />
+               </StackPane.margin>
+            </Label>
+            <TextField fx:id="password_textField" promptText="по замовчанюю: password">
+               <StackPane.margin>
+                  <Insets bottom="-130.0" left="50.0" right="50.0" />
+               </StackPane.margin>
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor>
+            </TextField>
+            <Label text="Ім'я бази даних">
+               <StackPane.margin>
+                  <Insets bottom="-210.0" />
+               </StackPane.margin>
+            </Label>
+            <TextField fx:id="databaseName_textField" promptText="mydb або будь-яке інше">
+               <StackPane.margin>
+                  <Insets bottom="-260.0" left="50.0" right="50.0" />
+               </StackPane.margin>
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor>
+            </TextField>
+            <Label text="Налаштування мережі" StackPane.alignment="TOP_CENTER">
+               <StackPane.margin>
+                  <Insets top="10.0" />
+               </StackPane.margin>
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="error_label" text="ERROR" textFill="RED" wrapText="true" StackPane.alignment="TOP_CENTER">
+               <StackPane.margin>
+                  <Insets top="50.0" />
+               </StackPane.margin>
+               <effect>
+                  <Glow />
+               </effect>
+            </Label>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>

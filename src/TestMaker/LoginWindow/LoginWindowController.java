@@ -21,7 +21,11 @@ import java.net.MalformedURLException;
 import static TestMaker.WindowTools.openNewWindow;
 
 public class LoginWindowController {
+    @FXML
+    private ImageView networkSettings_image;
 
+    @FXML
+    private Button networkSettings_button;
     @FXML
     private Label error_label;
 
@@ -75,6 +79,7 @@ public class LoginWindowController {
         });
         /*----------------------------Login button action-----------------------------*/
 
+
         /*----------------------------Registration button action-----------------------------*/
         register_button.setOnAction(event -> {
             openNewWindow("SingUpWindow/SingUpWindow.fxml", false, Modality.NONE);
@@ -83,6 +88,17 @@ public class LoginWindowController {
         /*----------------------------Registration button action-----------------------------*/
 
 
+        /*----------------------------networkSettings button action-----------------------------*/
+        networkSettings_image.setOnMouseClicked(event -> {
+            networkSettings_button.fire();
+        });
+        networkSettings_button.setOnAction(event -> {
+            openNewWindow("LoginWindow/NetworkSettings/NetworkSettings.fxml", false, Modality.WINDOW_MODAL);
+        });
+        /*----------------------------networkSettings button action-----------------------------*/
+
+
+        /*----------------------------Password functions-----------------------------*/
         //Password visibility
         passwordVisibility(passwordIsShownImage, passwordIsHiddenImage);
 
@@ -93,6 +109,7 @@ public class LoginWindowController {
         password_textField.setOnKeyReleased(event -> {
             password_passwordField.setText(password_textField.getText());
         });
+        /*----------------------------Password functions-----------------------------*/
 
     }
 

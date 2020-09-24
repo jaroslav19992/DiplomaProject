@@ -1,10 +1,9 @@
 package TestMaker.DBTools;
 
 public class Configs {
-    protected String dbHost = "localhost";
-    protected String dbPort = "3306";
-    protected String dbUser = "root";
-    protected String dbPassword = "password";
-    protected String dbName = "mydb";
-
+    public static String dbHost = "localhost";
+    public static String dbPort = "3306";
+    public static String dbUser = "root";
+    public static String dbPassword = "password";
+    public static String dbName = "mydb";
 }
