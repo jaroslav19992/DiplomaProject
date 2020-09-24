@@ -9,6 +9,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class AccessWindowController {
 
     @FXML
@@ -36,8 +39,14 @@ public class AccessWindowController {
                 //gain access, close window, register user, open main program window
                 DBHandler dbHandler = new DBHandler();
 
+                //get register and visit date
+                Date date = new Date();
+                SimpleDateFormat formatForRegDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+                SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+
                 dbHandler.singUpNewUser(UserDataTransfer.userName, UserDataTransfer.password, UserDataTransfer.firstName,
-                        UserDataTransfer.lastName, UserDataTransfer.email, UserDataTransfer.accessToken);
+                        UserDataTransfer.lastName, UserDataTransfer.email, UserDataTransfer.accessToken,
+                        formatForRegDate.format(date), formatForVisitDate.format(date));
 
                 UserDataTransfer.isRegisterAccessGained = true;
                 main_pane.getScene().getWindow().hide();

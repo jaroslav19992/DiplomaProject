@@ -14,10 +14,12 @@ public class DBHandler extends Configs {
     }
 
     //Add data to the database table
-    public void singUpNewUser(String username, String password, String firstName, String lastName, String email, String accessToken) {
+    public void singUpNewUser(String username, String password, String firstName, String lastName,
+                              String email, String accessToken, String regDate, String lastVisitDate) {
         String insertString = "INSERT INTO " + Constants.USERS_INFO_TABLE_NAME + " (" + Constants.USER_NAME_HASH + ", "
                 + Constants.PASSWORD_HASH + ", " + Constants.FIRST_NAME + ", " + Constants.LAST_NAME + ", " + Constants.EMAIL
-                + ", " + Constants.ACCESS_TOKEN + ")" + " VALUES (?,?,?,?,?,?)";
+                + ", " + Constants.ACCESS_TOKEN + ", " + Constants.REG_DATE + ", "
+                + Constants.LAST_VISIT_DATE + ")" + " VALUES (?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement = getDbConnection().prepareStatement(insertString);
             preparedStatement.setInt(1, username.hashCode());
@@ -26,6 +28,8 @@ public class DBHandler extends Configs {
             preparedStatement.setString(4, lastName);
             preparedStatement.setString(5, email);
             preparedStatement.setString(6, accessToken);
+            preparedStatement.setString(7, regDate);
+            preparedStatement.setString(8, lastVisitDate);
 
             preparedStatement.executeUpdate();
             System.out.println("user " + username + " singed up");

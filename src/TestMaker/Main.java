@@ -18,7 +18,12 @@ public class Main extends Application {
         primaryStage.setResizable(false);
         primaryStage.show();
 
-        System.out.println("admin".hashCode()+" "+"admin".hashCode());
+//        System.out.println("admin".hashCode()+" "+"admin".hashCode());
+//
+//        Date dateNow = new Date();
+//        SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+//
+//        System.out.println(formatForDateNow.format(dateNow));
     }
 
     public static void main(String[] args) {

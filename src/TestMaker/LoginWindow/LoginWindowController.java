@@ -1,10 +1,7 @@
 package TestMaker.LoginWindow;
 
-import java.io.File;
-import java.net.MalformedURLException;
-
-import TestMaker.UserDataTransfer;
 import TestMaker.UserDataChecker;
+import TestMaker.UserDataTransfer;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -18,7 +15,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 
-import static TestMaker.WindowTools.*;
+import java.io.File;
+import java.net.MalformedURLException;
+
+import static TestMaker.WindowTools.openNewWindow;
 
 public class LoginWindowController {
 
@@ -69,17 +69,18 @@ public class LoginWindowController {
         }
         imageView.setImage(passwordIsHiddenImage);
 
-/*----------------------------Login button action-----------------------------*/
+        /*----------------------------Login button action-----------------------------*/
         login_button.setOnAction(event -> {
             loginButtonAction();
         });
-/*----------------------------Login button action-----------------------------*/
+        /*----------------------------Login button action-----------------------------*/
 
-        //Open registration window
+        /*----------------------------Registration button action-----------------------------*/
         register_button.setOnAction(event -> {
-           openNewWindow("SingUpWindow/SingUpWindow.fxml", false, Modality.NONE);
-           login_pane.getScene().getWindow().hide();
+            openNewWindow("SingUpWindow/SingUpWindow.fxml", false, Modality.NONE);
+            login_pane.getScene().getWindow().hide();
         });
+        /*----------------------------Registration button action-----------------------------*/
 
 
         //Password visibility
@@ -97,7 +98,8 @@ public class LoginWindowController {
 
     /**
      * Set up is password is visible in order to image pressed
-     * @param passwordIsShownImage image that means that password is visible right now
+     *
+     * @param passwordIsShownImage  image that means that password is visible right now
      * @param passwordIsHiddenImage image that means that password is not visible right now
      */
     private void passwordVisibility(Image passwordIsShownImage, Image passwordIsHiddenImage) {
@@ -120,19 +122,20 @@ public class LoginWindowController {
      * What is happens when login button is pressed
      */
     private void loginButtonAction() {
-        UserDataTransfer.userName = userName_textField.getText();
-        UserDataTransfer.password = password_passwordField.getText();
         /* LogIn and Password Checker from DB */
         UserDataChecker checker = new UserDataChecker(userName_textField.getText().hashCode(),
                 password_passwordField.getText().hashCode());
 
         if (checker.isAccessGained()) {
-            UserDataTransfer.accessToken = "";
+//            UserDataTransfer.accessToken = ""; TODO: nahui?
+
+            UserDataTransfer.userName = userName_textField.getText();
+            UserDataTransfer.password = password_passwordField.getText();
             //Open main program window
-            openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
+            openNewWindow("MainProgramWindow/MainWindow.fxml", false, Modality.NONE);
             //Hide LogIn window
             login_pane.getScene().getWindow().hide();
-            error_label.setVisible(false);
+
         } else {
             userName_textField.clear();
             password_passwordField.clear();
@@ -144,6 +147,7 @@ public class LoginWindowController {
 
     /**
      * Enter pressed handler
+     *
      * @param root object, add handler to
      */
     private void setGlobalEventHandler(Parent root) {

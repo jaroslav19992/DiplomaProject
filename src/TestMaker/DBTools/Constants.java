@@ -11,5 +11,9 @@ public class Constants {
     public static final String TEACHER_ACCESS_TOKEN = "teacherAT";
     public static final String PUPIL_ACCESS_TOKEN = "pupilAT";
     public static final String ACCESS_TOKEN = "accessToken";
+    public static final String REG_DATE = "registrationDate";
+    public static final String LAST_VISIT_DATE = "lastVisitDate";
+    public static final String REG_DATE_LABEL_TEXT = "Дата реєстрації: ";
+    public static final String LAST_VISIT_DATE_LABEL_TEXT = "Дата останнього входу: ";
 
 }

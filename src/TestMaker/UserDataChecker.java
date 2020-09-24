@@ -31,6 +31,8 @@ public class UserDataChecker {
                 UserDataTransfer.lastName = userDataSet.getString(Constants.LAST_NAME);
                 UserDataTransfer.email = userDataSet.getString(Constants.EMAIL);
                 UserDataTransfer.accessToken = userDataSet.getString(Constants.ACCESS_TOKEN);
+                UserDataTransfer.registrationDate = userDataSet.getString(Constants.REG_DATE);
+                UserDataTransfer.lastVisitDate = userDataSet.getString(Constants.LAST_VISIT_DATE);
 
                 //debug user info
                 System.out.println("Sing IN user with user data:\n" +
@@ -39,7 +41,9 @@ public class UserDataChecker {
                         "First_name: " + UserDataTransfer.firstName +" \n" +
                         "Last_name: " + UserDataTransfer.lastName +" \n" +
                         "E-mail: " + UserDataTransfer.email +" \n" +
-                        "Access_token: " + UserDataTransfer.accessToken);
+                        "Access_token: " + UserDataTransfer.accessToken + "\n" +
+                        "Registration date: " + UserDataTransfer.registrationDate + "\n" +
+                        "Last visit: " + UserDataTransfer.lastVisitDate);
             } else {
                 //block access
                 System.out.println("No user with equal data");
@@ -52,6 +56,7 @@ public class UserDataChecker {
 
     //Access validation getter
     public boolean isAccessGained() {
+//        return true;
         return isAccessGained;
     }
 }

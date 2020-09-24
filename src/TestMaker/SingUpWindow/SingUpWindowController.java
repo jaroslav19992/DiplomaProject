@@ -10,6 +10,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static TestMaker.WindowTools.*;
 
@@ -81,6 +83,9 @@ public class SingUpWindowController {
                         //give control to access window and transfer user data
                         getUserInfo();
                         openNewWindowAndWait("AccessWindow/AccessWindow.fxml", false, Modality.APPLICATION_MODAL);
+                        /*
+                          TRANSFER USER INFO TO DATABASE HAPPENS IN ACCESS WINDOW
+                         */
                         if (UserDataTransfer.isRegisterAccessGained) {
                             openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
                             main_pane.getScene().getWindow().hide();
@@ -88,8 +93,12 @@ public class SingUpWindowController {
 
                     //If pupil access token
                     } else {
+                        Date date = new Date();
+                        SimpleDateFormat formatForRegDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+                        SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
                         dbHandler.singUpNewUser(userName_textField.getText(), password_textField.getText(), firstName_textField.getText(),
-                                lastName_textField.getText(), email_textField.getText(), Constants.PUPIL_ACCESS_TOKEN);
+                                lastName_textField.getText(), email_textField.getText(), Constants.PUPIL_ACCESS_TOKEN,
+                                formatForRegDate.format(date), formatForVisitDate.format(date));
                         openNewWindow("MainProgramWindow/MainWindow.fxml", false, Modality.NONE);
 
                         //close registration window
@@ -148,7 +157,7 @@ public class SingUpWindowController {
             error_label.setVisible(true);
             return false;
         }
-        if (!validateText(password_textField.getText())) {
+        if (validateText(password_textField.getText())) {
             error_label.setText("Пароль не повинен містити символи  \" / \\ [ ] : ; | = , + * ? < > .");
             error_label.setVisible(true);
             return false;
@@ -158,7 +167,7 @@ public class SingUpWindowController {
             error_label.setVisible(true);
             return false;
         }
-        if (!isOnlyLatLetters(password_textField.getText())) {
+        if (isOnlyLatLetters(password_textField.getText())) {
             error_label.setText("пароль повинен містити лише букви латинського алфавіту та не містити пробілів");
             error_label.setVisible(true);
             return false;
@@ -167,7 +176,7 @@ public class SingUpWindowController {
 
 
         /*-------------------------------Username check-----------------------------*/
-        if (!validateText(userName_textField.getText())) {
+        if (validateText(userName_textField.getText())) {
             error_label.setText("Логін не повинен містити символи  \" / \\ [ ] : ; | = , + * ? < >");
             error_label.setVisible(true);
             return false;
@@ -177,7 +186,7 @@ public class SingUpWindowController {
             error_label.setVisible(true);
             return false;
         }
-        if (!isOnlyLatLetters(userName_textField.getText())) {
+        if (isOnlyLatLetters(userName_textField.getText())) {
             error_label.setText("Логін повинен містити лише букви латинського алфавітута не містити пробілів");
             error_label.setVisible(true);
             return false;
@@ -219,21 +228,21 @@ public class SingUpWindowController {
 
     //check is there is no bad symbols
     public boolean validateText(String str) {
-        return !str.contains("\\") && !str.contains("/") && !str.contains("\"") && !str.contains("[") && !str.contains("]")
-                && !str.contains(";") && !str.contains(":") && !str.contains("=") && !str.contains(",") && !str.contains("+")
-                && !str.contains("*") && !str.contains("?") && !str.contains("<") && !str.contains(">");
+        return str.contains("\\") || str.contains("/") || str.contains("\"") || str.contains("[") || str.contains("]")
+                || str.contains(";") || str.contains(":") || str.contains("=") || str.contains(",") || str.contains("+")
+                || str.contains("*") || str.contains("?") || str.contains("<") || str.contains(">");
     }
 
     //check is there is only Latin alphabet letters or not
     public boolean isOnlyLatLetters(String str) {
         for (char c : str.toCharArray()) {
             if (c == ' ') {
-                return false;
+                return true;
             }
             if (String.valueOf(c).matches("([а-я]|[А-Я])")) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }

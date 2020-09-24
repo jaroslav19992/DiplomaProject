@@ -9,8 +9,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
-import static TestMaker.MainProgramWindow.Constants.*;
+import static TestMaker.MainProgramWindow.Constants.ACTIVE_ITEM_COLOR;
 
 
 public class MainWindowController {
@@ -57,17 +58,45 @@ public class MainWindowController {
     @FXML
     private BorderPane main_borderPane;
 
+    private Stage stage;
+
+
     @FXML
     void initialize() {
-        WindowTools windowTools = new WindowTools();
         setOnHoverColorChange();
+        setUpSceneOnClickChange();
+
+        main_splitPane.setOnMouseClicked(event -> {
+            main_splitPane.getScene().getWindow().setOnCloseRequest(event1 -> {
+                System.out.println("adawdawdawd");
+            });
+        });
+
+        MainWindowController mainWindowController = new MainWindowController();
+
+
+//        MouseEvent.fireEvent(main_splitPane, new MouseEvent(MouseEvent.MOUSE_CLICKED, 0,
+//                0, 0, 0, MouseButton.PRIMARY, 1, true, true, true, true,
+//                true, true, true, true, true, true, null));
+    }
+
+
+    /**
+     * Change scene when another menu item clicked
+     */
+    private void setUpSceneOnClickChange() {
+        WindowTools windowTools = new WindowTools();
         userInfo_stackPane.setOnMouseClicked(event -> {
-            windowTools.setUpNewScene(rightSide_anchorPane, "/TestMaker/MainProgramWindow/Panes/UserInfoPane/userInfoPane.fxml",
-                    "TestMaker/MainProgramWindow/Panes/UserInfoPane/UserInfoPaneController.java");
+            windowTools.setUpNewPaneOnBorderPane(main_borderPane,
+                    "/TestMaker/MainProgramWindow/Panes/UserInfoPane/userInfoPane.fxml");
         });
         tests_stackPane.setOnMouseClicked(event -> {
-            windowTools.setUpNewScene(rightSide_anchorPane, "/TestMaker/MainProgramWindow/Panes/TablesPane/TablesPane.fxml",
-                    "TestMaker/MainProgramWindow/Panes/TablesPane/TablesPaneController.java");
+            windowTools.setUpNewPaneOnBorderPane(main_borderPane,
+                    "/TestMaker/MainProgramWindow/Panes/TablesPane/TablesPane.fxml");
+        });
+        settings_stackPane.setOnMouseClicked(event -> {
+            windowTools.setUpNewPaneOnBorderPane(main_borderPane,
+                    "/TestMaker/MainProgramWindow/Panes/SettingsPane/SettingsPane.fxml");
         });
     }
 
