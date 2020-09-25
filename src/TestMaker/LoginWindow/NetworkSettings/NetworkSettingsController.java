@@ -8,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
+
 public class NetworkSettingsController {
 
     @FXML
@@ -41,60 +43,101 @@ public class NetworkSettingsController {
     private Button ok_button;
 
     @FXML
-    void initialize(){
+    void initialize() throws IOException {
+        NetworkSettingsConfigsReader properties = new NetworkSettingsConfigsReader();
         error_label.setVisible(false);
-        resetToDefaults_button.setOnAction(event -> {
-            setDefaultConfigValues();
-        });
+
+        getConfigsFromFile(properties);
+        setConfigsToTextFields();
+
+        resetToDefaults_button.setOnAction(event -> setDefaultConfigValues(properties));
 
         apply_button.setOnAction(event -> {
             if (checkForCorrectValues())
-            setUserConfigValues();
+            setUserConfigValues(properties);
         });
 
         ok_button.setOnAction(event -> {
             apply_button.fire();
             password_textField.getScene().getWindow().hide();
         });
+
+        cancel_button.setOnAction(event -> password_textField.getScene().getWindow().hide());
+    }
+
+    /**
+     * Insert configs to text fields from configs file
+     */
+    private void setConfigsToTextFields() {
+        host_textField.setText(Configs.dbHost);
+        port_textField.setText(Configs.dbPort);
+        user_textField.setText(Configs.dbUser);
+        password_textField.setText(Configs.dbPassword);
+        databaseName_textField.setText(Configs.dbName);
+    }
+
+    /**
+     * Get configs from file to Configs.java
+     * @param properties configs reader/writer class
+     */
+    private void getConfigsFromFile(NetworkSettingsConfigsReader properties) {
+        Configs.dbHost = properties.getConfig("dbHost");
+        Configs.dbPort = properties.getConfig("dbPort");
+        Configs.dbUser = properties.getConfig("dbUser");
+        Configs.dbPassword = properties.getConfig("dbPassword");
+        Configs.dbName = properties.getConfig("dbName");
     }
 
     /** TODO: доробити перевірки всякі
      * @return is user insert correct values into text fields
      */
     private boolean checkForCorrectValues() {
-        if (host_textField.getText().equals("") || port_textField.getText().equals("") || user_textField.getText().equals("") ||
-                password_textField.getText().equals("") || databaseName_textField.getText().equals("")){
-            error_label.setTextFill(Color.RED);
-            error_label.setText("Залишилися не заповнені поля");
-            error_label.setVisible(true);
-            return false;
-        }
         return true;
     }
 
     /**
      * set default config values and show label
+     * @param properties configs reader/writer class
      */
-    private void setUserConfigValues() {
-        Configs.dbHost = host_textField.getText();
-        Configs.dbPort = port_textField.getText();
-        Configs.dbUser = user_textField.getText();
-        Configs.dbPassword = password_textField.getText();
-        Configs.dbName = databaseName_textField.getText();
+    private void setUserConfigValues(NetworkSettingsConfigsReader properties) {
+        properties.setConfig("dbHost", (!host_textField.getText().equals(""))?host_textField.getText():DefaultConfigs.default_dbHost);
+        properties.setConfig("dbPort", (!port_textField.getText().equals(""))?port_textField.getText():DefaultConfigs.default_dbPort);
+        properties.setConfig("dbUser", (!user_textField.getText().equals(""))?user_textField.getText():DefaultConfigs.default_dbUser);
+        properties.setConfig("dbPassword", (!password_textField.getText().equals(""))?password_textField.getText():DefaultConfigs.default_dbPassword);
+        properties.setConfig("dbName", (!databaseName_textField.getText().equals(""))?databaseName_textField.getText():DefaultConfigs.default_dbName);
+        properties.writeConfigs();
+        getConfigsFromFile(properties);
+        setConfigsToTextFields();
+
         error_label.setTextFill(Color.GREEN);
         error_label.setText("Встановлено нові параметри");
         error_label.setVisible(true);
+
+        //-------------------DEBUG-------------------//
+        System.out.println("----------------------------\n"+
+                "Host: " + Configs.dbHost +
+                "; Port: " + Configs.dbPort +
+                "; User: " + Configs.dbUser +
+                "; Password: " + Configs.dbPassword +
+                "; DBName: " + Configs.dbName +
+                "\n----------------------------");
+        //-------------------DEBUG-------------------//
     }
 
     /**
      * set default config values and show label
+     * @param properties configs reader/writer class
      */
-    private void setDefaultConfigValues() {
-        Configs.dbHost = DefaultConfigs.default_dbHost;
-        Configs.dbPort = DefaultConfigs.default_dbPort;
-        Configs.dbUser = DefaultConfigs.default_dbUser;
-        Configs.dbPassword = DefaultConfigs.default_dbPassword;
-        Configs.dbName = DefaultConfigs.default_dbName;
+    private void setDefaultConfigValues(NetworkSettingsConfigsReader properties) {
+        properties.setConfig("dbHost", DefaultConfigs.default_dbHost);
+        properties.setConfig("dbPort", DefaultConfigs.default_dbPort);
+        properties.setConfig("dbUser", DefaultConfigs.default_dbUser);
+        properties.setConfig("dbPassword", DefaultConfigs.default_dbPassword);
+        properties.setConfig("dbName", DefaultConfigs.default_dbName);
+        properties.writeConfigs();
+        getConfigsFromFile(properties);
+        setConfigsToTextFields();
+
         error_label.setTextFill(Color.GREEN);
         error_label.setText("Встановлені параметри за замовчанням");
         error_label.setVisible(true);

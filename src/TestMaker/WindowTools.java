@@ -19,11 +19,10 @@ public class WindowTools {
      */
     public static void openNewWindow(String fxmlFileLocation, boolean isResizeable, Modality modality) {
         try {
-            FXMLLoader loader = new FXMLLoader();
-            Parent root = loader.load(Main.class.getResource(fxmlFileLocation));
+            Parent root = FXMLLoader.load(Main.class.getResource(fxmlFileLocation));
             Stage stage = new Stage();
             stage.setTitle("Diploma project KM-17, Ishchak Yaroslav");
-            stage.getIcons().add(new Image("@../../Images/logo_mini.png"));
+            stage.getIcons().add(new Image(Main.class.getResourceAsStream("logo_mini.png")));
             stage.setScene(new Scene(root));
             stage.setResizable(isResizeable);
             stage.initModality(modality);

@@ -11,7 +11,10 @@ public class UserDataTransfer {
     public static String lastVisitDate;
     public static boolean isRegisterAccessGained = false;
 
-    public static void eraseTransferInfo(){
+    /**
+     * Clear all data in user transfer info to avoid data stole
+     */
+    public static void eraseTransferInfoFull(){
         userName = null;
         password = null;
         firstName = null;
@@ -21,5 +24,12 @@ public class UserDataTransfer {
         registrationDate = null;
         lastVisitDate = null;
         isRegisterAccessGained = false;
+    }
+
+    /**
+     * Clear private data in user transfer info to avoid data stole
+     */
+    public static void eraseTransferInfoPrivate(){
+        password = null;
     }
 }

@@ -94,7 +94,7 @@ public class SingUpWindowController {
                     //If pupil access token
                     } else {
                         Date date = new Date();
-                        SimpleDateFormat formatForRegDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+                        SimpleDateFormat formatForRegDate = new SimpleDateFormat("yyyy.MM.dd");
                         SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
                         dbHandler.singUpNewUser(userName_textField.getText(), password_textField.getText(), firstName_textField.getText(),
                                 lastName_textField.getText(), email_textField.getText(), Constants.PUPIL_ACCESS_TOKEN,
@@ -210,13 +210,13 @@ public class SingUpWindowController {
                 + "\"" + email_textField.getText() + "\"";
 
         //username check
-        if (dbHandler.executeSQLQuery(SQLQueryForUsername).next()) {
+        if (dbHandler.getDataFromDB(SQLQueryForUsername).next()) {
             error_label.setText("Користувач з таким ім'ям уже існує");
             error_label.setVisible(true);
             return false;
         }
         //e-mail check
-        if (dbHandler.executeSQLQuery(SQLQueryForEmail).next()) {
+        if (dbHandler.getDataFromDB(SQLQueryForEmail).next()) {
             error_label.setText("Даний E-mail уже використовується");
             error_label.setVisible(true);
             return false;

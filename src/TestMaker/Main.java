@@ -1,6 +1,5 @@
 package TestMaker;
 
-import TestMaker.DBTools.Configs;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("LoginWindow/LoginWindow.fxml"));
         primaryStage.setTitle("Diploma project KM-17, Ishchak Yaroslav");
-        primaryStage.getIcons().add(new Image("@../../Images/logo_mini.png"));
+        primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("logo_mini.png")));
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.show();

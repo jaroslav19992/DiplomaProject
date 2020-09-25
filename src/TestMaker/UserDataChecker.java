@@ -9,19 +9,17 @@ import java.sql.SQLException;
 public class UserDataChecker {
     private boolean isAccessGained = false;
 
-    public UserDataChecker(int usernameHash, int passwordHash) {
-
+    public UserDataChecker(int usernameHash, int passwordHash) throws SQLException {
         getUserData(usernameHash, passwordHash);
     }
 
     //Connecting to the DB and checking is user with such user data is exist
-    private void getUserData(int usernameHash, int passwordHash) {
+    private void getUserData(int usernameHash, int passwordHash) throws SQLException {
         DBHandler dbHandler = new DBHandler();
         String SQLQuery = "SELECT * FROM " + Constants.USERS_INFO_TABLE_NAME + " where "
                 + Constants.USER_NAME_HASH + " = " + usernameHash + " and " + Constants.PASSWORD_HASH + " = " + passwordHash;
-        ResultSet userDataSet = dbHandler.executeSQLQuery(SQLQuery);
+        ResultSet userDataSet = dbHandler.getDataFromDB(SQLQuery);
 
-        try {
             if (userDataSet.next()) {
                 //gain access
                 isAccessGained = true;
@@ -49,9 +47,6 @@ public class UserDataChecker {
                 System.out.println("No user with equal data");
                 isAccessGained = false;
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
     }
 
     //Access validation getter

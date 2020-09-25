@@ -55,7 +55,6 @@ public class UserInfoPaneController {
         accessToken_label.setText(UserDataTransfer.accessToken);
         regDate_label.setText(Constants.REG_DATE_LABEL_TEXT + UserDataTransfer.registrationDate);
         lastVisitDate_label.setText(Constants.LAST_VISIT_DATE_LABEL_TEXT + UserDataTransfer.lastVisitDate);
-        UserDataTransfer.eraseTransferInfo();
     }
 
 }

@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -44,9 +45,13 @@ public class AccessWindowController {
                 SimpleDateFormat formatForRegDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
                 SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
 
-                dbHandler.singUpNewUser(UserDataTransfer.userName, UserDataTransfer.password, UserDataTransfer.firstName,
-                        UserDataTransfer.lastName, UserDataTransfer.email, UserDataTransfer.accessToken,
-                        formatForRegDate.format(date), formatForVisitDate.format(date));
+                try {
+                    dbHandler.singUpNewUser(UserDataTransfer.userName, UserDataTransfer.password, UserDataTransfer.firstName,
+                            UserDataTransfer.lastName, UserDataTransfer.email, UserDataTransfer.accessToken,
+                            formatForRegDate.format(date), formatForVisitDate.format(date));
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
 
                 UserDataTransfer.isRegisterAccessGained = true;
                 main_pane.getScene().getWindow().hide();

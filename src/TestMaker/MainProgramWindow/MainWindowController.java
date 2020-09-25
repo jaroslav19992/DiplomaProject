@@ -72,12 +72,7 @@ public class MainWindowController {
             });
         });
 
-        MainWindowController mainWindowController = new MainWindowController();
 
-
-//        MouseEvent.fireEvent(main_splitPane, new MouseEvent(MouseEvent.MOUSE_CLICKED, 0,
-//                0, 0, 0, MouseButton.PRIMARY, 1, true, true, true, true,
-//                true, true, true, true, true, true, null));
     }
 
 

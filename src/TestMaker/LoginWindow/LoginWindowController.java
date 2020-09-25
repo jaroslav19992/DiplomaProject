@@ -1,13 +1,13 @@
 package TestMaker.LoginWindow;
 
+import TestMaker.DBTools.Configs;
+import TestMaker.DBTools.Constants;
+import TestMaker.DBTools.DBHandler;
 import TestMaker.UserDataChecker;
 import TestMaker.UserDataTransfer;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -17,6 +17,9 @@ import javafx.stage.Modality;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static TestMaker.WindowTools.openNewWindow;
 
@@ -93,7 +96,7 @@ public class LoginWindowController {
             networkSettings_button.fire();
         });
         networkSettings_button.setOnAction(event -> {
-            openNewWindow("LoginWindow/NetworkSettings/NetworkSettings.fxml", false, Modality.WINDOW_MODAL);
+            openNewWindow("LoginWindow/NetworkSettings/NetworkSettings.fxml", false, Modality.APPLICATION_MODAL);
         });
         /*----------------------------networkSettings button action-----------------------------*/
 
@@ -139,19 +142,39 @@ public class LoginWindowController {
      * What is happens when login button is pressed
      */
     private void loginButtonAction() {
+        error_label.setVisible(false);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Помилка");
+        alert.setHeaderText(null);
+        alert.setContentText("Помилка з'єднання з базою даних");
+
         /* LogIn and Password Checker from DB */
-        UserDataChecker checker = new UserDataChecker(userName_textField.getText().hashCode(),
-                password_passwordField.getText().hashCode());
+        UserDataChecker checker = null;
+        try {
+            checker = new UserDataChecker(userName_textField.getText().hashCode(),
+                    password_passwordField.getText().hashCode());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            alert.showAndWait();
+        }
 
         if (checker.isAccessGained()) {
 //            UserDataTransfer.accessToken = ""; TODO: nahui?
-
+            setLastVisitDate();
             UserDataTransfer.userName = userName_textField.getText();
             UserDataTransfer.password = password_passwordField.getText();
             //Open main program window
             openNewWindow("MainProgramWindow/MainWindow.fxml", false, Modality.NONE);
             //Hide LogIn window
             login_pane.getScene().getWindow().hide();
+            System.out.println("----------------------------\n" +
+                    "connected via: \n" +
+                    "Host: " + Configs.dbHost +
+                    "; Port: " + Configs.dbPort +
+                    "; User: " + Configs.dbUser +
+                    "; Password: " + Configs.dbPassword +
+                    "; DBName: " + Configs.dbName +
+                    "\n----------------------------");
 
         } else {
             userName_textField.clear();
@@ -159,6 +182,23 @@ public class LoginWindowController {
             password_textField.clear();
             error_label.setText("Не правильний логін та/або пароль");
             error_label.setVisible(true);
+        }
+    }
+
+    /**
+     * Set up user last visit date
+     */
+    private void setLastVisitDate() {
+        DBHandler dbHandler = new DBHandler();
+        Date date = new Date();
+        SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+
+        try {
+            dbHandler.loadDataTODB("UPDATE " + "`" + Configs.dbName + "`" + "." + "`" + Constants.USERS_INFO_TABLE_NAME + "`" +
+                    " SET " + "`" + Constants.LAST_VISIT_DATE + "`" + " = " + "'" + formatForVisitDate.format(date) + "'" + " WHERE "
+                    + "`" + Constants.USER_NAME_HASH + "`" + " = " + "'" +userName_textField.getText().hashCode() + "'" + ";");
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
     }
 

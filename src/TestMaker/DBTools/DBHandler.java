@@ -15,12 +15,12 @@ public class DBHandler extends Configs {
 
     //Add data to the database table
     public void singUpNewUser(String username, String password, String firstName, String lastName,
-                              String email, String accessToken, String regDate, String lastVisitDate) {
+                              String email, String accessToken, String regDate, String lastVisitDate) throws SQLException {
         String insertString = "INSERT INTO " + Constants.USERS_INFO_TABLE_NAME + " (" + Constants.USER_NAME_HASH + ", "
                 + Constants.PASSWORD_HASH + ", " + Constants.FIRST_NAME + ", " + Constants.LAST_NAME + ", " + Constants.EMAIL
                 + ", " + Constants.ACCESS_TOKEN + ", " + Constants.REG_DATE + ", "
                 + Constants.LAST_VISIT_DATE + ")" + " VALUES (?,?,?,?,?,?,?,?)";
-        try {
+
             PreparedStatement preparedStatement = getDbConnection().prepareStatement(insertString);
             preparedStatement.setInt(1, username.hashCode());
             preparedStatement.setInt(2, password.hashCode());
@@ -33,9 +33,7 @@ public class DBHandler extends Configs {
 
             preparedStatement.executeUpdate();
             System.out.println("user " + username + " singed up");
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
-        }
+
         System.out.println("user " + username + " singed up");
     }
 
@@ -44,16 +42,18 @@ public class DBHandler extends Configs {
      * @param SQLQuery string
      * @return set of data from db
      */
-    public ResultSet executeSQLQuery(String SQLQuery ) {
-        ResultSet resultSet = null;
-        try {
+    public ResultSet getDataFromDB(String SQLQuery ) throws SQLException {
+        System.out.println("Execute SQL query: " + SQLQuery);
             Connection connection = getDbConnection();
             Statement statement = connection.createStatement();
-            resultSet = statement.executeQuery(SQLQuery);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+
+        return statement.executeQuery(SQLQuery);
+    }
+
+    public void loadDataTODB(String SQLQuery) throws SQLException {
         System.out.println("Execute SQL query: " + SQLQuery);
-        return resultSet;
+        Connection connection = getDbConnection();
+        Statement statement = connection.createStatement();
+        statement.execute(SQLQuery);
     }
 }
