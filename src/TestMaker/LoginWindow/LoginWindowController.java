@@ -69,8 +69,8 @@ public class LoginWindowController {
         Image passwordIsHiddenImage = null;
         Image passwordIsShownImage = null;
         try {
-            passwordIsHiddenImage = new Image(new File("src/Images/password/closed_eye.png").toURI().toURL().toString());
-            passwordIsShownImage = new Image(new File("src/Images/password/open_eye.png").toURI().toURL().toString());
+            passwordIsHiddenImage = new Image(new File("src/TestMaker/Assets/Images/password/closed_eye.png").toURI().toURL().toString());
+            passwordIsShownImage = new Image(new File("src/TestMaker/Assets/Images/password/open_eye.png").toURI().toURL().toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

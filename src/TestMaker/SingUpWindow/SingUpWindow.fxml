@@ -55,7 +55,7 @@
       <Button fx:id="back_button" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Назад" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
       <ImageView fitHeight="76.0" fitWidth="260.0" layoutX="170.0" layoutY="5.0">
          <image>
-            <Image url="@../../Images/logo.png" />
+            <Image url="@../Assets/Images/logo.png" />
          </image>
       </ImageView>
    </children>

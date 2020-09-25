@@ -66,7 +66,7 @@ public class NetworkSettingsController {
     }
 
     /**
-     * Insert configs to text fields from configs file
+     * Insert TestMaker.Assets.configs to text fields from TestMaker.Assets.configs file
      */
     private void setConfigsToTextFields() {
         host_textField.setText(Configs.dbHost);
@@ -77,8 +77,8 @@ public class NetworkSettingsController {
     }
 
     /**
-     * Get configs from file to Configs.java
-     * @param properties configs reader/writer class
+     * Get TestMaker.Assets.configs from file to Configs.java
+     * @param properties TestMaker.Assets.configs reader/writer class
      */
     private void getConfigsFromFile(NetworkSettingsConfigsReader properties) {
         Configs.dbHost = properties.getConfig("dbHost");
@@ -97,7 +97,7 @@ public class NetworkSettingsController {
 
     /**
      * set default config values and show label
-     * @param properties configs reader/writer class
+     * @param properties TestMaker.Assets.configs reader/writer class
      */
     private void setUserConfigValues(NetworkSettingsConfigsReader properties) {
         properties.setConfig("dbHost", (!host_textField.getText().equals(""))?host_textField.getText():DefaultConfigs.default_dbHost);
@@ -126,7 +126,7 @@ public class NetworkSettingsController {
 
     /**
      * set default config values and show label
-     * @param properties configs reader/writer class
+     * @param properties TestMaker.Assets.configs reader/writer class
      */
     private void setDefaultConfigValues(NetworkSettingsConfigsReader properties) {
         properties.setConfig("dbHost", DefaultConfigs.default_dbHost);

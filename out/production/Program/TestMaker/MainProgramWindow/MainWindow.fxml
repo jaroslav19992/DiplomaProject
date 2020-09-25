@@ -26,7 +26,7 @@
                               </Label>
                               <ImageView fx:id="userinfo_icon">
                                  <image>
-                                    <Image url="@../../Images/icons/user32.png" />
+                                    <Image url="@../Assets/Images/icons/user32.png" />
                                  </image>
                                  <StackPane.margin>
                                     <Insets right="200.0" />
@@ -49,7 +49,7 @@
                               </Label>
                               <ImageView fx:id="tests_icon">
                                  <image>
-                                    <Image url="@../../Images/icons/linedpapercheck32.png" />
+                                    <Image url="@../Assets/Images/icons/linedpapercheck32.png" />
                                  </image>
                                  <StackPane.margin>
                                     <Insets right="200.0" />
@@ -72,7 +72,7 @@
                               </Label>
                               <ImageView fx:id="settings_icon">
                                  <image>
-                                    <Image url="@../../Images/icons/spanner32.png" />
+                                    <Image url="@../Assets/Images/icons/spanner32.png" />
                                  </image>
                                  <StackPane.margin>
                                     <Insets right="200.0" />

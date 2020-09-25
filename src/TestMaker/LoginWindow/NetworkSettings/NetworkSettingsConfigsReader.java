@@ -8,7 +8,7 @@ public class NetworkSettingsConfigsReader {
 
     public NetworkSettingsConfigsReader() throws IOException {
         properties = new Properties();
-        properties.load(new FileInputStream(new File("src/configs/configs.ini")));
+        properties.load(new FileInputStream(new File("src/TestMaker/Assets/configs/configs.ini")));
     }
 
     /**
@@ -31,11 +31,11 @@ public class NetworkSettingsConfigsReader {
     }
 
     /**
-     * Write configs into configurations file
+     * Write TestMaker.Assets.configs into configurations file
      */
     public void writeConfigs(){
         try {
-            properties.store(new FileOutputStream("src/configs/configs.ini"), null);
+            properties.store(new FileOutputStream("src/TestMaker.Assets.configs/TestMaker.Assets.configs.ini"), null);
         } catch (IOException e) {
             e.printStackTrace();
         }

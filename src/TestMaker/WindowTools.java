@@ -44,7 +44,7 @@ public class WindowTools {
         }
         Stage stage = new Stage();
         stage.setTitle("Diploma project KM-17, Ishchak Yaroslav");
-        stage.getIcons().add(new Image("@../../Images/logo_mini.png"));
+        stage.getIcons().add(new Image("@../../TestMaker.Assets.Images/logo_mini.png"));
         stage.setScene(new Scene(root));
         stage.setResizable(isResizeable);
         stage.initModality(modality);
