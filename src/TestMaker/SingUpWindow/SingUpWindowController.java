@@ -49,8 +49,8 @@ public class SingUpWindowController {
     private Button back_button;
 
     @FXML
-    private AnchorPane main_pane;
 
+    private AnchorPane main_pane;
     @FXML
     public void initialize() {
         error_label.setVisible(false);

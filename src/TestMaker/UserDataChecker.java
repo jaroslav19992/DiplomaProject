@@ -25,6 +25,8 @@ public class UserDataChecker {
                 isAccessGained = true;
 
                 //set up user info in transfer class
+                UserDataTransfer.userName = userDataSet.getString(Constants.USER_NAME_HASH);
+                UserDataTransfer.password = userDataSet.getString(Constants.PASSWORD_HASH);
                 UserDataTransfer.firstName = userDataSet.getString(Constants.FIRST_NAME);
                 UserDataTransfer.lastName = userDataSet.getString(Constants.LAST_NAME);
                 UserDataTransfer.email = userDataSet.getString(Constants.EMAIL);

@@ -7,7 +7,7 @@ public class NetworkSettingsConfigsReader {
     private static Properties properties;
 
     public NetworkSettingsConfigsReader() throws IOException {
-        InputStream inputStream = getClass().getResourceAsStream("/TestMaker/Assets/configs/configs.ini");
+        InputStream inputStream = new FileInputStream("./configs/configs.ini");
         properties = new Properties();
         properties.load(inputStream);
     }
@@ -36,8 +36,7 @@ public class NetworkSettingsConfigsReader {
      */
     public void writeConfigs(){
         try {
-            InputStream inputStream = getClass().getResourceAsStream("/TestMaker/Assets/configs/configs.ini");
-            properties.store(new FileWriter(String.valueOf(inputStream)), null);
+            properties.store(new FileWriter("./configs/configs.ini"), null);
         } catch (IOException e) {
             e.printStackTrace();
         }
