@@ -2,13 +2,13 @@ package TestMaker.DBTools;
 
 import java.sql.*;
 
-public class DBHandler extends Configs {
+public class DBHandler {
     Connection dbConnection;
 
     public Connection getDbConnection() throws SQLException {
-        String connectionString = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName+ "?serverTimezone=UTC";
+        String connectionString = "jdbc:mysql://" + Configs.dbHost + ":" + Configs.dbPort + "/" + Configs.dbName+ "?serverTimezone=UTC";
 
-        dbConnection = DriverManager.getConnection(connectionString, dbUser, dbPassword);
+        dbConnection = DriverManager.getConnection(connectionString, Configs.dbUser, Configs.dbPassword);
 
         return dbConnection;
     }

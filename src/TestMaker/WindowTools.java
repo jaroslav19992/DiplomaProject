@@ -35,20 +35,19 @@ public class WindowTools {
     }
 
     public static void openNewWindowAndWait(String fxmlFileLocation, boolean isResizeable, Modality modality) {
-        Parent root = null;
         try {
-            root = FXMLLoader.load(Main.class.getResource(fxmlFileLocation));
+            Parent root = FXMLLoader.load(Main.class.getResource(fxmlFileLocation));
+            Stage stage = new Stage();
+            stage.setTitle("Diploma project KM-17, Ishchak Yaroslav");
+            stage.getIcons().add(new Image(Main.class.getResourceAsStream("logo_mini.png")));
+            stage.setScene(new Scene(root));
+            stage.setResizable(isResizeable);
+            stage.initModality(modality);
+            stage.showAndWait();
         } catch (IOException e) {
             System.out.println(e.getCause());
             e.printStackTrace();
         }
-        Stage stage = new Stage();
-        stage.setTitle("Diploma project KM-17, Ishchak Yaroslav");
-        stage.getIcons().add(new Image("@../../TestMaker.Assets.Images/logo_mini.png"));
-        stage.setScene(new Scene(root));
-        stage.setResizable(isResizeable);
-        stage.initModality(modality);
-        stage.showAndWait();
     }
 
     public void setUpNewPaneOnBorderPane(BorderPane rootPane, String fxmlFileLocation) {

@@ -22,16 +22,10 @@ public class SingUpWindowController {
     public TextField lastName_textField;
 
     @FXML
-    private Label accessLevel_label;
-
-    @FXML
     public TextField firstName_textField;
 
     @FXML
     private TextField passwordRepeat_textField;
-
-    @FXML
-    private Label password_label;
 
     @FXML
     public TextField email_textField;
@@ -40,16 +34,7 @@ public class SingUpWindowController {
     public TextField password_textField;
 
     @FXML
-    private RadioButton radioButton_pupil;
-
-    @FXML
-    private Label passwordRepeat_label;
-
-    @FXML
     private Label error_label;
-
-    @FXML
-    private ToggleGroup access_level;
 
     @FXML
     public TextField userName_textField;
@@ -82,7 +67,7 @@ public class SingUpWindowController {
                     if (radioButton_teacher.isSelected()) {
                         //give control to access window and transfer user data
                         getUserInfo();
-                        openNewWindowAndWait("AccessWindow/AccessWindow.fxml", false, Modality.APPLICATION_MODAL);
+                        openNewWindowAndWait("SingUpWindow/AccessWindow/AccessWindow.fxml", false, Modality.APPLICATION_MODAL);
                         /*
                           TRANSFER USER INFO TO DATABASE HAPPENS IN ACCESS WINDOW
                          */

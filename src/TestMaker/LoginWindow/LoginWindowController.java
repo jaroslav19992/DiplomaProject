@@ -3,20 +3,19 @@ package TestMaker.LoginWindow;
 import TestMaker.DBTools.Configs;
 import TestMaker.DBTools.Constants;
 import TestMaker.DBTools.DBHandler;
+import TestMaker.LoginWindow.NetworkSettings.NetworkSettingsConfigsReader;
 import TestMaker.UserDataChecker;
 import TestMaker.UserDataTransfer;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 
-import java.io.File;
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,7 +27,15 @@ public class LoginWindowController {
     private ImageView networkSettings_image;
 
     @FXML
+    private ImageView openEye_imageView;
+
+    @FXML
+    private ImageView closedEye_imageView;
+
+
+    @FXML
     private Button networkSettings_button;
+
     @FXML
     private Label error_label;
 
@@ -43,9 +50,6 @@ public class LoginWindowController {
 
     @FXML
     private Label password_label;
-
-    @FXML
-    private ImageView imageView;
 
     @FXML
     private Button register_button;
@@ -63,18 +67,10 @@ public class LoginWindowController {
     void initialize() {
         //Hide invalid sing in data label
         error_label.setVisible(false);
+        //Set last saved configs
+        getLastConfigs();
         //Enter pressed listener
         setGlobalEventHandler(login_pane);
-        //Set up hidden or shown password image
-        Image passwordIsHiddenImage = null;
-        Image passwordIsShownImage = null;
-        try {
-            passwordIsHiddenImage = new Image(new File("src/TestMaker/Assets/Images/password/closed_eye.png").toURI().toURL().toString());
-            passwordIsShownImage = new Image(new File("src/TestMaker/Assets/Images/password/open_eye.png").toURI().toURL().toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        imageView.setImage(passwordIsHiddenImage);
 
         /*----------------------------Login button action-----------------------------*/
         login_button.setOnAction(event -> {
@@ -103,7 +99,7 @@ public class LoginWindowController {
 
         /*----------------------------Password functions-----------------------------*/
         //Password visibility
-        passwordVisibility(passwordIsShownImage, passwordIsHiddenImage);
+        passwordVisibility();
 
         //Sync password fields
         password_passwordField.setOnKeyReleased(event -> {
@@ -116,24 +112,43 @@ public class LoginWindowController {
 
     }
 
+    private void getLastConfigs() {
+        NetworkSettingsConfigsReader properties = null;
+        try {
+            properties = new NetworkSettingsConfigsReader();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert properties != null;
+        Configs.dbHost = properties.getConfig("dbHost");
+        Configs.dbPort = properties.getConfig("dbPort");
+        Configs.dbUser = properties.getConfig("dbUser");
+        Configs.dbPassword = properties.getConfig("dbPassword");
+        Configs.dbName = properties.getConfig("dbName");
+    }
+
     /**
      * Set up is password is visible in order to image pressed
-     *
-     * @param passwordIsShownImage  image that means that password is visible right now
-     * @param passwordIsHiddenImage image that means that password is not visible right now
      */
-    private void passwordVisibility(Image passwordIsShownImage, Image passwordIsHiddenImage) {
-        imageView.setOnMousePressed(event -> {
-            if (imageView.getImage().equals(passwordIsHiddenImage)) {
-                password_textField.setVisible(true);
-                password_passwordField.setVisible(false);
-                imageView.setImage(passwordIsShownImage);
-            } else {
-                password_textField.setVisible(false);
-                password_passwordField.setVisible(true);
-                imageView.setImage(passwordIsHiddenImage);
-                password_passwordField.setFocusTraversable(true);
-            }
+    private void passwordVisibility() {
+        closedEye_imageView.setOnMouseClicked(event -> {
+            password_textField.setVisible(true);
+            password_passwordField.setVisible(false);
+            password_textField.toFront();
+
+            openEye_imageView.setVisible(true);
+            closedEye_imageView.setVisible(false);
+            openEye_imageView.toFront();
+        });
+
+        openEye_imageView.setOnMouseClicked(event -> {
+            password_textField.setVisible(false);
+            password_passwordField.setVisible(true);
+            password_passwordField.toFront();
+
+            openEye_imageView.setVisible(false);
+            closedEye_imageView.setVisible(true);
+            closedEye_imageView.toFront();
 
         });
     }
@@ -164,7 +179,7 @@ public class LoginWindowController {
             UserDataTransfer.userName = userName_textField.getText();
             UserDataTransfer.password = password_passwordField.getText();
             //Open main program window
-            openNewWindow("MainProgramWindow/MainWindow.fxml", false, Modality.NONE);
+            openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
             //Hide LogIn window
             login_pane.getScene().getWindow().hide();
             System.out.println("----------------------------\n" +
@@ -191,7 +206,7 @@ public class LoginWindowController {
     private void setLastVisitDate() {
         DBHandler dbHandler = new DBHandler();
         Date date = new Date();
-        SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+        SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
         try {
             dbHandler.loadDataTODB("UPDATE " + "`" + Configs.dbName + "`" + "." + "`" + Constants.USERS_INFO_TABLE_NAME + "`" +
@@ -215,13 +230,5 @@ public class LoginWindowController {
             }
         });
     }
-
-    //get user info snd give it to transfer info class
-    private void getUserInfo() {
-        UserDataTransfer.userName = userName_textField.getText();
-        UserDataTransfer.password = password_passwordField.getText();
-    }
-
-
 }
 

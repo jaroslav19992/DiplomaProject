@@ -20,10 +20,21 @@
             <Insets left="80.0" right="80.0" top="20.0" />
          </StackPane.margin>
       </TextField>
-      <ImageView fx:id="imageView" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT">
+      <ImageView fx:id="closedEye_imageView" fitHeight="25.0" fitWidth="25.0" layoutX="435.0" layoutY="208.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT">
          <StackPane.margin>
             <Insets right="50.0" top="20.0" />
          </StackPane.margin>
+         <image>
+            <Image url="@../Assets/Images/password/closed_eye.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="openEye_imageView" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_RIGHT">
+         <StackPane.margin>
+            <Insets right="50.0" top="20.0" />
+         </StackPane.margin>
+         <image>
+            <Image url="@../Assets/Images/password/open_eye.png" />
+         </image>
       </ImageView>
       <Button fx:id="register_button" mnemonicParsing="false" text="зареєструватися">
          <StackPane.margin>
@@ -38,12 +49,12 @@
             <Insets top="-200.0" />
          </StackPane.margin>
       </Label>
-      <Label fx:id="password_label" text="Password">
+      <Label fx:id="password_label" text="Пароль">
          <StackPane.margin>
             <Insets top="-30.0" />
          </StackPane.margin>
       </Label>
-      <Label fx:id="login_label" text="User name">
+      <Label fx:id="login_label" text="Ім'я користувача">
          <StackPane.margin>
             <Insets top="-150.0" />
          </StackPane.margin>
