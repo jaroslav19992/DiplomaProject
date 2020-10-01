@@ -6,7 +6,7 @@ public class DBHandler {
     Connection dbConnection;
 
     public Connection getDbConnection() throws SQLException {
-        String connectionString = "jdbc:mysql://" + Configs.dbHost + ":" + Configs.dbPort + "/" + Configs.dbName+ "?serverTimezone=UTC";
+        String connectionString = "jdbc:mysql://" + Configs.dbHost + ":" + Configs.dbPort + "/" + Configs.dbName + "?serverTimezone=UTC";
 
         dbConnection = DriverManager.getConnection(connectionString, Configs.dbUser, Configs.dbPassword);
 
@@ -21,37 +21,36 @@ public class DBHandler {
                 + ", " + Constants.ACCESS_TOKEN + ", " + Constants.REG_DATE + ", "
                 + Constants.LAST_VISIT_DATE + ")" + " VALUES (?,?,?,?,?,?,?,?)";
 
-            PreparedStatement preparedStatement = getDbConnection().prepareStatement(insertString);
-            preparedStatement.setInt(1, username.hashCode());
-            preparedStatement.setInt(2, password.hashCode());
-            preparedStatement.setString(3, firstName);
-            preparedStatement.setString(4, lastName);
-            preparedStatement.setString(5, email);
-            preparedStatement.setString(6, accessToken);
-            preparedStatement.setString(7, regDate);
-            preparedStatement.setString(8, lastVisitDate);
+        PreparedStatement preparedStatement = getDbConnection().prepareStatement(insertString);
+        preparedStatement.setInt(1, username.hashCode());
+        preparedStatement.setInt(2, password.hashCode());
+        preparedStatement.setString(3, firstName);
+        preparedStatement.setString(4, lastName);
+        preparedStatement.setString(5, email);
+        preparedStatement.setString(6, accessToken);
+        preparedStatement.setString(7, regDate);
+        preparedStatement.setString(8, lastVisitDate);
 
-            preparedStatement.executeUpdate();
-            System.out.println("user " + username + " singed up");
-
+        preparedStatement.executeUpdate();
         System.out.println("user " + username + " singed up");
     }
 
     /**
      * Send SQL query to DB and returns result set
+     *
      * @param SQLQuery string
      * @return set of data from db
      */
-    public ResultSet getDataFromDB(String SQLQuery ) throws SQLException {
+    public ResultSet getDataFromDB(String SQLQuery) throws SQLException {
         System.out.println("Execute SQL query: " + SQLQuery);
-            Connection connection = getDbConnection();
-            Statement statement = connection.createStatement();
+        Connection connection = getDbConnection();
+        Statement statement = connection.createStatement();
 
         return statement.executeQuery(SQLQuery);
     }
 
-    public void loadDataTODB(String SQLQuery) throws SQLException {
-        System.out.println("Execute SQL query: " + SQLQuery);
+    public void loadDataToDB(String SQLQuery) throws SQLException {
+        System.out.println("Execute SQL query: " + SQLQuery +"\n");
         Connection connection = getDbConnection();
         Statement statement = connection.createStatement();
         statement.execute(SQLQuery);

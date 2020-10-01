@@ -1,5 +1,6 @@
 package TestMaker.MainProgramWindow;
 
+import TestMaker.UserDataTransfer;
 import TestMaker.WindowTools;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -82,8 +83,13 @@ public class MainWindowController {
     private void setUpSceneOnClickChange() {
         WindowTools windowTools = new WindowTools();
         userInfo_stackPane.setOnMouseClicked(event -> {
-            windowTools.setUpNewPaneOnBorderPane(main_borderPane,
-                    "/TestMaker/MainProgramWindow/Panes/UserInfoPane/userInfoPane.fxml");
+            if (UserDataTransfer.accessToken.equals("teacherAT")) {
+                windowTools.setUpNewPaneOnBorderPane(main_borderPane,
+                        "/TestMaker/MainProgramWindow/Panes/UserInfoPane/TeacherPane/TeacherUserInfoPane.fxml");
+            }else if (UserDataTransfer.accessToken.equals("pupilAT")) {
+                windowTools.setUpNewPaneOnBorderPane(main_borderPane,
+                        "/TestMaker/MainProgramWindow/Panes/UserInfoPane/PupilPane/PupilUserInfoPane.fxml");
+            }
         });
         tests_stackPane.setOnMouseClicked(event -> {
             windowTools.setUpNewPaneOnBorderPane(main_borderPane,

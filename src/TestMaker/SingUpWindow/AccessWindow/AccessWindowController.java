@@ -1,17 +1,12 @@
 package TestMaker.SingUpWindow.AccessWindow;
 
 
-import TestMaker.DBTools.DBHandler;
 import TestMaker.UserDataTransfer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
-
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class AccessWindowController {
 
@@ -37,25 +32,10 @@ public class AccessWindowController {
         error_label.setVisible(false);
         accept_button.setOnAction(event -> {
             if (isAccessGained(accessKey_textField.getText())) {
-                //gain access, close window, register user, open main program window
-                DBHandler dbHandler = new DBHandler();
-
-                //get register and visit date
-                Date date = new Date();
-                SimpleDateFormat formatForRegDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
-                SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
-
-                try {
-                    dbHandler.singUpNewUser(UserDataTransfer.userName, UserDataTransfer.password, UserDataTransfer.firstName,
-                            UserDataTransfer.lastName, UserDataTransfer.email, UserDataTransfer.accessToken,
-                            formatForRegDate.format(date), formatForVisitDate.format(date));
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-
                 UserDataTransfer.isRegisterAccessGained = true;
-                main_pane.getScene().getWindow().hide();
+                closeCurrentWindow();
             } else {
+                UserDataTransfer.isRegisterAccessGained = false;
                 error_label.setVisible(true);
             }
         });
@@ -63,6 +43,11 @@ public class AccessWindowController {
         cancel_button.setOnAction(event1 -> {
             main_pane.getScene().getWindow().hide();
         });
+    }
+
+
+    private void closeCurrentWindow() {
+        main_pane.getScene().getWindow().hide();
     }
 
     /**

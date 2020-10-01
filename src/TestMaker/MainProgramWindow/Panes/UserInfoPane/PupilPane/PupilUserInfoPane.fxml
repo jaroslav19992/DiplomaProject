@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="720.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.UserInfoPane.PupilPane.PupilUserInfoPaneController">
+   <children>
+      <BorderPane layoutX="380.0" layoutY="260.0" prefHeight="720.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <Label text="Особиста інформація" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets top="20.0" />
+               </BorderPane.margin>
+               <font>
+                  <Font name="System Bold" size="48.0" />
+               </font>
+            </Label>
+         </top>
+         <left>
+            <VBox fx:id="left_vBox" alignment="TOP_CENTER" prefHeight="665.0" prefWidth="469.0" spacing="20.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER_RIGHT" text="Ім'я" textAlignment="CENTER">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Фамілія">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="E-mail">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Вид доступу">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+                  <Label text="Клас">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets top="20.0" />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="120.0" top="50.0" />
+               </padding>
+            </VBox>
+         </left>
+         <right>
+            <VBox fx:id="right_vBox" alignment="TOP_CENTER" prefHeight="665.0" prefWidth="487.0" spacing="20.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="firstName_label" text="firstName">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <opaqueInsets>
+                        <Insets top="20.0" />
+                     </opaqueInsets>
+                  </Label>
+                  <Label fx:id="lastName_label" text="lastName">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="email_label" text="email">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="accessToken_label" text="accessToken">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="classRoom_label" text="classRoom">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets top="20.0" />
+               </opaqueInsets>
+               <padding>
+                  <Insets right="120.0" top="50.0" />
+               </padding>
+            </VBox>
+         </right>
+         <bottom>
+            <StackPane fx:id="bottom_stackPane" prefHeight="204.0" prefWidth="960.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="changeInfo_button" alignment="CENTER" mnemonicParsing="false" text="Редагувати особисту інформацію" StackPane.alignment="BOTTOM_RIGHT">
+                     <StackPane.margin>
+                        <Insets bottom="20.0" right="20.0" />
+                     </StackPane.margin>
+                  </Button>
+                  <Label fx:id="regDate_label" text="Дата теєстрації: " textFill="#00000080" StackPane.alignment="BOTTOM_LEFT">
+                     <StackPane.margin>
+                        <Insets bottom="20.0" left="20.0" />
+                     </StackPane.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lastVisitDate_label" text="Попередній вхід: " textFill="#00000080" StackPane.alignment="CENTER_LEFT">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <StackPane.margin>
+                        <Insets left="20.0" top="50.0" />
+                     </StackPane.margin>
+                  </Label>
+               </children></StackPane>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>

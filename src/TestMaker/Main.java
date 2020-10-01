@@ -18,6 +18,7 @@ public class Main extends Application {
         primaryStage.setResizable(false);
         primaryStage.show();
 
+        System.out.println("admin".hashCode());
     }
 
     public static void main(String[] args) {

@@ -1,14 +1,16 @@
-package TestMaker.MainProgramWindow.Panes.UserInfoPane;
+package TestMaker.MainProgramWindow.Panes.UserInfoPane.PupilPane;
 
 import TestMaker.DBTools.Constants;
 import TestMaker.UserDataTransfer;
+import TestMaker.WindowTools;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 
-public class UserInfoPaneController {
+public class PupilUserInfoPaneController {
 
     @FXML
     private StackPane bottom_stackPane;
@@ -43,6 +45,11 @@ public class UserInfoPaneController {
     @FXML
     void initialize() {
         initUserInfo();
+
+        changeInfo_button.setOnAction(event -> {
+            WindowTools.openNewWindow("/TestMaker/MainProgramWindow/Panes/UserInfoPane/ChangeUserInfoWindow/ChangeUserInfoWindow.fxml",
+                    false, Modality.WINDOW_MODAL);
+        });
     }
 
     /**

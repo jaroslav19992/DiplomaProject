@@ -1,6 +1,7 @@
 package TestMaker.DBTools;
 
 public class Constants {
+    public static final String DB_NAME = "mydb";
     public static final String USERS_ID = "idUsersinfo";
     public static final String USERS_INFO_TABLE_NAME = "usersinfo";
     public static final String USER_NAME_HASH = "usernameHash";

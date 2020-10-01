@@ -49,57 +49,47 @@ public class SingUpWindowController {
     private Button back_button;
 
     @FXML
-
     private AnchorPane main_pane;
+
     @FXML
     public void initialize() {
+        //set no error
         error_label.setVisible(false);
 
-        //Register button click
+        //SingUp button click
         SingUpButton.setOnAction(event -> {
+            DBHandler dbHandler = new DBHandler();
 
             try {
                 if (checkForCorrectInfo()) {
-                    DBHandler dbHandler = new DBHandler();
                     error_label.setVisible(false);
 
                     //If teacher access chose
                     if (radioButton_teacher.isSelected()) {
                         //give control to access window and transfer user data
-                        getUserInfo();
+                        transferUserInfo();
                         openNewWindowAndWait("SingUpWindow/AccessWindow/AccessWindow.fxml", false, Modality.APPLICATION_MODAL);
-                        /*
-                          TRANSFER USER INFO TO DATABASE HAPPENS IN ACCESS WINDOW
-                         */
-                        if (UserDataTransfer.isRegisterAccessGained) {
-                            openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
-                            main_pane.getScene().getWindow().hide();
-                        }
-
-                    //If pupil access token
+                        registerTeacher(dbHandler);
+                        openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
+                        main_pane.getScene().getWindow().hide();
+                        //if pupil access token
                     } else {
-                        Date date = new Date();
-                        SimpleDateFormat formatForRegDate = new SimpleDateFormat("yyyy.MM.dd");
-                        SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
-                        dbHandler.singUpNewUser(userName_textField.getText(), password_textField.getText(), firstName_textField.getText(),
-                                lastName_textField.getText(), email_textField.getText(), Constants.PUPIL_ACCESS_TOKEN,
-                                formatForRegDate.format(date), formatForVisitDate.format(date));
-                        openNewWindow("MainProgramWindow/MainWindow.fxml", false, Modality.NONE);
-
+                        registerPupil(dbHandler);
                         //close registration window
                         main_pane.getScene().getWindow().hide();
                     }
+
                     //debug user info
                     System.out.println("Sing UP user with user data:\n" +
-                            "User_name: " + UserDataTransfer.userName +" \n" +
-                            "Password: " + UserDataTransfer.password +" \n" +
-                            "First_name: " + UserDataTransfer.firstName +" \n" +
-                            "Last_name: " + UserDataTransfer.lastName +" \n" +
-                            "E-mail: " + UserDataTransfer.email +" \n" +
-                            "Access_token: " + UserDataTransfer.accessToken);
+                            "User_name: " + UserDataTransfer.userName + " \n" +
+                            "Password: " + UserDataTransfer.password + " \n" +
+                            "First_name: " + UserDataTransfer.firstName + " \n" +
+                            "Last_name: " + UserDataTransfer.lastName + " \n" +
+                            "E-mail: " + UserDataTransfer.email + " \n" +
+                            "Access_token: " + UserDataTransfer.accessToken +"\n" );
                 }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
             }
         });
 
@@ -109,14 +99,70 @@ public class SingUpWindowController {
         });
     }
 
+    /**
+     * Register user with teacher access token
+     * @param dbHandler database connector class
+     */
+    private void registerPupil(DBHandler dbHandler) {
+        // last visit and registration date
+        Date date = new Date();
+        SimpleDateFormat formatForRegDate = new SimpleDateFormat("yyyy.MM.dd");
+        SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        transferUserInfo();
+        try {
+            dbHandler.singUpNewUser(userName_textField.getText(), password_textField.getText(), firstName_textField.getText(),
+                    lastName_textField.getText(), email_textField.getText(), Constants.PUPIL_ACCESS_TOKEN,
+                    formatForRegDate.format(date), formatForVisitDate.format(date));
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Помилка");
+            alert.setHeaderText(null);
+            alert.setContentText("Помилка з'єднання з сервером");
+            alert.showAndWait();
+        }
+        openNewWindow("MainProgramWindow/MainWindow.fxml", false, Modality.NONE);
+    }
+
+    /**
+     * Register user with pupil access token
+     * @param dbHandler database connector class
+     */
+    private void registerTeacher(DBHandler dbHandler) {
+        if (UserDataTransfer.isRegisterAccessGained) {
+            //get register and visit date
+            Date date = new Date();
+            SimpleDateFormat formatForRegDate = new SimpleDateFormat("yyyy.MM.dd");
+            SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+
+            try {
+                dbHandler.singUpNewUser(UserDataTransfer.userName, UserDataTransfer.password, UserDataTransfer.firstName,
+                        UserDataTransfer.lastName, UserDataTransfer.email, UserDataTransfer.accessToken,
+                        formatForRegDate.format(date), formatForVisitDate.format(date));
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Помилка");
+                alert.setHeaderText(null);
+                alert.setContentText("Помилка з'єднання з сервером");
+                alert.showAndWait();
+            }
+        }
+    }
+
     //get user info snd give it to transfer info class
-    private void getUserInfo() {
+    private void transferUserInfo() {
         UserDataTransfer.userName = userName_textField.getText();
         UserDataTransfer.password = password_textField.getText();
         UserDataTransfer.firstName = firstName_textField.getText();
         UserDataTransfer.lastName = lastName_textField.getText();
         UserDataTransfer.email = email_textField.getText();
-        UserDataTransfer.accessToken = Constants.TEACHER_ACCESS_TOKEN;
+        if (radioButton_teacher.isSelected()) {
+            UserDataTransfer.accessToken = Constants.TEACHER_ACCESS_TOKEN;
+        } else {
+            UserDataTransfer.accessToken = Constants.PUPIL_ACCESS_TOKEN;
+
+        }
     }
 
     /**
@@ -189,9 +235,9 @@ public class SingUpWindowController {
 
         /*----------------------------Check if no user data duplicates-----------------------------*/
         //create queries
-        String SQLQueryForUsername = "SELECT " + Constants.USER_NAME_HASH + " FROM usersInfo WHERE " + Constants.USER_NAME_HASH + " = "
+        String SQLQueryForUsername = "SELECT " + Constants.USER_NAME_HASH + " FROM " + Constants.USERS_INFO_TABLE_NAME + " WHERE " + Constants.USER_NAME_HASH + " = "
                 + userName_textField.getText().hashCode();
-        String SQLQueryForEmail = "SELECT " + Constants.EMAIL + " FROM usersInfo WHERE " + Constants.EMAIL + " = "
+        String SQLQueryForEmail = "SELECT " + Constants.EMAIL + " FROM " + Constants.USERS_INFO_TABLE_NAME + " WHERE " + Constants.EMAIL + " = "
                 + "\"" + email_textField.getText() + "\"";
 
         //username check

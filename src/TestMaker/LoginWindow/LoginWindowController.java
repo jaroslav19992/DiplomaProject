@@ -161,7 +161,7 @@ public class LoginWindowController {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Помилка");
         alert.setHeaderText(null);
-        alert.setContentText("Помилка з'єднання з базою даних");
+        alert.setContentText("Помилка з'єднання з сервером");
 
         /* LogIn and Password Checker from DB */
         UserDataChecker checker = null;
@@ -209,7 +209,7 @@ public class LoginWindowController {
         SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
         try {
-            dbHandler.loadDataTODB("UPDATE " + "`" + Configs.dbName + "`" + "." + "`" + Constants.USERS_INFO_TABLE_NAME + "`" +
+            dbHandler.loadDataToDB("UPDATE " + "`" + Configs.dbName + "`" + "." + "`" + Constants.USERS_INFO_TABLE_NAME + "`" +
                     " SET " + "`" + Constants.LAST_VISIT_DATE + "`" + " = " + "'" + formatForVisitDate.format(date) + "'" + " WHERE "
                     + "`" + Constants.USER_NAME_HASH + "`" + " = " + "'" +userName_textField.getText().hashCode() + "'" + ";");
         } catch (SQLException exception) {
