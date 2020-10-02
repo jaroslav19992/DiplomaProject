@@ -88,18 +88,17 @@
             <Insets top="5.0" />
          </StackPane.margin>
       </ImageView>
-      <Button fx:id="networkSettings_button" mnemonicParsing="false" prefHeight="38.0" prefWidth="40.0" StackPane.alignment="BOTTOM_RIGHT">
+      <Button fx:id="networkSettings_button" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-graphic: url=&quot;@../Assets/Images/logo.png&quot;;" StackPane.alignment="BOTTOM_RIGHT">
          <StackPane.margin>
             <Insets bottom="7.0" right="7.0" />
          </StackPane.margin>
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Assets/Images/icons/networksetings.png" />
+               </image>
+            </ImageView>
+         </graphic>
       </Button>
-      <ImageView fx:id="networkSettings_image" StackPane.alignment="BOTTOM_RIGHT">
-         <image>
-            <Image url="@../Assets/Images/icons/networksetings.png" />
-         </image>
-         <StackPane.margin>
-            <Insets bottom="10.0" right="10.0" />
-         </StackPane.margin>
-      </ImageView>
    </children>
 </StackPane>

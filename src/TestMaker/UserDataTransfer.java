@@ -9,7 +9,7 @@ public class UserDataTransfer {
     public static String accessToken;
     public static String registrationDate;
     public static String lastVisitDate;
-    public static boolean isRegisterAccessGained = false;
+    public static boolean isAccessGained = false;
 
     /**
      * Clear all data in user transfer info to avoid data stole
@@ -23,7 +23,7 @@ public class UserDataTransfer {
         accessToken = null;
         registrationDate = null;
         lastVisitDate = null;
-        isRegisterAccessGained = false;
+        isAccessGained = false;
     }
 
     /**

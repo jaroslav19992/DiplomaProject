@@ -93,7 +93,7 @@
                         </RadioButton>
                      </children>
                   </StackPane>
-                  <Button fx:id="SingUpButton" layoutX="179.0" layoutY="462.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="242.0" text="Увійти в систему" AnchorPane.bottomAnchor="14.0">
+                  <Button fx:id="singUpButton" layoutX="179.0" layoutY="462.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="242.0" text="Увійти в систему" AnchorPane.bottomAnchor="14.0">
                      <font>
                         <Font size="24.0" />
                      </font>

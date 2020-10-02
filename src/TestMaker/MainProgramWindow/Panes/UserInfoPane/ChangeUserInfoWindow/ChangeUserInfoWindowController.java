@@ -4,12 +4,18 @@ import TestMaker.DBTools.Constants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.UserDataTransfer;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import static TestMaker.WindowTools.openNewWindowAndWait;
 
 public class ChangeUserInfoWindowController {
 
@@ -69,6 +75,8 @@ public class ChangeUserInfoWindowController {
 
     @FXML
     void initialize() {
+        setGlobalEventHandler(main_pane);
+
         error_label.setVisible(false);
 
         setTextForTextFields();
@@ -78,14 +86,22 @@ public class ChangeUserInfoWindowController {
 
             try {
                 if (checkForCorrectInfo()) {
-                    DBHandler dbHandler = new DBHandler();
-                    error_label.setVisible(false);
-                    changeUserInfo(dbHandler);
-                    transferUserInfo();
+                    if (radioButton_teacher.isSelected()) {
+                        openNewWindowAndWait("SingUpWindow/AccessWindow/AccessWindow.fxml",
+                                false, Modality.APPLICATION_MODAL);
+                    } else {
+                        UserDataTransfer.isAccessGained = true;
+                    }
+                    if (UserDataTransfer.isAccessGained) {
+                        DBHandler dbHandler = new DBHandler();
+                        error_label.setVisible(false);
+                        changeUserInfo(dbHandler);
+                        transferUserInfo();
 
-                    error_label.setTextFill(Color.GREEN);
-                    error_label.setText("Нові дані успішно завантажені на сервер");
-                    error_label.setVisible(true);
+                        error_label.setTextFill(Color.GREEN);
+                        error_label.setText("Нові дані успішно завантажені на сервер");
+                        error_label.setVisible(true);
+                    }
                 }
             } catch (SQLException exception) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -105,6 +121,7 @@ public class ChangeUserInfoWindowController {
 
     /**
      * Create SQL query to update user info. if password fields is not touched password will be the same
+     *
      * @param dbHandler
      */
     private void changeUserInfo(DBHandler dbHandler) {
@@ -113,7 +130,8 @@ public class ChangeUserInfoWindowController {
                 ((password_textField.getText().equals("")) ? UserDataTransfer.password.hashCode() : password_textField.getText().hashCode())
                 + "'" + ", " + Constants.EMAIL + " = " + "'" + email_textField.getText() + "'" + ", " + Constants.FIRST_NAME + " = " +
                 "'" + firstName_textField.getText() + "'" + ", " + Constants.LAST_NAME + " = " + "'" + lastName_textField.getText()
-                + "'" + " WHERE " + "(" + Constants.USER_NAME_HASH + " = " + UserDataTransfer.userName.hashCode() + ")";
+                + "'" +", " + Constants.ACCESS_TOKEN + " = " + ((radioButton_teacher.isSelected())?(Constants.TEACHER_ACCESS_TOKEN):
+                (Constants.PUPIL_ACCESS_TOKEN)) + "', WHERE (" + Constants.USER_NAME_HASH + " = " + UserDataTransfer.userName.hashCode() + ")";
         try {
             dbHandler.loadDataToDB(SQLQuery);
         } catch (SQLException exception) {
@@ -310,5 +328,20 @@ public class ChangeUserInfoWindowController {
         }
         return false;
     }
-
+    /**
+     * Keys pressed handler
+     *
+     * @param root object, add handler to
+     */
+    private void setGlobalEventHandler(Parent root) {
+        root.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
+            if (ev.getCode() == KeyCode.ENTER) {
+                applyChangesButton.fire();
+                ev.consume();
+            }
+            if (ev.getCode() == KeyCode.ESCAPE) {
+                back_button.fire();
+            }
+        });
+    }
 }

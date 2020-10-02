@@ -88,9 +88,7 @@ public class LoginWindowController {
 
 
         /*----------------------------networkSettings button action-----------------------------*/
-        networkSettings_image.setOnMouseClicked(event -> {
-            networkSettings_button.fire();
-        });
+
         networkSettings_button.setOnAction(event -> {
             openNewWindow("LoginWindow/NetworkSettings/NetworkSettings.fxml", false, Modality.APPLICATION_MODAL);
         });
@@ -164,9 +162,9 @@ public class LoginWindowController {
         alert.setContentText("Помилка з'єднання з сервером");
 
         /* LogIn and Password Checker from DB */
-        UserDataChecker checker = null;
+        UserDataChecker checker = new UserDataChecker();
         try {
-            checker = new UserDataChecker(userName_textField.getText().hashCode(),
+            checker.getUserData(userName_textField.getText().hashCode(),
                     password_passwordField.getText().hashCode());
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -174,7 +172,6 @@ public class LoginWindowController {
         }
 
         if (checker.isAccessGained()) {
-//            UserDataTransfer.accessToken = ""; TODO: nahui?
             setLastVisitDate();
             UserDataTransfer.userName = userName_textField.getText();
             UserDataTransfer.password = password_passwordField.getText();

@@ -1,6 +1,7 @@
 package TestMaker;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -34,6 +35,11 @@ public class WindowTools {
 
     }
 
+    /**
+     * Opens new window from fxml, stops any next operations until current window will be closed
+     *
+     * @param fxmlFileLocation location of window fxml file
+     */
     public static void openNewWindowAndWait(String fxmlFileLocation, boolean isResizeable, Modality modality) {
         try {
             Parent root = FXMLLoader.load(Main.class.getResource(fxmlFileLocation));
@@ -50,6 +56,11 @@ public class WindowTools {
         }
     }
 
+    /**
+     * Set new pane as a child of parent pane
+     * @param rootPane parent pane, in witch child will be located
+     * @param fxmlFileLocation location to fxml file of child pane
+     */
     public void setUpNewPaneOnBorderPane(BorderPane rootPane, String fxmlFileLocation) {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource(fxmlFileLocation));
@@ -60,5 +71,13 @@ public class WindowTools {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Close window
+     * @param node child window element
+     */
+    public static void closeCurrentWindow(Node node) {
+        node.getScene().getWindow().hide();
     }
 }

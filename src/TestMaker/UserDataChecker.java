@@ -9,12 +9,12 @@ import java.sql.SQLException;
 public class UserDataChecker {
     private boolean isAccessGained = false;
 
-    public UserDataChecker(int usernameHash, int passwordHash) throws SQLException {
-        getUserData(usernameHash, passwordHash);
+    public UserDataChecker(){
+
     }
 
     //Connecting to the DB and checking is user with such user data is exist
-    private void getUserData(int usernameHash, int passwordHash) throws SQLException {
+    public void getUserData(int usernameHash, int passwordHash) throws SQLException {
         DBHandler dbHandler = new DBHandler();
         String SQLQuery = "SELECT * FROM " + Constants.USERS_INFO_TABLE_NAME + " where "
                 + Constants.USER_NAME_HASH + " = " + usernameHash + " and " + Constants.PASSWORD_HASH + " = " + passwordHash;
@@ -53,7 +53,8 @@ public class UserDataChecker {
 
     //Access validation getter
     public boolean isAccessGained() {
-//        return true;
         return isAccessGained;
     }
+
+
 }
