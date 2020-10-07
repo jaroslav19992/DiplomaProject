@@ -9,7 +9,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.UserInfoPane.ChangeUserInfoWindow.ChangeUserInfoWindowController">
    <children>
       <AnchorPane fx:id="main_pane" layoutX="10.0" layoutY="10.0" prefHeight="550.0" prefWidth="600.0">
@@ -18,10 +17,17 @@
                <children>
                   <VBox alignment="CENTER" layoutY="5.0">
                      <children>
-                        <Label prefHeight="40.0" prefWidth="308.0" text="Редаувати сосбисті дані" textAlignment="CENTER">
+                        <Label prefHeight="40.0" prefWidth="410.0" text="Редаувати дані користувача" textAlignment="CENTER">
                            <font>
                               <Font size="28.0" />
                            </font>
+                           <graphic>
+                              <ImageView>
+                                 <image>
+                                    <Image url="@../../../../Assets/Images/icons/userSetings.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
                         </Label>
                         <StackPane layoutY="129.0" prefHeight="55.0" prefWidth="600.0" AnchorPane.bottomAnchor="416.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="129.0">
                            <children>
@@ -118,7 +124,7 @@
                   </VBox>
                </children>
             </VBox>
-            <Button fx:id="back_button" mnemonicParsing="false" text="Назад" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+            <Button fx:id="back_button" mnemonicParsing="false" text="Назад" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
          </children>
       </AnchorPane>
    </children>

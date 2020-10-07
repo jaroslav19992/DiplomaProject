@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -17,6 +18,13 @@
                <font>
                   <Font name="System Bold" size="48.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="50.0" fitWidth="50.0">
+                     <image>
+                        <Image url="@../../../../Assets/Images/icons/user32.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Label>
          </top>
          <left>
@@ -113,10 +121,20 @@
          <bottom>
             <StackPane fx:id="bottom_stackPane" prefHeight="204.0" prefWidth="960.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="changeInfo_button" alignment="CENTER" mnemonicParsing="false" text="Редагувати особисту інформацію" StackPane.alignment="BOTTOM_RIGHT">
+                  <Button fx:id="changeInfo_button" alignment="CENTER" mnemonicParsing="false" text="Налаштування" StackPane.alignment="BOTTOM_RIGHT">
                      <StackPane.margin>
                         <Insets bottom="20.0" right="20.0" />
                      </StackPane.margin>
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="35.0">
+                           <image>
+                              <Image url="@../../../../Assets/Images/icons/userSetings.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
                   </Button>
                   <Label fx:id="regDate_label" text="Дата теєстрації: " textFill="#00000080" StackPane.alignment="BOTTOM_LEFT">
                      <StackPane.margin>

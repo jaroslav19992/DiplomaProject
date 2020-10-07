@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minHeight="350.0" minWidth="400.0" prefHeight="718.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.TeacherTestsPaneController">
+   <children>
+      <StackPane layoutX="-9.0" prefHeight="718.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefHeight="718.0" prefWidth="969.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="99.0" prefWidth="960.0">
+                     <children>
+                        <Label text="Меню тестів">
+                           <font>
+                              <Font name="System Bold" size="36.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="46.0">
+                                 <image>
+                                    <Image url="@../../../../Assets/Images/icons/notecheck32.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="TOP_CENTER" prefHeight="638.0" prefWidth="960.0" spacing="30.0" />
+               </children>
+            </VBox>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>

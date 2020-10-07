@@ -1,7 +1,7 @@
 package TestMaker.SingUpWindow.AccessWindow;
 
 
-import TestMaker.UserDataTransfer;
+import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -37,16 +37,16 @@ public class AccessWindowController {
         error_label.setVisible(false);
         accept_button.setOnAction(event -> {
             if (isAccessGained(accessKey_textField.getText())) {
-                UserDataTransfer.isAccessGained = true;
+                UserInfoHandler.isAccessGained = true;
                 WindowTools.closeCurrentWindow(main_pane);
             } else {
-                UserDataTransfer.isAccessGained = false;
+                UserInfoHandler.isAccessGained = false;
                 error_label.setVisible(true);
             }
         });
         //set up close button
         cancel_button.setOnAction(event1 -> {
-            UserDataTransfer.isAccessGained = false;
+            UserInfoHandler.isAccessGained = false;
             main_pane.getScene().getWindow().hide();
         });
     }

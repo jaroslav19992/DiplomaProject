@@ -1,7 +1,7 @@
 package TestMaker.MainProgramWindow.Panes.UserInfoPane.PupilPane;
 
 import TestMaker.DBTools.Constants;
-import TestMaker.UserDataTransfer;
+import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -56,12 +56,12 @@ public class PupilUserInfoPaneController {
      * Set user info into pane labels
      */
     private void initUserInfo() {
-        firstName_label.setText(UserDataTransfer.firstName);
-        lastName_label.setText(UserDataTransfer.lastName);
-        email_label.setText(UserDataTransfer.email);
-        accessToken_label.setText(UserDataTransfer.accessToken);
-        regDate_label.setText(Constants.REG_DATE_LABEL_TEXT + UserDataTransfer.registrationDate);
-        lastVisitDate_label.setText(Constants.LAST_VISIT_DATE_LABEL_TEXT + UserDataTransfer.lastVisitDate);
+        firstName_label.setText(UserInfoHandler.firstName);
+        lastName_label.setText(UserInfoHandler.lastName);
+        email_label.setText(UserInfoHandler.email);
+        accessToken_label.setText(UserInfoHandler.accessToken);
+        regDate_label.setText(Constants.REG_DATE_LABEL_TEXT + UserInfoHandler.registrationDate);
+        lastVisitDate_label.setText(Constants.LAST_VISIT_DATE_LABEL_TEXT + UserInfoHandler.lastVisitDate);
     }
 
 }

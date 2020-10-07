@@ -1,0 +1,171 @@
+package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane;
+
+import TestMaker.DBTools.Constants;
+import TestMaker.DBTools.DBHandler;
+import TestMaker.TestMakerTestFile;
+import TestMaker.UserInfoHandler;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.layout.AnchorPane;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+public class TeacherTestsPaneController {
+
+    @FXML
+    private Button removeTest_button;
+
+    @FXML
+    private Button removeAccess_button;
+
+    @FXML
+    private Button addTest_button;
+
+    @FXML
+    private ListView<TestMakerTestFile> createdTests_listView;
+
+    @FXML
+    private AnchorPane main_pane;
+
+    @FXML
+    private Button editTest_button;
+
+    @FXML
+    private ListView<AccessedPupil> testsAccess_listView;
+
+    @FXML
+    private Button gainAccess_button;
+
+    private int createdTests_currentIndex;
+
+    private ArrayList<AccessedPupil>[] accessedPupilsList = new ArrayList[1000];
+
+    @FXML
+    void initialize() {
+        try {
+            getTestsList();
+            getTestsAccessList();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Помилка");
+            alert.setHeaderText(null);
+            alert.setContentText("Помилка з'єднання з сервером\n" + exception.getMessage());
+        }
+
+        createdTests_listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        createdTests_listView.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldIndex, Number newIndex) {
+                System.out.println("OLD Index: " + oldIndex + ",  NEW Index: " + newIndex);
+                createdTests_currentIndex = (int) newIndex;
+                showTestsAccess(createdTests_currentIndex);
+            }
+        });
+    }
+
+    /**
+     * Get list of which pupil could access which test
+     * @throws SQLException
+     */
+    private void getTestsAccessList() throws SQLException {
+        String SQLQuery = "SELECT " + Constants.ID_TESTS_LIST + ", " + Constants.FIRST_NAME + ", "
+                + Constants.LAST_NAME + ", " + Constants.USER_NAME_HASH + " FROM " +
+                Constants.PUPILS_TESTS_TABLE_NAME + " INNER JOIN " + Constants.USERS_INFO_TABLE_NAME +
+                " USING (" + Constants.USER_NAME_HASH + ") INNER JOIN " + Constants.TESTS_LIST_TABLE_NAME +
+                " USING (" + Constants.ID_TESTS_LIST + ")";
+        DBHandler dbHandler = new DBHandler();
+        ResultSet testsAccessResultSet = dbHandler.getDataFromDB(SQLQuery);
+
+        //Id for current test
+        int currentTestId;
+        //Used for chose minimal possible arraylist length
+        int maxTestId = 0;
+
+        /*//Choose minimal possible arraylist length
+        ResultSet templeSet;
+        testsAccessResultSet.clone();
+        while (templeSet.next()) {
+            currentTestId = templeSet.getInt(Constants.ID_TESTS_LIST);
+            if (currentTestId > maxTestId) {
+                maxTestId = currentTestId;
+            }
+        }*/
+
+        /*
+         * adds into arraylist cell in [currentTestId] position
+         * arraylist with all pupils that have access to that test
+         */
+        while (testsAccessResultSet.next()) {
+            int usernameHash = testsAccessResultSet.getInt(Constants.USER_NAME_HASH);
+            String firstName = testsAccessResultSet.getString(Constants.FIRST_NAME);
+            String lastName = testsAccessResultSet.getString(Constants.LAST_NAME);
+            currentTestId = testsAccessResultSet.getInt(Constants.ID_TESTS_LIST);
+
+            /*
+             * If there is no pupils added into array list cell in [currentTestId] position
+             * create new Arraylist in this position and add new pupil with test access to it.
+             * If any pupil already have access to that test, just add new pupil to arraylist
+             */
+            if (accessedPupilsList[currentTestId] == null) {
+                accessedPupilsList[currentTestId] = new ArrayList<>();
+                accessedPupilsList[currentTestId].add(new AccessedPupil(usernameHash, firstName, lastName));
+            } else {
+                accessedPupilsList[currentTestId].add(new AccessedPupil(usernameHash, firstName, lastName));
+            }
+        }
+    }
+
+    /**
+     * Show testes created by current user at createdTests_listView
+     * create TestMakerTestFile exemplars without file inside
+     */
+    private void getTestsList() throws SQLException {
+        DBHandler dbHandler = new DBHandler();
+        String SQLQuery = "SELECT " + Constants.ID_TESTS_LIST + ", " + Constants.TEST_NAME + " FROM " +
+                Constants.TEACHERS_TESTS_TABLE_NAME + " INNER JOIN " + Constants.USERS_INFO_TABLE_NAME +
+                " USING (" + Constants.USER_NAME_HASH + ") INNER JOIN " + Constants.TESTS_LIST_TABLE_NAME +
+                " USING (" + Constants.ID_TESTS_LIST + ") WHERE " + Constants.USER_NAME_HASH + " = " +
+                UserInfoHandler.userName.hashCode() + ";";
+        ResultSet testsList = dbHandler.getDataFromDB(SQLQuery);
+        showTestsList(testsList);
+    }
+
+    /**
+     * Add entries to list view with tests list
+     *
+     * @param testsList result set from DB with tests information
+     * @throws SQLException
+     */
+    private void showTestsList(ResultSet testsList) throws SQLException {
+        int pointer = -1;
+        while (testsList.next()) {
+            pointer++;
+            TestMakerTestFile test = new TestMakerTestFile(testsList.getInt(Constants.ID_TESTS_LIST),
+                    testsList.getString(Constants.TEST_NAME));
+            createdTests_listView.getItems().add(pointer, test);
+        }
+    }
+
+    /**
+     * Show pupils who have access to currently selected test in tests list view
+     *
+     * @param createdTests_currentIndex - id of currently selected test in tests list view from DB table
+     */
+    private void showTestsAccess(int createdTests_currentIndex) {
+        ArrayList<AccessedPupil> awd = accessedPupilsList[createdTests_listView.getItems()
+                .get(createdTests_currentIndex).getIdInTestsList()];
+        testsAccess_listView.getItems().clear();
+        for (AccessedPupil pupil : awd) {
+            testsAccess_listView.getItems().add(pupil);
+        }
+    }
+}
+

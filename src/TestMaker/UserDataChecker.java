@@ -25,25 +25,25 @@ public class UserDataChecker {
                 isAccessGained = true;
 
                 //set up user info in transfer class
-                UserDataTransfer.userName = userDataSet.getString(Constants.USER_NAME_HASH);
-                UserDataTransfer.password = userDataSet.getString(Constants.PASSWORD_HASH);
-                UserDataTransfer.firstName = userDataSet.getString(Constants.FIRST_NAME);
-                UserDataTransfer.lastName = userDataSet.getString(Constants.LAST_NAME);
-                UserDataTransfer.email = userDataSet.getString(Constants.EMAIL);
-                UserDataTransfer.accessToken = userDataSet.getString(Constants.ACCESS_TOKEN);
-                UserDataTransfer.registrationDate = userDataSet.getString(Constants.REG_DATE);
-                UserDataTransfer.lastVisitDate = userDataSet.getString(Constants.LAST_VISIT_DATE);
+                UserInfoHandler.userName = userDataSet.getString(Constants.USER_NAME_HASH);
+                UserInfoHandler.password = userDataSet.getString(Constants.PASSWORD_HASH);
+                UserInfoHandler.firstName = userDataSet.getString(Constants.FIRST_NAME);
+                UserInfoHandler.lastName = userDataSet.getString(Constants.LAST_NAME);
+                UserInfoHandler.email = userDataSet.getString(Constants.EMAIL);
+                UserInfoHandler.accessToken = userDataSet.getString(Constants.ACCESS_TOKEN);
+                UserInfoHandler.registrationDate = userDataSet.getString(Constants.REG_DATE);
+                UserInfoHandler.lastVisitDate = userDataSet.getString(Constants.LAST_VISIT_DATE);
 
                 //debug user info
                 System.out.println("Sing IN user with user data:\n" +
-                        "User_name: " + UserDataTransfer.userName +" \n" +
-                        "Password: " + UserDataTransfer.password +" \n" +
-                        "First_name: " + UserDataTransfer.firstName +" \n" +
-                        "Last_name: " + UserDataTransfer.lastName +" \n" +
-                        "E-mail: " + UserDataTransfer.email +" \n" +
-                        "Access_token: " + UserDataTransfer.accessToken + "\n" +
-                        "Registration date: " + UserDataTransfer.registrationDate + "\n" +
-                        "Last visit: " + UserDataTransfer.lastVisitDate);
+                        "User_name: " + UserInfoHandler.userName +" \n" +
+                        "Password: " + UserInfoHandler.password +" \n" +
+                        "First_name: " + UserInfoHandler.firstName +" \n" +
+                        "Last_name: " + UserInfoHandler.lastName +" \n" +
+                        "E-mail: " + UserInfoHandler.email +" \n" +
+                        "Access_token: " + UserInfoHandler.accessToken + "\n" +
+                        "Registration date: " + UserInfoHandler.registrationDate + "\n" +
+                        "Last visit: " + UserInfoHandler.lastVisitDate);
             } else {
                 //block access
                 System.out.println("No user with equal data");

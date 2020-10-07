@@ -5,7 +5,7 @@ import TestMaker.DBTools.Constants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.LoginWindow.NetworkSettings.NetworkSettingsConfigsReader;
 import TestMaker.UserDataChecker;
-import TestMaker.UserDataTransfer;
+import TestMaker.UserInfoHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -156,10 +156,6 @@ public class LoginWindowController {
      */
     private void loginButtonAction() {
         error_label.setVisible(false);
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Помилка");
-        alert.setHeaderText(null);
-        alert.setContentText("Помилка з'єднання з сервером");
 
         /* LogIn and Password Checker from DB */
         UserDataChecker checker = new UserDataChecker();
@@ -168,13 +164,17 @@ public class LoginWindowController {
                     password_passwordField.getText().hashCode());
         } catch (Exception exception) {
             exception.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Помилка");
+            alert.setHeaderText(null);
+            alert.setContentText("Помилка з'єднання з сервером\nПричина:\n" + exception.getMessage());
             alert.showAndWait();
         }
 
         if (checker.isAccessGained()) {
             setLastVisitDate();
-            UserDataTransfer.userName = userName_textField.getText();
-            UserDataTransfer.password = password_passwordField.getText();
+            UserInfoHandler.userName = userName_textField.getText();
+            UserInfoHandler.password = password_passwordField.getText();
             //Open main program window
             openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
             //Hide LogIn window
@@ -208,7 +208,7 @@ public class LoginWindowController {
         try {
             dbHandler.loadDataToDB("UPDATE " + "`" + Configs.dbName + "`" + "." + "`" + Constants.USERS_INFO_TABLE_NAME + "`" +
                     " SET " + "`" + Constants.LAST_VISIT_DATE + "`" + " = " + "'" + formatForVisitDate.format(date) + "'" + " WHERE "
-                    + "`" + Constants.USER_NAME_HASH + "`" + " = " + "'" +userName_textField.getText().hashCode() + "'" + ";");
+                    + "`" + Constants.USER_NAME_HASH + "`" + " = " + "'" + userName_textField.getText().hashCode() + "'" + ";");
         } catch (SQLException exception) {
             exception.printStackTrace();
         }

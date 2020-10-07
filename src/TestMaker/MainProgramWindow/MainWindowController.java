@@ -1,6 +1,6 @@
 package TestMaker.MainProgramWindow;
 
-import TestMaker.UserDataTransfer;
+import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -66,14 +66,6 @@ public class MainWindowController {
     void initialize() {
         setOnHoverColorChange();
         setUpSceneOnClickChange();
-
-        main_splitPane.setOnMouseClicked(event -> {
-            main_splitPane.getScene().getWindow().setOnCloseRequest(event1 -> {
-                System.out.println("adawdawdawd");
-            });
-        });
-
-
     }
 
 
@@ -83,17 +75,22 @@ public class MainWindowController {
     private void setUpSceneOnClickChange() {
         WindowTools windowTools = new WindowTools();
         userInfo_stackPane.setOnMouseClicked(event -> {
-            if (UserDataTransfer.accessToken.equals("teacherAT")) {
+            if (UserInfoHandler.accessToken.equals("teacherAT")) {
                 windowTools.setUpNewPaneOnBorderPane(main_borderPane,
                         "/TestMaker/MainProgramWindow/Panes/UserInfoPane/TeacherPane/TeacherUserInfoPane.fxml");
-            }else if (UserDataTransfer.accessToken.equals("pupilAT")) {
+            } else if (UserInfoHandler.accessToken.equals("pupilAT")) {
                 windowTools.setUpNewPaneOnBorderPane(main_borderPane,
                         "/TestMaker/MainProgramWindow/Panes/UserInfoPane/PupilPane/PupilUserInfoPane.fxml");
             }
         });
         tests_stackPane.setOnMouseClicked(event -> {
-            windowTools.setUpNewPaneOnBorderPane(main_borderPane,
-                    "/TestMaker/MainProgramWindow/Panes/TablesPane/TablesPane.fxml");
+            if (UserInfoHandler.accessToken.equals("teacherAT")) {
+                windowTools.setUpNewPaneOnBorderPane(main_borderPane,
+                        "/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/TeacherTestsPane.fxml");
+            } else {
+                windowTools.setUpNewPaneOnBorderPane(main_borderPane,
+                        "/TestMaker/MainProgramWindow/Panes/TestsPane/PupilPane/PupilTestsPane.fxml");
+            }
         });
         settings_stackPane.setOnMouseClicked(event -> {
             windowTools.setUpNewPaneOnBorderPane(main_borderPane,

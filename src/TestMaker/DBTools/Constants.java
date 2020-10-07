@@ -2,8 +2,10 @@ package TestMaker.DBTools;
 
 public class Constants {
     public static final String DB_NAME = "mydb";
-    public static final String USERS_ID = "idUsersinfo";
+
+    //users info table constants
     public static final String USERS_INFO_TABLE_NAME = "usersinfo";
+    public static final String USERS_ID = "idUsersinfo";
     public static final String USER_NAME_HASH = "usernameHash";
     public static final String PASSWORD_HASH = "passwordHash";
     public static final String EMAIL = "email";
@@ -14,6 +16,25 @@ public class Constants {
     public static final String ACCESS_TOKEN = "accessToken";
     public static final String REG_DATE = "registrationDate";
     public static final String LAST_VISIT_DATE = "lastVisitDate";
+
+    //teachers tests table constants
+    public static final String TEACHERS_TESTS_TABLE_NAME = "teacherstests";
+//    public static final String USER_NAME_HASH = "usernameHash";
+//    public static final String ID_TESTS_LIST = "idTestsList";
+
+    //pupils tests table constants
+    public static final String PUPILS_TESTS_TABLE_NAME = "pupilstests";
+    //    public static final String USER_NAME_HASH = "usernameHash";
+    //    public static final String ID_TESTS_LIST = "idTestsList";
+
+    //tests list table constants
+    public static final String TESTS_LIST_TABLE_NAME = "testslist";
+    public static final String ID_TESTS_LIST = "idTestsList";
+    public static final String TEST_NAME = "testName";
+    public static final String TEST_FILE = "testFile";
+
+
+
     public static final String REG_DATE_LABEL_TEXT = "Дата реєстрації: ";
     public static final String LAST_VISIT_DATE_LABEL_TEXT = "Дата останнього входу: ";
 

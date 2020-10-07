@@ -99,6 +99,9 @@
                </image>
             </ImageView>
          </graphic>
+         <tooltip>
+            <Tooltip text="Налаштування підключення" />
+         </tooltip>
       </Button>
    </children>
 </StackPane>

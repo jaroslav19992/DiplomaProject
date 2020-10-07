@@ -1,4 +1,0 @@
-root@localhost: uWKqsJCe0c.Q
-
-ALTER USER 'root'@'localhost'   -Юзер
-IDENTIFIED BY 'password';	-Новий пароль

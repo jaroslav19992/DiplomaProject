@@ -1,7 +1,7 @@
 package TestMaker.SingUpWindow;
 
 
-import TestMaker.UserDataTransfer;
+import TestMaker.UserInfoHandler;
 import TestMaker.DBTools.Constants;
 import TestMaker.DBTools.DBHandler;
 import javafx.fxml.FXML;
@@ -73,9 +73,9 @@ public class SingUpWindowController {
                         openNewWindowAndWait("SingUpWindow/AccessWindow/AccessWindow.fxml",
                                 false, Modality.APPLICATION_MODAL);
                     } else {
-                        UserDataTransfer.isAccessGained = true;
+                        UserInfoHandler.isAccessGained = true;
                     }
-                    if (UserDataTransfer.isAccessGained) {
+                    if (UserInfoHandler.isAccessGained) {
                         transferUserInfo();
                         registerUser(dbHandler);
                         openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
@@ -99,15 +99,15 @@ public class SingUpWindowController {
      * @param dbHandler database connector class
      */
     private void registerUser(DBHandler dbHandler) {
-        if (UserDataTransfer.isAccessGained) {
+        if (UserInfoHandler.isAccessGained) {
             //get register and visit date
             Date date = new Date();
             SimpleDateFormat formatForRegDate = new SimpleDateFormat("yyyy.MM.dd");
             SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
             try {
-                dbHandler.singUpNewUser(UserDataTransfer.userName, UserDataTransfer.password, UserDataTransfer.firstName,
-                        UserDataTransfer.lastName, UserDataTransfer.email, UserDataTransfer.accessToken,
+                dbHandler.singUpNewUser(UserInfoHandler.userName, UserInfoHandler.password, UserInfoHandler.firstName,
+                        UserInfoHandler.lastName, UserInfoHandler.email, UserInfoHandler.accessToken,
                         formatForRegDate.format(date), formatForVisitDate.format(date));
             } catch (SQLException exception) {
                 exception.printStackTrace();
@@ -122,15 +122,15 @@ public class SingUpWindowController {
 
     //get user info snd give it to transfer info class
     private void transferUserInfo() {
-        UserDataTransfer.userName = userName_textField.getText();
-        UserDataTransfer.password = password_textField.getText();
-        UserDataTransfer.firstName = firstName_textField.getText();
-        UserDataTransfer.lastName = lastName_textField.getText();
-        UserDataTransfer.email = email_textField.getText();
+        UserInfoHandler.userName = userName_textField.getText();
+        UserInfoHandler.password = password_textField.getText();
+        UserInfoHandler.firstName = firstName_textField.getText();
+        UserInfoHandler.lastName = lastName_textField.getText();
+        UserInfoHandler.email = email_textField.getText();
         if (radioButton_teacher.isSelected()) {
-            UserDataTransfer.accessToken = Constants.TEACHER_ACCESS_TOKEN;
+            UserInfoHandler.accessToken = Constants.TEACHER_ACCESS_TOKEN;
         } else {
-            UserDataTransfer.accessToken = Constants.PUPIL_ACCESS_TOKEN;
+            UserInfoHandler.accessToken = Constants.PUPIL_ACCESS_TOKEN;
 
         }
     }

@@ -43,6 +43,7 @@ public class DBHandler {
      */
     public ResultSet getDataFromDB(String SQLQuery) throws SQLException {
         System.out.println("Execute SQL query: " + SQLQuery);
+        System.out.println("----------------------------\n");
         Connection connection = getDbConnection();
         Statement statement = connection.createStatement();
 
@@ -50,7 +51,8 @@ public class DBHandler {
     }
 
     public void loadDataToDB(String SQLQuery) throws SQLException {
-        System.out.println("Execute SQL query: " + SQLQuery +"\n");
+        System.out.println("Execute SQL query: " + SQLQuery);
+        System.out.println("----------------------------\n");
         Connection connection = getDbConnection();
         Statement statement = connection.createStatement();
         statement.execute(SQLQuery);

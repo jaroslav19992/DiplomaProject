@@ -2,7 +2,7 @@ package TestMaker.MainProgramWindow.Panes.UserInfoPane.ChangeUserInfoWindow;
 
 import TestMaker.DBTools.Constants;
 import TestMaker.DBTools.DBHandler;
-import TestMaker.UserDataTransfer;
+import TestMaker.UserInfoHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -90,9 +90,9 @@ public class ChangeUserInfoWindowController {
                         openNewWindowAndWait("SingUpWindow/AccessWindow/AccessWindow.fxml",
                                 false, Modality.APPLICATION_MODAL);
                     } else {
-                        UserDataTransfer.isAccessGained = true;
+                        UserInfoHandler.isAccessGained = true;
                     }
-                    if (UserDataTransfer.isAccessGained) {
+                    if (UserInfoHandler.isAccessGained) {
                         DBHandler dbHandler = new DBHandler();
                         error_label.setVisible(false);
                         changeUserInfo(dbHandler);
@@ -124,51 +124,44 @@ public class ChangeUserInfoWindowController {
      *
      * @param dbHandler
      */
-    private void changeUserInfo(DBHandler dbHandler) {
+    private void changeUserInfo(DBHandler dbHandler) throws SQLException {
         String SQLQuery = "UPDATE " + Constants.DB_NAME + "." + Constants.USERS_INFO_TABLE_NAME + " SET " + Constants.USER_NAME_HASH +
                 " = " + "'" + userName_textField.getText().hashCode() + "'" + ", " + Constants.PASSWORD_HASH + " = " + "'" +
-                ((password_textField.getText().equals("")) ? UserDataTransfer.password.hashCode() : password_textField.getText().hashCode())
+                ((password_textField.getText().equals("")) ? UserInfoHandler.password.hashCode() : password_textField.getText().hashCode())
                 + "'" + ", " + Constants.EMAIL + " = " + "'" + email_textField.getText() + "'" + ", " + Constants.FIRST_NAME + " = " +
                 "'" + firstName_textField.getText() + "'" + ", " + Constants.LAST_NAME + " = " + "'" + lastName_textField.getText()
-                + "'" +", " + Constants.ACCESS_TOKEN + " = " + ((radioButton_teacher.isSelected())?(Constants.TEACHER_ACCESS_TOKEN):
-                (Constants.PUPIL_ACCESS_TOKEN)) + "', WHERE (" + Constants.USER_NAME_HASH + " = " + UserDataTransfer.userName.hashCode() + ")";
-        try {
-            dbHandler.loadDataToDB(SQLQuery);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Помилка");
-            alert.setHeaderText(null);
-            alert.setContentText("Помилка з'єднання з сервером");
-            alert.showAndWait();
-        }
+                + "'" + ", " + Constants.ACCESS_TOKEN + " = " + "'" + ((radioButton_teacher.isSelected()) ? (Constants.TEACHER_ACCESS_TOKEN) :
+                (Constants.PUPIL_ACCESS_TOKEN)) + "' WHERE (" + Constants.USER_NAME_HASH + " = " + UserInfoHandler.userName.hashCode() + ")";
+
+        dbHandler.loadDataToDB(SQLQuery);
     }
+
 
     /**
      * Set info from user data transfer to text fields
      */
     private void setTextForTextFields() {
-        userName_textField.setText(UserDataTransfer.userName);
-        email_textField.setText(UserDataTransfer.email);
-        firstName_textField.setText(UserDataTransfer.firstName);
-        lastName_textField.setText(UserDataTransfer.lastName);
+        userName_textField.setText(UserInfoHandler.userName);
+        email_textField.setText(UserInfoHandler.email);
+        firstName_textField.setText(UserInfoHandler.firstName);
+        lastName_textField.setText(UserInfoHandler.lastName);
     }
 
     /**
      * Get user info snd give it to transfer info class
      */
     private void transferUserInfo() {
-        UserDataTransfer.userName = userName_textField.getText();
+        UserInfoHandler.userName = userName_textField.getText();
         if (!password_textField.getText().equals("")) {
-            UserDataTransfer.password = password_textField.getText();
+            UserInfoHandler.password = password_textField.getText();
         }
-        UserDataTransfer.firstName = firstName_textField.getText();
-        UserDataTransfer.lastName = lastName_textField.getText();
-        UserDataTransfer.email = email_textField.getText();
+        UserInfoHandler.firstName = firstName_textField.getText();
+        UserInfoHandler.lastName = lastName_textField.getText();
+        UserInfoHandler.email = email_textField.getText();
         if (radioButton_teacher.isSelected()) {
-            UserDataTransfer.accessToken = Constants.TEACHER_ACCESS_TOKEN;
+            UserInfoHandler.accessToken = Constants.TEACHER_ACCESS_TOKEN;
         } else {
-            UserDataTransfer.accessToken = Constants.PUPIL_ACCESS_TOKEN;
+            UserInfoHandler.accessToken = Constants.PUPIL_ACCESS_TOKEN;
 
         }
     }
@@ -265,7 +258,7 @@ public class ChangeUserInfoWindowController {
                 + "\"" + email_textField.getText() + "\"";
 
         //if username changed
-        if (userName_textField.getText().hashCode() != UserDataTransfer.userName.hashCode()) {
+        if (userName_textField.getText().hashCode() != UserInfoHandler.userName.hashCode()) {
             //username check
             if (dbHandler.getDataFromDB(SQLQueryForUsername).next()) {
                 error_label.setText("Користувач з таким ім'ям уже існує");
@@ -275,7 +268,7 @@ public class ChangeUserInfoWindowController {
         }
 
         //if e-mail changed
-        if (email_textField.getText().hashCode() != UserDataTransfer.email.hashCode()) {
+        if (email_textField.getText().hashCode() != UserInfoHandler.email.hashCode()) {
             //e-mail check
             if (dbHandler.getDataFromDB(SQLQueryForEmail).next()) {
                 error_label.setText("Даний E-mail уже використовується");
@@ -298,7 +291,7 @@ public class ChangeUserInfoWindowController {
         ResultSet resultSet;
         String SQLQuery = "SELECT " + Constants.PASSWORD_HASH + " FROM " + Constants.DB_NAME + "." +
                 Constants.USERS_INFO_TABLE_NAME + " WHERE " +
-                Constants.USER_NAME_HASH + " = " + UserDataTransfer.userName.hashCode();
+                Constants.USER_NAME_HASH + " = " + UserInfoHandler.userName.hashCode();
         try {
             resultSet = dbHandler.getDataFromDB(SQLQuery);
             resultSet.next();
@@ -328,6 +321,7 @@ public class ChangeUserInfoWindowController {
         }
         return false;
     }
+
     /**
      * Keys pressed handler
      *
