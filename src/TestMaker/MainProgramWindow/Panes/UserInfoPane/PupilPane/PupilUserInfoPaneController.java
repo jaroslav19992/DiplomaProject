@@ -49,10 +49,9 @@ public class PupilUserInfoPaneController {
     void initialize() {
         initUserInfo();
 
-        changeInfo_button.setOnAction(event -> {
-            WindowTools.openNewWindow("/TestMaker/MainProgramWindow/Panes/UserInfoPane/ChangeUserInfoWindow/ChangeUserInfoWindow.fxml",
-                    false, Modality.WINDOW_MODAL);
-        });
+        changeInfo_button.setOnAction(event -> WindowTools.openNewWindow(
+                "/TestMaker/MainProgramWindow/Panes/UserInfoPane/ChangeUserInfoWindow/ChangeUserInfoWindow.fxml",
+                false, Modality.WINDOW_MODAL));
     }
 
     /**

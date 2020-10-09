@@ -15,10 +15,9 @@ public class UserDataChecker {
 
     //Connecting to the DB and checking is user with such user data is exist
     public void getUserData(int usernameHash, int passwordHash) throws SQLException {
-        DBHandler dbHandler = new DBHandler();
         String SQLQuery = "SELECT * FROM " + Constants.USERS_INFO_TABLE_NAME + " where "
                 + Constants.USER_NAME_HASH + " = " + usernameHash + " and " + Constants.PASSWORD_HASH + " = " + passwordHash;
-        ResultSet userDataSet = dbHandler.getDataFromDB(SQLQuery);
+        ResultSet userDataSet = DBHandler.getDataFromDB(SQLQuery);
 
             if (userDataSet.next()) {
                 //gain access

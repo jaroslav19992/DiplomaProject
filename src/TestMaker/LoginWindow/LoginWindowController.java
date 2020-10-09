@@ -13,7 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 
@@ -25,11 +24,6 @@ import java.util.Date;
 import static TestMaker.WindowTools.openNewWindow;
 
 public class LoginWindowController {
-    @FXML
-    private AnchorPane main_pane;
-
-    @FXML
-    private ImageView networkSettings_image;
 
     @FXML
     private ImageView openEye_imageView;
@@ -54,9 +48,6 @@ public class LoginWindowController {
     private Button login_button;
 
     @FXML
-    private Label password_label;
-
-    @FXML
     private Button register_button;
 
     @FXML
@@ -64,9 +55,6 @@ public class LoginWindowController {
 
     @FXML
     private StackPane login_pane;
-
-    @FXML
-    private Label login_label;
 
     LoadingAnimation loadingAnimation;
 
@@ -83,11 +71,7 @@ public class LoginWindowController {
         login_button.setOnAction(event -> {
             loadingAnimation = new LoadingAnimation(login_pane);
             loadingAnimation.start();
-            try {
-                loginButtonAction();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            loginButtonAction();
             loadingAnimation.interrupt();
 
         });
@@ -104,9 +88,9 @@ public class LoginWindowController {
 
         /*----------------------------networkSettings button action-----------------------------*/
 
-        networkSettings_button.setOnAction(event -> {
-            openNewWindow("LoginWindow/NetworkSettings/NetworkSettings.fxml", false, Modality.APPLICATION_MODAL);
-        });
+        networkSettings_button.setOnAction(event ->
+                openNewWindow("LoginWindow/NetworkSettings/NetworkSettings.fxml",
+                        false, Modality.APPLICATION_MODAL));
         /*----------------------------networkSettings button action-----------------------------*/
 
 
@@ -115,12 +99,8 @@ public class LoginWindowController {
         passwordVisibility();
 
         //Sync password fields
-        password_passwordField.setOnKeyReleased(event -> {
-            password_textField.setText(password_passwordField.getText());
-        });
-        password_textField.setOnKeyReleased(event -> {
-            password_passwordField.setText(password_textField.getText());
-        });
+        password_passwordField.setOnKeyReleased(event -> password_textField.setText(password_passwordField.getText()));
+        password_textField.setOnKeyReleased(event -> password_passwordField.setText(password_textField.getText()));
         /*----------------------------Password functions-----------------------------*/
 
     }
@@ -169,7 +149,7 @@ public class LoginWindowController {
     /**
      * What is happens when login button is pressed
      */
-    private void loginButtonAction() throws InterruptedException {
+    private void loginButtonAction(){
         error_label.setVisible(false);
 
         /* LogIn and Password Checker from DB */
@@ -217,12 +197,11 @@ public class LoginWindowController {
      * Set up user last visit date
      */
     private void setLastVisitDate() {
-        DBHandler dbHandler = new DBHandler();
         Date date = new Date();
         SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
         try {
-            dbHandler.loadDataToDB("UPDATE " + "`" + Configs.dbName + "`" + "." + "`" + Constants.USERS_INFO_TABLE_NAME + "`" +
+            DBHandler.loadDataToDB("UPDATE " + "`" + Configs.dbName + "`" + "." + "`" + Constants.USERS_INFO_TABLE_NAME + "`" +
                     " SET " + "`" + Constants.LAST_VISIT_DATE + "`" + " = " + "'" + formatForVisitDate.format(date) + "'" + " WHERE "
                     + "`" + Constants.USER_NAME_HASH + "`" + " = " + "'" + userName_textField.getText().hashCode() + "'" + ";");
         } catch (SQLException exception) {

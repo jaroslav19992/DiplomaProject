@@ -3,19 +3,19 @@ package TestMaker.DBTools;
 import java.sql.*;
 
 public class DBHandler {
-    Connection dbConnection;
+    public static Connection dbConnection = null;
 
-    public Connection getDbConnection() throws SQLException {
+    public static Connection getDbConnection() throws SQLException {
         String connectionString = "jdbc:mysql://" + Configs.dbHost + ":" + Configs.dbPort + "/" + Configs.dbName + "?serverTimezone=UTC";
-
-        dbConnection = DriverManager.getConnection(connectionString, Configs.dbUser, Configs.dbPassword);
-
+            if (dbConnection == null) {
+                dbConnection = DriverManager.getConnection(connectionString, Configs.dbUser, Configs.dbPassword);
+            }
         return dbConnection;
     }
 
     //Add data to the database table
-    public void singUpNewUser(String username, String password, String firstName, String lastName,
-                              String email, String accessToken, String regDate, String lastVisitDate) throws SQLException {
+    public static void singUpNewUser(String username, String password, String firstName, String lastName,
+                                     String email, String accessToken, String regDate, String lastVisitDate) throws SQLException {
         String insertString = "INSERT INTO " + Constants.USERS_INFO_TABLE_NAME + " (" + Constants.USER_NAME_HASH + ", "
                 + Constants.PASSWORD_HASH + ", " + Constants.FIRST_NAME + ", " + Constants.LAST_NAME + ", " + Constants.EMAIL
                 + ", " + Constants.ACCESS_TOKEN + ", " + Constants.REG_DATE + ", "
@@ -41,7 +41,7 @@ public class DBHandler {
      * @param SQLQuery string
      * @return set of data from db
      */
-    public ResultSet getDataFromDB(String SQLQuery) throws SQLException {
+    public static ResultSet getDataFromDB(String SQLQuery) throws SQLException {
         System.out.println("Execute SQL query: " + SQLQuery);
         System.out.println("----------------------------\n");
         Connection connection = getDbConnection();
@@ -50,7 +50,7 @@ public class DBHandler {
         return statement.executeQuery(SQLQuery);
     }
 
-    public void loadDataToDB(String SQLQuery) throws SQLException {
+    public static void loadDataToDB(String SQLQuery) throws SQLException {
         System.out.println("Execute SQL query: " + SQLQuery);
         System.out.println("----------------------------\n");
         Connection connection = getDbConnection();

@@ -64,7 +64,6 @@ public class SingUpWindowController {
 
         //SingUp button click
         singUpButton.setOnAction(event -> {
-            DBHandler dbHandler = new DBHandler();
 
             try {
                 if (checkForCorrectInfo()) {
@@ -77,7 +76,7 @@ public class SingUpWindowController {
                     }
                     if (UserInfoHandler.isAccessGained) {
                         transferUserInfo();
-                        registerUser(dbHandler);
+                        registerUser();
                         openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
                         main_pane.getScene().getWindow().hide();
                     }
@@ -95,10 +94,9 @@ public class SingUpWindowController {
 
     /**
      * Register user with pupil or teacher access token
-     *
-     * @param dbHandler database connector class
+
      */
-    private void registerUser(DBHandler dbHandler) {
+    private void registerUser() {
         if (UserInfoHandler.isAccessGained) {
             //get register and visit date
             Date date = new Date();
@@ -106,7 +104,7 @@ public class SingUpWindowController {
             SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
             try {
-                dbHandler.singUpNewUser(UserInfoHandler.userName, UserInfoHandler.password, UserInfoHandler.firstName,
+                DBHandler.singUpNewUser(UserInfoHandler.userName, UserInfoHandler.password, UserInfoHandler.firstName,
                         UserInfoHandler.lastName, UserInfoHandler.email, UserInfoHandler.accessToken,
                         formatForRegDate.format(date), formatForVisitDate.format(date));
             } catch (SQLException exception) {
@@ -141,7 +139,6 @@ public class SingUpWindowController {
      * @return is user can register
      */
     private boolean checkForCorrectInfo() throws SQLException {
-        DBHandler dbHandler = new DBHandler();
         /*-------------------------------Empty fields check-----------------------------*/
         if (email_textField.getText().equals("") || password_textField.getText().equals("") || firstName_textField.getText().equals("") ||
                 lastName_textField.getText().equals("") || userName_textField.getText().equals("")) {
@@ -211,13 +208,13 @@ public class SingUpWindowController {
                 + "\"" + email_textField.getText() + "\"";
 
         //username check
-        if (dbHandler.getDataFromDB(SQLQueryForUsername).next()) {
+        if (DBHandler.getDataFromDB(SQLQueryForUsername).next()) {
             error_label.setText("Користувач з таким ім'ям уже існує");
             error_label.setVisible(true);
             return false;
         }
         //e-mail check
-        if (dbHandler.getDataFromDB(SQLQueryForEmail).next()) {
+        if (DBHandler.getDataFromDB(SQLQueryForEmail).next()) {
             error_label.setText("Даний E-mail уже використовується");
             error_label.setVisible(true);
             return false;

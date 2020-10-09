@@ -93,9 +93,8 @@ public class ChangeUserInfoWindowController {
                         UserInfoHandler.isAccessGained = true;
                     }
                     if (UserInfoHandler.isAccessGained) {
-                        DBHandler dbHandler = new DBHandler();
                         error_label.setVisible(false);
-                        changeUserInfo(dbHandler);
+                        changeUserInfo();
                         transferUserInfo();
 
                         error_label.setTextFill(Color.GREEN);
@@ -114,17 +113,13 @@ public class ChangeUserInfoWindowController {
 
         });
 
-        back_button.setOnAction(event -> {
-            main_pane.getScene().getWindow().hide();
-        });
+        back_button.setOnAction(event -> main_pane.getScene().getWindow().hide());
     }
 
     /**
      * Create SQL query to update user info. if password fields is not touched password will be the same
-     *
-     * @param dbHandler
      */
-    private void changeUserInfo(DBHandler dbHandler) throws SQLException {
+    private void changeUserInfo() throws SQLException {
         String SQLQuery = "UPDATE " + Constants.DB_NAME + "." + Constants.USERS_INFO_TABLE_NAME + " SET " + Constants.USER_NAME_HASH +
                 " = " + "'" + userName_textField.getText().hashCode() + "'" + ", " + Constants.PASSWORD_HASH + " = " + "'" +
                 ((password_textField.getText().equals("")) ? UserInfoHandler.password.hashCode() : password_textField.getText().hashCode())
@@ -133,7 +128,7 @@ public class ChangeUserInfoWindowController {
                 + "'" + ", " + Constants.ACCESS_TOKEN + " = " + "'" + ((radioButton_teacher.isSelected()) ? (Constants.TEACHER_ACCESS_TOKEN) :
                 (Constants.PUPIL_ACCESS_TOKEN)) + "' WHERE (" + Constants.USER_NAME_HASH + " = " + UserInfoHandler.userName.hashCode() + ")";
 
-        dbHandler.loadDataToDB(SQLQuery);
+        DBHandler.loadDataToDB(SQLQuery);
     }
 
 
@@ -172,7 +167,6 @@ public class ChangeUserInfoWindowController {
      * @return is user can register
      */
     private boolean checkForCorrectInfo() throws SQLException {
-        DBHandler dbHandler = new DBHandler();
         /*-------------------------------Empty fields check-----------------------------*/
         if (email_textField.getText().equals("") || firstName_textField.getText().equals("")
                 || lastName_textField.getText().equals("") || userName_textField.getText().equals("")) {
@@ -185,7 +179,7 @@ public class ChangeUserInfoWindowController {
         /*-------------------------------Password check-----------------------------*/
         if (!oldPassword_textField.getText().equals("") || !password_textField.getText().equals("") ||
                 !passwordRepeat_textField.getText().equals("")) {
-            int oldPasswordHash = getOldPasswordHash(dbHandler);
+            int oldPasswordHash = getOldPasswordHash();
 
             if (oldPassword_textField.getText().hashCode() != oldPasswordHash) {
                 error_label.setText("Старий пароль не вірний");
@@ -260,7 +254,7 @@ public class ChangeUserInfoWindowController {
         //if username changed
         if (userName_textField.getText().hashCode() != UserInfoHandler.userName.hashCode()) {
             //username check
-            if (dbHandler.getDataFromDB(SQLQueryForUsername).next()) {
+            if (DBHandler.getDataFromDB(SQLQueryForUsername).next()) {
                 error_label.setText("Користувач з таким ім'ям уже існує");
                 error_label.setVisible(true);
                 return false;
@@ -270,7 +264,7 @@ public class ChangeUserInfoWindowController {
         //if e-mail changed
         if (email_textField.getText().hashCode() != UserInfoHandler.email.hashCode()) {
             //e-mail check
-            if (dbHandler.getDataFromDB(SQLQueryForEmail).next()) {
+            if (DBHandler.getDataFromDB(SQLQueryForEmail).next()) {
                 error_label.setText("Даний E-mail уже використовується");
                 error_label.setVisible(true);
                 return false;
@@ -284,16 +278,15 @@ public class ChangeUserInfoWindowController {
     /**
      * Get old user password hash from db
      *
-     * @param dbHandler
      * @return old password ahsh
      */
-    private int getOldPasswordHash(DBHandler dbHandler) {
+    private int getOldPasswordHash() {
         ResultSet resultSet;
         String SQLQuery = "SELECT " + Constants.PASSWORD_HASH + " FROM " + Constants.DB_NAME + "." +
                 Constants.USERS_INFO_TABLE_NAME + " WHERE " +
                 Constants.USER_NAME_HASH + " = " + UserInfoHandler.userName.hashCode();
         try {
-            resultSet = dbHandler.getDataFromDB(SQLQuery);
+            resultSet = DBHandler.getDataFromDB(SQLQuery);
             resultSet.next();
             return resultSet.getInt(1);
         } catch (SQLException exception) {

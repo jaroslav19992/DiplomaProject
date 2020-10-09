@@ -6,8 +6,6 @@ import TestMaker.DBTools.DBHandler;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTestFile;
 import TestMaker.UserInfoHandler;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -47,9 +45,7 @@ public class TeacherTestsPaneController {
 
     private int createdTests_currentIndex;
 
-    private ArrayList<AccessedPupil>[] accessedPupilsList = new ArrayList[1000];
-
-    private ResultSet testsList;
+    private final ArrayList<AccessedPupil>[] accessedPupilsList = new ArrayList[1000];
 
     private LoadingAnimation loadingAnimation;
 
@@ -57,30 +53,25 @@ public class TeacherTestsPaneController {
     void initialize() {
             loadingAnimation = new LoadingAnimation(main_pane);
             loadingAnimation.start();
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        getTestsList();
-                        getTestsAccessList();
-                        createdTests_listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-                        createdTests_listView.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-                            @Override
-                            public void changed(ObservableValue<? extends Number> observable, Number oldIndex, Number newIndex) {
-                                System.out.println("OLD Index: " + oldIndex + ",  NEW Index: " + newIndex);
-                                createdTests_currentIndex = (int) newIndex;
-                                showTestsAccess(createdTests_currentIndex);
-                            }
-                        });
-                    } catch (SQLException exception) {
-                        exception.printStackTrace();
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Помилка");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Помилка з'єднання з сервером\n" + exception.getMessage());
-                        alert.showAndWait();
-                        loadingAnimation.interrupt();
-                    }
+            Platform.runLater(() -> {
+                try {
+                    getTestsList();
+                    getTestsAccessList();
+                    createdTests_listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+                    createdTests_listView.getSelectionModel().selectedIndexProperty().addListener((
+                            observable, oldIndex, newIndex) -> {
+                        System.out.println("OLD Index: " + oldIndex + ",  NEW Index: " + newIndex);
+                        createdTests_currentIndex = (int) newIndex;
+                        showTestsAccess(createdTests_currentIndex);
+                    });
+                } catch (SQLException exception) {
+                    exception.printStackTrace();
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Помилка");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Помилка з'єднання з сервером\n" + exception.getMessage());
+                    alert.showAndWait();
+                    loadingAnimation.interrupt();
                 }
             });
     }
@@ -88,7 +79,7 @@ public class TeacherTestsPaneController {
     /**
      * Get list of which pupil could access which test
      *
-     * @throws SQLException
+     * @throws SQLException if no connection
      */
     private void getTestsAccessList() throws SQLException {
         String SQLQuery = "SELECT " + Constants.ID_TESTS_LIST + ", " + Constants.FIRST_NAME + ", "
@@ -96,14 +87,13 @@ public class TeacherTestsPaneController {
                 Constants.PUPILS_TESTS_TABLE_NAME + " INNER JOIN " + Constants.USERS_INFO_TABLE_NAME +
                 " USING (" + Constants.USER_NAME_HASH + ") INNER JOIN " + Constants.TESTS_LIST_TABLE_NAME +
                 " USING (" + Constants.ID_TESTS_LIST + ")";
-        DBHandler dbHandler = new DBHandler();
-        ResultSet testsAccessResultSet = dbHandler.getDataFromDB(SQLQuery);
+        ResultSet testsAccessResultSet = DBHandler.getDataFromDB(SQLQuery);
 
         //Id for current test
         int currentTestId;
         //Used for chose minimal possible arraylist length
-        int maxTestId = 0;
-
+//        int maxTestId = 0;
+//
         /*//Choose minimal possible arraylist length
         ResultSet templeSet;
         testsAccessResultSet.clone();
@@ -155,11 +145,10 @@ public class TeacherTestsPaneController {
     /**
      * Add entries to list view with tests list
      *
-     * @throws SQLException
+     * @throws SQLException if no connection
      */
     private void showTestsList(String SQLQuery) throws SQLException {
-        DBHandler dbHandler = new DBHandler();
-        testsList = dbHandler.getDataFromDB(SQLQuery);
+        ResultSet testsList = DBHandler.getDataFromDB(SQLQuery);
         int pointer = -1;
         while (testsList.next()) {
             pointer++;

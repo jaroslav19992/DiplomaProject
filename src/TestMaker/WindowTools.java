@@ -29,7 +29,7 @@ public class WindowTools {
             stage.initModality(modality);
             stage.show();
         } catch (IOException e) {
-            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
 
@@ -51,7 +51,7 @@ public class WindowTools {
             stage.initModality(modality);
             stage.showAndWait();
         } catch (IOException e) {
-            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -69,7 +69,7 @@ public class WindowTools {
             }
             rootPane.setCenter(loader.load());
         } catch (Exception e) {
-            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
