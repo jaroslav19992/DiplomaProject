@@ -1,5 +1,6 @@
 package TestMaker.LoginWindow;
 
+import TestMaker.Assets.Animation.LoadingAnimation;
 import TestMaker.DBTools.Configs;
 import TestMaker.DBTools.Constants;
 import TestMaker.DBTools.DBHandler;
@@ -12,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 
@@ -23,6 +25,9 @@ import java.util.Date;
 import static TestMaker.WindowTools.openNewWindow;
 
 public class LoginWindowController {
+    @FXML
+    private AnchorPane main_pane;
+
     @FXML
     private ImageView networkSettings_image;
 
@@ -63,6 +68,8 @@ public class LoginWindowController {
     @FXML
     private Label login_label;
 
+    LoadingAnimation loadingAnimation;
+
     @FXML
     void initialize() {
         //Hide invalid sing in data label
@@ -74,7 +81,15 @@ public class LoginWindowController {
 
         /*----------------------------Login button action-----------------------------*/
         login_button.setOnAction(event -> {
-            loginButtonAction();
+            loadingAnimation = new LoadingAnimation(login_pane);
+            loadingAnimation.start();
+            try {
+                loginButtonAction();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            loadingAnimation.interrupt();
+
         });
         /*----------------------------Login button action-----------------------------*/
 
@@ -154,7 +169,7 @@ public class LoginWindowController {
     /**
      * What is happens when login button is pressed
      */
-    private void loginButtonAction() {
+    private void loginButtonAction() throws InterruptedException {
         error_label.setVisible(false);
 
         /* LogIn and Password Checker from DB */
@@ -163,18 +178,21 @@ public class LoginWindowController {
             checker.getUserData(userName_textField.getText().hashCode(),
                     password_passwordField.getText().hashCode());
         } catch (Exception exception) {
+            error_label.setVisible(false);
             exception.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Помилка");
             alert.setHeaderText(null);
             alert.setContentText("Помилка з'єднання з сервером\nПричина:\n" + exception.getMessage());
             alert.showAndWait();
+            return;
         }
 
         if (checker.isAccessGained()) {
             setLastVisitDate();
             UserInfoHandler.userName = userName_textField.getText();
             UserInfoHandler.password = password_passwordField.getText();
+            loadingAnimation.interrupt();
             //Open main program window
             openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
             //Hide LogIn window
@@ -189,11 +207,9 @@ public class LoginWindowController {
                     "\n----------------------------");
 
         } else {
-            userName_textField.clear();
-            password_passwordField.clear();
-            password_textField.clear();
             error_label.setText("Не правильний логін та/або пароль");
             error_label.setVisible(true);
+            loadingAnimation.interrupt();
         }
     }
 

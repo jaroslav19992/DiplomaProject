@@ -30,7 +30,7 @@ public class MainWindowController {
     private ImageView settings_icon;
 
     @FXML
-    private SplitPane main_splitPane;
+    private SplitPane main_pane;
 
     @FXML
     private StackPane tests_stackPane;

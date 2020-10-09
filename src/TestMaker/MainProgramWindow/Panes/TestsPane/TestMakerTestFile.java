@@ -1,4 +1,4 @@
-package TestMaker;
+package TestMaker.MainProgramWindow.Panes.TestsPane;
 
 import java.io.File;
 

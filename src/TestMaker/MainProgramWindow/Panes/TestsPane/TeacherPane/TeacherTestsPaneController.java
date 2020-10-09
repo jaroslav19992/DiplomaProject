@@ -1,9 +1,11 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane;
 
+import TestMaker.Assets.Animation.LoadingAnimation;
 import TestMaker.DBTools.Constants;
 import TestMaker.DBTools.DBHandler;
-import TestMaker.TestMakerTestFile;
+import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTestFile;
 import TestMaker.UserInfoHandler;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -47,32 +49,45 @@ public class TeacherTestsPaneController {
 
     private ArrayList<AccessedPupil>[] accessedPupilsList = new ArrayList[1000];
 
+    private ResultSet testsList;
+
+    private LoadingAnimation loadingAnimation;
+
     @FXML
     void initialize() {
-        try {
-            getTestsList();
-            getTestsAccessList();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Помилка");
-            alert.setHeaderText(null);
-            alert.setContentText("Помилка з'єднання з сервером\n" + exception.getMessage());
-        }
-
-        createdTests_listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        createdTests_listView.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldIndex, Number newIndex) {
-                System.out.println("OLD Index: " + oldIndex + ",  NEW Index: " + newIndex);
-                createdTests_currentIndex = (int) newIndex;
-                showTestsAccess(createdTests_currentIndex);
-            }
-        });
+            loadingAnimation = new LoadingAnimation(main_pane);
+            loadingAnimation.start();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        getTestsList();
+                        getTestsAccessList();
+                        createdTests_listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+                        createdTests_listView.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+                            @Override
+                            public void changed(ObservableValue<? extends Number> observable, Number oldIndex, Number newIndex) {
+                                System.out.println("OLD Index: " + oldIndex + ",  NEW Index: " + newIndex);
+                                createdTests_currentIndex = (int) newIndex;
+                                showTestsAccess(createdTests_currentIndex);
+                            }
+                        });
+                    } catch (SQLException exception) {
+                        exception.printStackTrace();
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Помилка");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Помилка з'єднання з сервером\n" + exception.getMessage());
+                        alert.showAndWait();
+                        loadingAnimation.interrupt();
+                    }
+                }
+            });
     }
 
     /**
      * Get list of which pupil could access which test
+     *
      * @throws SQLException
      */
     private void getTestsAccessList() throws SQLException {
@@ -128,23 +143,23 @@ public class TeacherTestsPaneController {
      * create TestMakerTestFile exemplars without file inside
      */
     private void getTestsList() throws SQLException {
-        DBHandler dbHandler = new DBHandler();
         String SQLQuery = "SELECT " + Constants.ID_TESTS_LIST + ", " + Constants.TEST_NAME + " FROM " +
                 Constants.TEACHERS_TESTS_TABLE_NAME + " INNER JOIN " + Constants.USERS_INFO_TABLE_NAME +
                 " USING (" + Constants.USER_NAME_HASH + ") INNER JOIN " + Constants.TESTS_LIST_TABLE_NAME +
                 " USING (" + Constants.ID_TESTS_LIST + ") WHERE " + Constants.USER_NAME_HASH + " = " +
                 UserInfoHandler.userName.hashCode() + ";";
-        ResultSet testsList = dbHandler.getDataFromDB(SQLQuery);
-        showTestsList(testsList);
+
+        showTestsList(SQLQuery);
     }
 
     /**
      * Add entries to list view with tests list
      *
-     * @param testsList result set from DB with tests information
      * @throws SQLException
      */
-    private void showTestsList(ResultSet testsList) throws SQLException {
+    private void showTestsList(String SQLQuery) throws SQLException {
+        DBHandler dbHandler = new DBHandler();
+        testsList = dbHandler.getDataFromDB(SQLQuery);
         int pointer = -1;
         while (testsList.next()) {
             pointer++;
@@ -152,6 +167,7 @@ public class TeacherTestsPaneController {
                     testsList.getString(Constants.TEST_NAME));
             createdTests_listView.getItems().add(pointer, test);
         }
+        loadingAnimation.interrupt();
     }
 
     /**

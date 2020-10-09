@@ -68,7 +68,8 @@ public class WindowTools {
                 rootPane.getChildren().remove(0);
             }
             rootPane.setCenter(loader.load());
-        } catch (IOException e) {
+        } catch (Exception e) {
+            System.out.println(e.getCause());
             e.printStackTrace();
         }
     }

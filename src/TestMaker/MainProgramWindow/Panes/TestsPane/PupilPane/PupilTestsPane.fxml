@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane minHeight="350.0" minWidth="400.0" prefHeight="718.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.TeacherTestsPaneController">
+<AnchorPane fx:id="main_pane" minHeight="350.0" minWidth="400.0" prefHeight="718.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.TeacherTestsPaneController">
    <children>
       <StackPane layoutX="-9.0" prefHeight="718.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

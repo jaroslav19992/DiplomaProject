@@ -1,16 +1,21 @@
 package TestMaker.LoginWindow.NetworkSettings;
 
+import TestMaker.Assets.Animation.LoadingAnimation;
 import TestMaker.DBTools.Configs;
 import TestMaker.DBTools.DefaultConfigs;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
 
 public class NetworkSettingsController {
+
+    @FXML
+    private AnchorPane main_pane;
 
     @FXML
     private Button cancel_button;

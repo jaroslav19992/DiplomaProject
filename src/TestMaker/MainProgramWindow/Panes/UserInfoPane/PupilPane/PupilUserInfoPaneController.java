@@ -6,11 +6,14 @@ import TestMaker.WindowTools;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 
 public class PupilUserInfoPaneController {
+    @FXML
+    private AnchorPane main_pane;
 
     @FXML
     private StackPane bottom_stackPane;

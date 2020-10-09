@@ -9,7 +9,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<SplitPane fx:id="main_splitPane" dividerPositions="0.24569640062597808" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="480.0" minWidth="640.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.MainWindowController">
+
+<SplitPane fx:id="main_pane" dividerPositions="0.24569640062597808" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="480.0" minWidth="640.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.MainWindowController">
    <items>
       <AnchorPane fx:id="leftSide_anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="201.0">
          <children>
