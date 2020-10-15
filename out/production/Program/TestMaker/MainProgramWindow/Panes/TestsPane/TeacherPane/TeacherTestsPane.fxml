@@ -22,7 +22,7 @@
                               <Font name="System Bold" size="36.0" />
                            </font>
                            <graphic>
-                              <ImageView fitHeight="42.0" fitWidth="46.0">
+                              <ImageView fitHeight="40.0" fitWidth="40.0">
                                  <image>
                                     <Image url="@../../../../Assets/Images/icons/notecheck32.png" />
                                  </image>

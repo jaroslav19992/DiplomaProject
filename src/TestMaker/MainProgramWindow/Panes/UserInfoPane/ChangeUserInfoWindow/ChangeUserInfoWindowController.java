@@ -1,6 +1,6 @@
 package TestMaker.MainProgramWindow.Panes.UserInfoPane.ChangeUserInfoWindow;
 
-import TestMaker.DBTools.Constants;
+import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.UserInfoHandler;
 import javafx.fxml.FXML;
@@ -120,13 +120,13 @@ public class ChangeUserInfoWindowController {
      * Create SQL query to update user info. if password fields is not touched password will be the same
      */
     private void changeUserInfo() throws SQLException {
-        String SQLQuery = "UPDATE " + Constants.DB_NAME + "." + Constants.USERS_INFO_TABLE_NAME + " SET " + Constants.USER_NAME_HASH +
-                " = " + "'" + userName_textField.getText().hashCode() + "'" + ", " + Constants.PASSWORD_HASH + " = " + "'" +
+        String SQLQuery = "UPDATE " + DBConstants.DB_NAME + "." + DBConstants.USERS_INFO_TABLE_NAME + " SET " + DBConstants.USER_NAME_HASH +
+                " = " + "'" + userName_textField.getText().hashCode() + "'" + ", " + DBConstants.PASSWORD_HASH + " = " + "'" +
                 ((password_textField.getText().equals("")) ? UserInfoHandler.password.hashCode() : password_textField.getText().hashCode())
-                + "'" + ", " + Constants.EMAIL + " = " + "'" + email_textField.getText() + "'" + ", " + Constants.FIRST_NAME + " = " +
-                "'" + firstName_textField.getText() + "'" + ", " + Constants.LAST_NAME + " = " + "'" + lastName_textField.getText()
-                + "'" + ", " + Constants.ACCESS_TOKEN + " = " + "'" + ((radioButton_teacher.isSelected()) ? (Constants.TEACHER_ACCESS_TOKEN) :
-                (Constants.PUPIL_ACCESS_TOKEN)) + "' WHERE (" + Constants.USER_NAME_HASH + " = " + UserInfoHandler.userName.hashCode() + ")";
+                + "'" + ", " + DBConstants.EMAIL + " = " + "'" + email_textField.getText() + "'" + ", " + DBConstants.FIRST_NAME + " = " +
+                "'" + firstName_textField.getText() + "'" + ", " + DBConstants.LAST_NAME + " = " + "'" + lastName_textField.getText()
+                + "'" + ", " + DBConstants.ACCESS_TOKEN + " = " + "'" + ((radioButton_teacher.isSelected()) ? (DBConstants.TEACHER_ACCESS_TOKEN) :
+                (DBConstants.PUPIL_ACCESS_TOKEN)) + "' WHERE (" + DBConstants.USER_NAME_HASH + " = " + UserInfoHandler.userName.hashCode() + ")";
 
         DBHandler.loadDataToDB(SQLQuery);
     }
@@ -154,9 +154,9 @@ public class ChangeUserInfoWindowController {
         UserInfoHandler.lastName = lastName_textField.getText();
         UserInfoHandler.email = email_textField.getText();
         if (radioButton_teacher.isSelected()) {
-            UserInfoHandler.accessToken = Constants.TEACHER_ACCESS_TOKEN;
+            UserInfoHandler.accessToken = DBConstants.TEACHER_ACCESS_TOKEN;
         } else {
-            UserInfoHandler.accessToken = Constants.PUPIL_ACCESS_TOKEN;
+            UserInfoHandler.accessToken = DBConstants.PUPIL_ACCESS_TOKEN;
 
         }
     }
@@ -246,9 +246,9 @@ public class ChangeUserInfoWindowController {
 
         /*----------------------------Check if no user data duplicates-----------------------------*/
         //create queries
-        String SQLQueryForUsername = "SELECT " + Constants.USER_NAME_HASH + " FROM usersInfo WHERE " + Constants.USER_NAME_HASH + " = "
+        String SQLQueryForUsername = "SELECT " + DBConstants.USER_NAME_HASH + " FROM usersInfo WHERE " + DBConstants.USER_NAME_HASH + " = "
                 + userName_textField.getText().hashCode();
-        String SQLQueryForEmail = "SELECT " + Constants.EMAIL + " FROM usersInfo WHERE " + Constants.EMAIL + " = "
+        String SQLQueryForEmail = "SELECT " + DBConstants.EMAIL + " FROM usersInfo WHERE " + DBConstants.EMAIL + " = "
                 + "\"" + email_textField.getText() + "\"";
 
         //if username changed
@@ -282,9 +282,9 @@ public class ChangeUserInfoWindowController {
      */
     private int getOldPasswordHash() {
         ResultSet resultSet;
-        String SQLQuery = "SELECT " + Constants.PASSWORD_HASH + " FROM " + Constants.DB_NAME + "." +
-                Constants.USERS_INFO_TABLE_NAME + " WHERE " +
-                Constants.USER_NAME_HASH + " = " + UserInfoHandler.userName.hashCode();
+        String SQLQuery = "SELECT " + DBConstants.PASSWORD_HASH + " FROM " + DBConstants.DB_NAME + "." +
+                DBConstants.USERS_INFO_TABLE_NAME + " WHERE " +
+                DBConstants.USER_NAME_HASH + " = " + UserInfoHandler.userName.hashCode();
         try {
             resultSet = DBHandler.getDataFromDB(SQLQuery);
             resultSet.next();

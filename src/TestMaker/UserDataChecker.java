@@ -1,6 +1,6 @@
 package TestMaker;
 
-import TestMaker.DBTools.Constants;
+import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 
 import java.sql.ResultSet;
@@ -15,8 +15,8 @@ public class UserDataChecker {
 
     //Connecting to the DB and checking is user with such user data is exist
     public void getUserData(int usernameHash, int passwordHash) throws SQLException {
-        String SQLQuery = "SELECT * FROM " + Constants.USERS_INFO_TABLE_NAME + " where "
-                + Constants.USER_NAME_HASH + " = " + usernameHash + " and " + Constants.PASSWORD_HASH + " = " + passwordHash;
+        String SQLQuery = "SELECT * FROM " + DBConstants.USERS_INFO_TABLE_NAME + " where "
+                + DBConstants.USER_NAME_HASH + " = " + usernameHash + " and " + DBConstants.PASSWORD_HASH + " = " + passwordHash;
         ResultSet userDataSet = DBHandler.getDataFromDB(SQLQuery);
 
             if (userDataSet.next()) {
@@ -24,14 +24,14 @@ public class UserDataChecker {
                 isAccessGained = true;
 
                 //set up user info in transfer class
-                UserInfoHandler.userName = userDataSet.getString(Constants.USER_NAME_HASH);
-                UserInfoHandler.password = userDataSet.getString(Constants.PASSWORD_HASH);
-                UserInfoHandler.firstName = userDataSet.getString(Constants.FIRST_NAME);
-                UserInfoHandler.lastName = userDataSet.getString(Constants.LAST_NAME);
-                UserInfoHandler.email = userDataSet.getString(Constants.EMAIL);
-                UserInfoHandler.accessToken = userDataSet.getString(Constants.ACCESS_TOKEN);
-                UserInfoHandler.registrationDate = userDataSet.getString(Constants.REG_DATE);
-                UserInfoHandler.lastVisitDate = userDataSet.getString(Constants.LAST_VISIT_DATE);
+                UserInfoHandler.userName = userDataSet.getString(DBConstants.USER_NAME_HASH);
+                UserInfoHandler.password = userDataSet.getString(DBConstants.PASSWORD_HASH);
+                UserInfoHandler.firstName = userDataSet.getString(DBConstants.FIRST_NAME);
+                UserInfoHandler.lastName = userDataSet.getString(DBConstants.LAST_NAME);
+                UserInfoHandler.email = userDataSet.getString(DBConstants.EMAIL);
+                UserInfoHandler.accessToken = userDataSet.getString(DBConstants.ACCESS_TOKEN);
+                UserInfoHandler.registrationDate = userDataSet.getString(DBConstants.REG_DATE);
+                UserInfoHandler.lastVisitDate = userDataSet.getString(DBConstants.LAST_VISIT_DATE);
 
                 //debug user info
                 System.out.println("Sing IN user with user data:\n" +

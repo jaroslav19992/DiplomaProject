@@ -2,7 +2,7 @@ package TestMaker.SingUpWindow;
 
 
 import TestMaker.UserInfoHandler;
-import TestMaker.DBTools.Constants;
+import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -126,9 +126,9 @@ public class SingUpWindowController {
         UserInfoHandler.lastName = lastName_textField.getText();
         UserInfoHandler.email = email_textField.getText();
         if (radioButton_teacher.isSelected()) {
-            UserInfoHandler.accessToken = Constants.TEACHER_ACCESS_TOKEN;
+            UserInfoHandler.accessToken = DBConstants.TEACHER_ACCESS_TOKEN;
         } else {
-            UserInfoHandler.accessToken = Constants.PUPIL_ACCESS_TOKEN;
+            UserInfoHandler.accessToken = DBConstants.PUPIL_ACCESS_TOKEN;
 
         }
     }
@@ -202,9 +202,9 @@ public class SingUpWindowController {
 
         /*----------------------------Check if no user data duplicates-----------------------------*/
         //create queries
-        String SQLQueryForUsername = "SELECT " + Constants.USER_NAME_HASH + " FROM " + Constants.USERS_INFO_TABLE_NAME + " WHERE " + Constants.USER_NAME_HASH + " = "
+        String SQLQueryForUsername = "SELECT " + DBConstants.USER_NAME_HASH + " FROM " + DBConstants.USERS_INFO_TABLE_NAME + " WHERE " + DBConstants.USER_NAME_HASH + " = "
                 + userName_textField.getText().hashCode();
-        String SQLQueryForEmail = "SELECT " + Constants.EMAIL + " FROM " + Constants.USERS_INFO_TABLE_NAME + " WHERE " + Constants.EMAIL + " = "
+        String SQLQueryForEmail = "SELECT " + DBConstants.EMAIL + " FROM " + DBConstants.USERS_INFO_TABLE_NAME + " WHERE " + DBConstants.EMAIL + " = "
                 + "\"" + email_textField.getText() + "\"";
 
         //username check

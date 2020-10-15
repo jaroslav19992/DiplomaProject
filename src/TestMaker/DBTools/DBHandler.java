@@ -16,10 +16,10 @@ public class DBHandler {
     //Add data to the database table
     public static void singUpNewUser(String username, String password, String firstName, String lastName,
                                      String email, String accessToken, String regDate, String lastVisitDate) throws SQLException {
-        String insertString = "INSERT INTO " + Constants.USERS_INFO_TABLE_NAME + " (" + Constants.USER_NAME_HASH + ", "
-                + Constants.PASSWORD_HASH + ", " + Constants.FIRST_NAME + ", " + Constants.LAST_NAME + ", " + Constants.EMAIL
-                + ", " + Constants.ACCESS_TOKEN + ", " + Constants.REG_DATE + ", "
-                + Constants.LAST_VISIT_DATE + ")" + " VALUES (?,?,?,?,?,?,?,?)";
+        String insertString = "INSERT INTO " + DBConstants.USERS_INFO_TABLE_NAME + " (" + DBConstants.USER_NAME_HASH + ", "
+                + DBConstants.PASSWORD_HASH + ", " + DBConstants.FIRST_NAME + ", " + DBConstants.LAST_NAME + ", " + DBConstants.EMAIL
+                + ", " + DBConstants.ACCESS_TOKEN + ", " + DBConstants.REG_DATE + ", "
+                + DBConstants.LAST_VISIT_DATE + ")" + " VALUES (?,?,?,?,?,?,?,?)";
 
         PreparedStatement preparedStatement = getDbConnection().prepareStatement(insertString);
         preparedStatement.setInt(1, username.hashCode());

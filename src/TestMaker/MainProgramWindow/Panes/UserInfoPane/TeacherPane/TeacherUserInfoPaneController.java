@@ -1,6 +1,6 @@
 package TestMaker.MainProgramWindow.Panes.UserInfoPane.TeacherPane;
 
-import TestMaker.DBTools.Constants;
+import TestMaker.DBTools.DBConstants;
 import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
 import javafx.fxml.FXML;
@@ -66,8 +66,8 @@ public class TeacherUserInfoPaneController {
         lastName_label.setText(UserInfoHandler.lastName);
         email_label.setText(UserInfoHandler.email);
         accessToken_label.setText(UserInfoHandler.accessToken);
-        regDate_label.setText(Constants.REG_DATE_LABEL_TEXT + UserInfoHandler.registrationDate);
-        lastVisitDate_label.setText(Constants.LAST_VISIT_DATE_LABEL_TEXT + UserInfoHandler.lastVisitDate);
+        regDate_label.setText(DBConstants.REG_DATE_LABEL_TEXT + UserInfoHandler.registrationDate);
+        lastVisitDate_label.setText(DBConstants.LAST_VISIT_DATE_LABEL_TEXT + UserInfoHandler.lastVisitDate);
     }
 
 }

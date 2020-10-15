@@ -1,6 +1,6 @@
 package TestMaker.MainProgramWindow;
 
-public class Constants {
+public class WindowConstants {
     public static final String ACTIVE_ITEM_COLOR = "#daebf2";
 
 }

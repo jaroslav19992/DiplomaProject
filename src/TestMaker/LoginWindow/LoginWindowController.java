@@ -2,7 +2,7 @@ package TestMaker.LoginWindow;
 
 import TestMaker.Assets.Animation.LoadingAnimation;
 import TestMaker.DBTools.Configs;
-import TestMaker.DBTools.Constants;
+import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.LoginWindow.NetworkSettings.NetworkSettingsConfigsReader;
 import TestMaker.UserDataChecker;
@@ -201,9 +201,9 @@ public class LoginWindowController {
         SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
         try {
-            DBHandler.loadDataToDB("UPDATE " + "`" + Configs.dbName + "`" + "." + "`" + Constants.USERS_INFO_TABLE_NAME + "`" +
-                    " SET " + "`" + Constants.LAST_VISIT_DATE + "`" + " = " + "'" + formatForVisitDate.format(date) + "'" + " WHERE "
-                    + "`" + Constants.USER_NAME_HASH + "`" + " = " + "'" + userName_textField.getText().hashCode() + "'" + ";");
+            DBHandler.loadDataToDB("UPDATE " + "`" + Configs.dbName + "`" + "." + "`" + DBConstants.USERS_INFO_TABLE_NAME + "`" +
+                    " SET " + "`" + DBConstants.LAST_VISIT_DATE + "`" + " = " + "'" + formatForVisitDate.format(date) + "'" + " WHERE "
+                    + "`" + DBConstants.USER_NAME_HASH + "`" + " = " + "'" + userName_textField.getText().hashCode() + "'" + ";");
         } catch (SQLException exception) {
             exception.printStackTrace();
         }

@@ -12,10 +12,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import static TestMaker.MainProgramWindow.Constants.ACTIVE_ITEM_COLOR;
-
-
-public class MainWindowController {
+public class MainWindowController extends WindowConstants{
 
     @FXML
     private Label settings_label;
