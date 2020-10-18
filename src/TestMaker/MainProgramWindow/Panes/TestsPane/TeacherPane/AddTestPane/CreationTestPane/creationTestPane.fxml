@@ -11,7 +11,7 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController">
    <children>
-      <VBox alignment="TOP_CENTER" spacing="20.0">
+      <VBox alignment="TOP_CENTER" spacing="10.0">
          <children>
             <Label fx:id="testName_label" text="Назва тесту">
                <VBox.margin>

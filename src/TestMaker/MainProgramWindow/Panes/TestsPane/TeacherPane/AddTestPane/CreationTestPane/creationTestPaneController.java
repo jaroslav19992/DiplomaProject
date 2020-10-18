@@ -21,36 +21,35 @@ public class creationTestPaneController {
     private static int numberOfPages;
     private static boolean isRetestingAllowed;
     private static int timeLimit;
+    private static String evaluationSystem;
 
     @FXML
     public void initialize() throws IOException {
-        /*Parent root = FXMLLoader.load(Main.class.getResource("/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/CreationTestPane/creationTestPane.fxml"));
-        Stage stage = new Stage();
-        stage.setTitle("Diploma project KM-17, Ishchak Yaroslav");
-        stage.getIcons().add(new Image(Main.class.getResourceAsStream("logo_mini.png")));
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();*/
-
         pagination.setPageCount(numberOfPages);
         pagination.setCurrentPageIndex(0);
         pagination.setPageFactory(pageIndex -> createPage(pageIndex));
     }
 
-    public static void setTestProperties(String testName, int numberOfPages, boolean isRetestingAllowed, Integer timeLimit) throws IOException {
+    /**
+     * Should be used before opening new window with this controller
+     * @param testName name of current test
+     * @param numberOfPages number of pages in pagination/number of questions
+     * @param isRetestingAllowed can you retesting or not
+     * @param timeLimit time limit dor test
+     */
+    public static void setTestProperties(String testName, String evaluationSystem, int numberOfPages, boolean isRetestingAllowed, Integer timeLimit) throws IOException {
+        creationTestPaneController.evaluationSystem = evaluationSystem;
         creationTestPaneController.testName = testName;
         creationTestPaneController.numberOfPages = numberOfPages;
         creationTestPaneController.isRetestingAllowed = isRetestingAllowed;
         creationTestPaneController.timeLimit = timeLimit;
     }
 
-
-
-
     private Node createPage(Integer pageIndex) {
         BorderPane mainQuestionPane = new BorderPane();
-        WindowTools.setUpNewPaneOnBorderPane(mainQuestionPane, "/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/TeacherTestsPane.fxml");
+        WindowTools.setUpNewPaneOnBorderPane(mainQuestionPane,
+                "/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/CreationTestPane" +
+                        "/QuestionsTypes/questionBase.fxml");
 
         return mainQuestionPane;
     }

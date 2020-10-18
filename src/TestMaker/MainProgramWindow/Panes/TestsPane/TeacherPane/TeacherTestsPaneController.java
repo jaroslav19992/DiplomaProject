@@ -75,7 +75,7 @@ public class TeacherTestsPaneController {
     private void setButtonsActions() {
         addTest_button.setOnAction(event -> {
             WindowTools.openNewWindowAndWait(
-                    "/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/AddTestPane.fxml",
+                    "/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/ConfigTestPane.fxml",
                     false, Modality.APPLICATION_MODAL);
         });
 

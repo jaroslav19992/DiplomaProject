@@ -1,9 +1,11 @@
 package TestMaker.SingUpWindow;
 
 
+import TestMaker.Assets.Animation.LoadingAnimation;
 import TestMaker.UserInfoHandler;
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -54,6 +56,9 @@ public class SingUpWindowController {
     @FXML
     private AnchorPane main_pane;
 
+    private static Thread singUpThread;
+    private static LoadingAnimation loadingAnimation;
+
     @FXML
     public void initialize() {
         //set keys listener
@@ -64,26 +69,13 @@ public class SingUpWindowController {
 
         //SingUp button click
         singUpButton.setOnAction(event -> {
-
-            try {
-                if (checkForCorrectInfo()) {
-                    error_label.setVisible(false);
-                    if (radioButton_teacher.isSelected()) {
-                        openNewWindowAndWait("SingUpWindow/AccessWindow/AccessWindow.fxml",
-                                false, Modality.APPLICATION_MODAL);
-                    } else {
-                        UserInfoHandler.isAccessGained = true;
-                    }
-                    if (UserInfoHandler.isAccessGained) {
-                        transferUserInfo();
-                        registerUser();
-                        openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
-                        main_pane.getScene().getWindow().hide();
-                    }
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
+            singUpThread = new Thread(() -> {
+                loadingAnimation = new LoadingAnimation(main_pane);
+                loadingAnimation.start();
+                singUpNewUser();
+                loadingAnimation.interrupt();
+            });
+            singUpThread.start();
         });
 
         back_button.setOnAction(event -> {
@@ -92,9 +84,44 @@ public class SingUpWindowController {
         });
     }
 
+    private void singUpNewUser() {
+        try {
+            if (checkForCorrectInfo()) {
+                error_label.setVisible(false);
+                if (radioButton_teacher.isSelected()) {
+                    openNewWindowAndWait("SingUpWindow/AccessWindow/AccessWindow.fxml",
+                            false, Modality.APPLICATION_MODAL);
+                } else {
+                    UserInfoHandler.isAccessGained = true;
+                }
+                if (UserInfoHandler.isAccessGained) {
+                    transferUserInfo();
+                    registerUser();
+                    openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
+                    main_pane.getScene().getWindow().hide();
+                    singUpThread.interrupt();
+                    loadingAnimation.interrupt();
+                }
+            }
+        } catch (SQLException exception) {
+            Platform.runLater(() -> {
+                error_label.setVisible(false);
+                exception.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Помилка");
+                alert.setHeaderText(null);
+                alert.setContentText("Помилка з'єднання з сервером\nПричина:\n" + exception.getMessage());
+                alert.showAndWait();
+                singUpThread.interrupt();
+                loadingAnimation.interrupt();
+                return;
+            });
+
+        }
+    }
+
     /**
      * Register user with pupil or teacher access token
-
      */
     private void registerUser() {
         if (UserInfoHandler.isAccessGained) {

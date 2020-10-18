@@ -7,6 +7,7 @@ import TestMaker.DBTools.DBHandler;
 import TestMaker.LoginWindow.NetworkSettings.NetworkSettingsConfigsReader;
 import TestMaker.UserDataChecker;
 import TestMaker.UserInfoHandler;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -56,7 +57,8 @@ public class LoginWindowController {
     @FXML
     private StackPane login_pane;
 
-    LoadingAnimation loadingAnimation;
+    private static LoadingAnimation loadingAnimation;
+    private static Thread loginThread;
 
     @FXML
     void initialize() {
@@ -69,11 +71,14 @@ public class LoginWindowController {
 
         /*----------------------------Login button action-----------------------------*/
         login_button.setOnAction(event -> {
-            loadingAnimation = new LoadingAnimation(login_pane);
-            loadingAnimation.start();
-            loginButtonAction();
-            loadingAnimation.interrupt();
-
+            //creating another Thread from UI, starting animation, login user, stopping animation
+            loginThread = new Thread(() -> {
+                loadingAnimation = new LoadingAnimation(login_pane);
+                loadingAnimation.start();
+                loginButtonAction();
+                loadingAnimation.interrupt();
+            });
+            loginThread.start();
         });
         /*----------------------------Login button action-----------------------------*/
 
@@ -158,25 +163,32 @@ public class LoginWindowController {
             checker.getUserData(userName_textField.getText().hashCode(),
                     password_passwordField.getText().hashCode());
         } catch (Exception exception) {
-            error_label.setVisible(false);
-            exception.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Помилка");
-            alert.setHeaderText(null);
-            alert.setContentText("Помилка з'єднання з сервером\nПричина:\n" + exception.getMessage());
-            alert.showAndWait();
-            return;
+            Platform.runLater(() -> {
+                error_label.setVisible(false);
+                exception.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Помилка");
+                alert.setHeaderText(null);
+                alert.setContentText("Помилка з'єднання з сервером\nПричина:\n" + exception.getMessage());
+                alert.showAndWait();
+                loginThread.interrupt();
+                return;
+            });
         }
 
         if (checker.isAccessGained()) {
             setLastVisitDate();
             UserInfoHandler.userName = userName_textField.getText();
             UserInfoHandler.password = password_passwordField.getText();
-            loadingAnimation.interrupt();
             //Open main program window
-            openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
-            //Hide LogIn window
-            login_pane.getScene().getWindow().hide();
+            Platform.runLater(() -> {
+                openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
+                loadingAnimation.interrupt();
+                //Hide LogIn window
+                login_pane.getScene().getWindow().hide();
+            });
+
+
             System.out.println("----------------------------\n" +
                     "connected via: \n" +
                     "Host: " + Configs.dbHost +
@@ -189,7 +201,8 @@ public class LoginWindowController {
         } else {
             error_label.setText("Не правильний логін та/або пароль");
             error_label.setVisible(true);
-            loadingAnimation.interrupt();
+//            loadingAnimation.interrupt();
+            loginThread.interrupt();
         }
     }
 

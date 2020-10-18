@@ -11,28 +11,21 @@
 <AnchorPane fx:id="main_anchorPane" prefHeight="430.0" prefWidth="560.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.QuestionsTypes.OneAnswer.OneAnswerController">
    <children>
       <StackPane layoutX="21.0" layoutY="24.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
          <children>
-            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;" StackPane.alignment="CENTER">
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;" vbarPolicy="ALWAYS" StackPane.alignment="CENTER">
                <content>
                   <VBox fx:id="answerVariants_vBox" alignment="TOP_CENTER" spacing="20.0">
                      <children>
                         <HBox alignment="CENTER">
                            <children>
-                              <RadioButton mnemonicParsing="false" selected="true">
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="correctAnswer_toggleGroup" />
-                                 </toggleGroup>
-                              </RadioButton>
-                              <TextField prefWidth="400.0" promptText="варіант 1" />
+                              <CheckBox mnemonicParsing="false" selected="true" />
+                              <TextField alignment="CENTER" prefWidth="400.0" promptText="варіант 1" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
-                              <RadioButton mnemonicParsing="false" toggleGroup="$correctAnswer_toggleGroup" />
-                              <TextField prefWidth="400.0" promptText="варіант 2" />
+                              <CheckBox mnemonicParsing="false" />
+                              <TextField alignment="CENTER" prefWidth="400.0" promptText="варіант 2" />
                            </children>
                         </HBox>
                         <Button fx:id="addVariant_button" mnemonicParsing="false">
@@ -50,11 +43,11 @@
                      </padding>
                   </VBox>
                </content>
-               <StackPane.margin>
-                  <Insets />
-               </StackPane.margin>
             </ScrollPane>
          </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
       </StackPane>
    </children>
 </AnchorPane>

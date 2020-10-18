@@ -1,6 +1,6 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane;
 
-import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController;
+import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
 import TestMaker.WindowTools;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,7 +11,7 @@ import javafx.stage.Modality;
 
 import java.io.IOException;
 
-public class AddTestPaneController {
+public class ConfigTestPaneController extends TestsConstants {
 
     @FXML
     private Button startTestCreation_button;
@@ -82,12 +82,12 @@ public class AddTestPaneController {
     private void createTest() throws IOException {
         System.out.println("Starting to create "+testName_textField.getText()+"");
 
-        creationTestPaneController creationTestPaneController = new creationTestPaneController();
-                TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController.setTestProperties(testName_textField.getText(),
-                Integer.parseInt(questionsAmount_textField.getText()),
-                reTestingEnabled_radioButton.isSelected(),
-                (timeLimitEnabled_radioButton.isSelected())?(Integer.parseInt(timeLimit_textField.getText())):(0));
-        WindowTools.openNewWindow("/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/CreationTestPane/creationTestPane.fxml", false, Modality.APPLICATION_MODAL);
+                TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController.setTestProperties(
+                        testName_textField.getText(), evaluationSystem_choiceBox.getValue(), Integer.parseInt(questionsAmount_textField.getText()),
+                reTestingEnabled_radioButton.isSelected(), (timeLimitEnabled_radioButton.isSelected())?
+                                (Integer.parseInt(timeLimit_textField.getText())):(0));
+        WindowTools.openNewWindow("/TestMaker/MainProgramWindow/Panes/TestsPane/" +
+                "TeacherPane/AddTestPane/CreationTestPane/creationTestPane.fxml", false, Modality.APPLICATION_MODAL);
 
         WindowTools.closeCurrentWindow(main_pane);
     }
@@ -153,7 +153,7 @@ public class AddTestPaneController {
      */
     private void setEvaluationSystemVariants() {
         ObservableList<String> evaluationSystemsList = FXCollections.observableArrayList(
-                "12-ти бальна система", "5-ти бальна система", "100 бальна система");
+                EVAL_SYSTEM_12, EVAL_SYSTEM_5, EVAL_SYSTEM_100);
         evaluationSystem_choiceBox.setItems(evaluationSystemsList);
         evaluationSystem_choiceBox.setValue("12-ти бальна система");
     }

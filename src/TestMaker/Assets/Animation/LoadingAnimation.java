@@ -32,7 +32,7 @@ public class LoadingAnimation extends Thread {
 
     public LoadingAnimation(Pane pane) {
         this.pane = pane;
-        createAnimation();
+        Platform.runLater(this::createAnimation);
     }
 
     private void createAnimation() {
@@ -152,5 +152,15 @@ public class LoadingAnimation extends Thread {
             System.out.println("Animation thread: " + this.getName() + " was interrupted");
             stopAnimation();
         }
+    }
+
+    @Override
+    public void interrupt() {
+        Platform.runLater(super::interrupt);
+    }
+
+    @Override
+    public synchronized void start() {
+        Platform.runLater(super::start);
     }
 }
