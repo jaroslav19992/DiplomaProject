@@ -59,18 +59,21 @@ public class WindowTools {
      * Set new pane as a child of parent pane
      * @param rootPane parent pane, in witch child will be located
      * @param fxmlFileLocation location to fxml file of child pane
+     * @return
      */
-    public static void setUpNewPaneOnBorderPane(BorderPane rootPane, String fxmlFileLocation) {
+    public static Object setUpNewPaneOnBorderPane(BorderPane rootPane, String fxmlFileLocation) {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource(fxmlFileLocation));
             if (!rootPane.getChildren().isEmpty()) {
                 rootPane.getChildren().remove(0);
             }
             rootPane.setCenter(loader.load());
+            return loader.getController();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
+        return null;
     }
 
     /**

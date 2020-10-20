@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<Test>
+    <testName>test1</testName>
+    <numberOfQuestions>3</numberOfQuestions>
+    <isRetestingAllowed>true</isRetestingAllowed>
+    <timeLimit>0</timeLimit>
+    <evaluationSystem>"5-ти бальна система"</evaluationSystem>
+    <Questions>
+        <Question questionType="питання з однією правильною відповіддю" questionText="перше питання">
+            <answerVariants>
+                <variant id="1" text="перший вар"/>
+                <variant id="2" text="другий вар"/>
+                <variant id="3" text="третій вар"/>
+            </answerVariants>
+            <severalCorrectAnswers>
+                <answer id="1" variantId="2"/>
+            </severalCorrectAnswers>
+        </Question>
+        <Question questionType="питання кількома правильними відповідями" questionText="друге питання">
+            <answerVariants>
+                <variant id="1" text="перший вар"/>
+                <variant id="2" text="другий вар"/>
+                <variant id="3" text="третій вар"/>
+            </answerVariants>
+            <severalCorrectAnswers>
+                <answer id="1" variantId="2"/>
+                <answer id="2" variantId="3"/>
+            </severalCorrectAnswers>
+        </Question>
+        <Question questionType="питання на відповідність" questionText="третє питання">
+            <answerVariants>
+                <variant id="1" text="перший вар"/>
+                <variant id="2" text="другий вар"/>
+                <variant id="3" text="третій вар"/>
+            </answerVariants>
+            <severalCorrectAnswers>
+                <answer id="1" variantId="2"/>
+                <answer id="2" variantId="3"/>
+                <answer id="3" variantId="1"/>
+            </severalCorrectAnswers>
+        </Question>
+    </Questions>
+</Test>

@@ -1,12 +1,10 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane;
 
-import TestMaker.Assets.Animation.LoadingAnimation;
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTestFile;
 import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -42,16 +40,11 @@ public class TeacherTestsPaneController {
 //                       ^---AccessedPupil1 <-\
 //                       ^---AccessedPupil2 < -- pupils who has access to current test
 //                       ^---AccessedPupil3 <-/
-    private final ArrayList<AccessedPupil>[] accessedPupilsList = new ArrayList[maxTestsNumber];
-
-    private LoadingAnimation loadingAnimation;
+    private final ArrayList[] accessedPupilsList = new ArrayList[maxTestsNumber];
 
     @FXML
     void initialize() {
         setButtonsActions();
-        loadingAnimation = new LoadingAnimation(main_pane);
-        loadingAnimation.start();
-        Platform.runLater(() -> {
             try {
                 getTestsList();
                 getTestsAccessList();
@@ -64,9 +57,7 @@ public class TeacherTestsPaneController {
             } catch (SQLException exception) {
                 exception.printStackTrace();
                 showAlert(exception);
-                loadingAnimation.interrupt();
             }
-        });
     }
 
     /**
@@ -277,8 +268,7 @@ public class TeacherTestsPaneController {
                     testsList.getString(DBConstants.TEST_NAME));
             createdTests_listView.getItems().add(pointer, test);
         }
-        //stop animation
-        loadingAnimation.interrupt();
+
     }
 
     /**

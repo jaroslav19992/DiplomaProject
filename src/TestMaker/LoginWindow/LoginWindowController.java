@@ -172,7 +172,6 @@ public class LoginWindowController {
                 alert.setContentText("Помилка з'єднання з сервером\nПричина:\n" + exception.getMessage());
                 alert.showAndWait();
                 loginThread.interrupt();
-                return;
             });
         }
 

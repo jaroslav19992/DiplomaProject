@@ -80,14 +80,14 @@ public class ConfigTestPaneController extends TestsConstants {
     }
 
     private void createTest() throws IOException {
-        System.out.println("Starting to create "+testName_textField.getText()+"");
+        System.out.println("Starting to create " + testName_textField.getText() + "");
 
-                TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController.setTestProperties(
-                        testName_textField.getText(), evaluationSystem_choiceBox.getValue(), Integer.parseInt(questionsAmount_textField.getText()),
-                reTestingEnabled_radioButton.isSelected(), (timeLimitEnabled_radioButton.isSelected())?
-                                (Integer.parseInt(timeLimit_textField.getText())):(0));
+        TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController.setTestProperties(
+                testName_textField.getText(), evaluationSystem_choiceBox.getValue(), Integer.parseInt(questionsAmount_textField.getText()),
+                reTestingEnabled_radioButton.isSelected(), (timeLimitEnabled_radioButton.isSelected()) ?
+                        (Integer.parseInt(timeLimit_textField.getText())) : (0));
         WindowTools.openNewWindow("/TestMaker/MainProgramWindow/Panes/TestsPane/" +
-                "TeacherPane/AddTestPane/CreationTestPane/creationTestPane.fxml", false, Modality.APPLICATION_MODAL);
+                "TeacherPane/AddTestPane/CreationTestPane/creationTestPane.fxml", true, Modality.APPLICATION_MODAL);
 
         WindowTools.closeCurrentWindow(main_pane);
     }
@@ -98,18 +98,28 @@ public class ConfigTestPaneController extends TestsConstants {
      * @return
      */
     private boolean checkForCorrectInfo() {
+        //Test Name check
+        if (testName_textField.getText().equals("")) {
+            showAlert("Поле вводу назви тесту не повинне бути пустим");
+            return false;
+        }
+
+        //Time limit check
         if (timeLimitEnabled_radioButton.isSelected()) {
             if (timeLimit_textField.getText().equals("")) {
                 showAlert("Введіть кількість часу для проходження тесту\n(У хв.)");
                 return false;
             }
             if (!isNumeric(timeLimit_textField.getText())) {
-                if (!isNumeric(questionsAmount_textField.getText())) {
-                    showAlert("Поле вводу ліміту часу повинне містити тільки цифри");
-                    return false;
-                }
+                showAlert("Поле вводу ліміту часу повинне містити тільки цифри");
+                return false;
+            } else if (Integer.parseInt(questionsAmount_textField.getText()) <= 0) {
+                showAlert("Неможлива кількість часу");
+                return false;
             }
         }
+
+        //Questions amount check
         if (questionsAmount_textField.getText().equals("")) {
             showAlert("Поле вводу кількості питань не повинне бути пусттим");
             return false;
@@ -117,11 +127,10 @@ public class ConfigTestPaneController extends TestsConstants {
             if (!isNumeric(questionsAmount_textField.getText())) {
                 showAlert("Поле вводу кількості питань повинне містити тільки цифри");
                 return false;
+            } else if (Integer.parseInt(questionsAmount_textField.getText()) <= 0) {
+                showAlert("Неможлива кількість питань");
+                return false;
             }
-        }
-        if (testName_textField.getText().equals("")) {
-            showAlert("Поле вводу назви тесту не повинне бути пустим");
-            return false;
         }
         return true;
     }

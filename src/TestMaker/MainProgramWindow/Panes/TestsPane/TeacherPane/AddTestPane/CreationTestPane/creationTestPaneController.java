@@ -1,5 +1,6 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane;
 
+import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.QuestionsTypes.questionBaseController;
 import TestMaker.WindowTools;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -18,16 +19,18 @@ public class creationTestPaneController {
 
 
     private static String testName;
-    private static int numberOfPages;
+    private static int numberOfQuestions;
     private static boolean isRetestingAllowed;
     private static int timeLimit;
     private static String evaluationSystem;
 
+    private questionBaseController currentPageController;
+
     @FXML
-    public void initialize() throws IOException {
-        pagination.setPageCount(numberOfPages);
+    public void initialize() {
+        pagination.setPageCount(numberOfQuestions);
         pagination.setCurrentPageIndex(0);
-        pagination.setPageFactory(pageIndex -> createPage(pageIndex));
+        pagination.setPageFactory(this::createPage);
     }
 
     /**
@@ -40,17 +43,16 @@ public class creationTestPaneController {
     public static void setTestProperties(String testName, String evaluationSystem, int numberOfPages, boolean isRetestingAllowed, Integer timeLimit) throws IOException {
         creationTestPaneController.evaluationSystem = evaluationSystem;
         creationTestPaneController.testName = testName;
-        creationTestPaneController.numberOfPages = numberOfPages;
+        creationTestPaneController.numberOfQuestions = numberOfPages;
         creationTestPaneController.isRetestingAllowed = isRetestingAllowed;
         creationTestPaneController.timeLimit = timeLimit;
     }
 
     private Node createPage(Integer pageIndex) {
         BorderPane mainQuestionPane = new BorderPane();
-        WindowTools.setUpNewPaneOnBorderPane(mainQuestionPane,
+        currentPageController = (questionBaseController) WindowTools.setUpNewPaneOnBorderPane(mainQuestionPane,
                 "/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/CreationTestPane" +
                         "/QuestionsTypes/questionBase.fxml");
-
         return mainQuestionPane;
     }
 }

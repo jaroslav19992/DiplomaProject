@@ -21,8 +21,33 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Pagination fx:id="pagination" prefHeight="580.0" prefWidth="600.0" />
+            <Pagination fx:id="pagination" prefHeight="599.0" prefWidth="600.0" />
          </children>
       </VBox>
+      <HBox alignment="BOTTOM_CENTER" fillHeight="false" StackPane.alignment="BOTTOM_CENTER">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Попереднє">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@../../../../../../Assets/Images/icons/circleleft32.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Наступне">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@../../../../../../Assets/Images/icons/circleright32.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+         <StackPane.margin>
+            <Insets bottom="10.0" />
+         </StackPane.margin>
+      </HBox>
    </children>
 </StackPane>

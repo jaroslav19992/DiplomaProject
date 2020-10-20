@@ -18,6 +18,16 @@ public class Main extends Application {
         primaryStage.setResizable(false);
         primaryStage.show();
 
+        /*
+        File file = new File("src/TestMaker/testXML.xml");
+        DOMxmlParser parser = new DOMxmlParser(file);
+        System.out.println("test name: " + parser.getTestName());
+        System.out.println("q. number: " + parser.getAmountOfQuestions());
+        System.out.println("is retestable : " + parser.isRetestingAllowed());
+        System.out.println("ev. system: " + parser.getTestEVSystem());
+        parser.getQuestionsList();
+         */
+
     }
 
     public static void main(String[] args) {
