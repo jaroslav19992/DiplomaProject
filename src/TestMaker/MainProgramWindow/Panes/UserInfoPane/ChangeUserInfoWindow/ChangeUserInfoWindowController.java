@@ -3,6 +3,7 @@ package TestMaker.MainProgramWindow.Panes.UserInfoPane.ChangeUserInfoWindow;
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.UserInfoHandler;
+import TestMaker.WindowTools;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -14,8 +15,6 @@ import javafx.stage.Modality;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import static TestMaker.WindowTools.openNewWindowAndWait;
 
 public class ChangeUserInfoWindowController {
 
@@ -87,7 +86,8 @@ public class ChangeUserInfoWindowController {
             try {
                 if (checkForCorrectInfo()) {
                     if (radioButton_teacher.isSelected()) {
-                        openNewWindowAndWait("SingUpWindow/AccessWindow/AccessWindow.fxml",
+                        WindowTools windowTools = new WindowTools();
+                        windowTools.openNewWindowAndWait("SingUpWindow/AccessWindow/AccessWindow.fxml",
                                 false, Modality.APPLICATION_MODAL);
                     } else {
                         UserInfoHandler.isAccessGained = true;

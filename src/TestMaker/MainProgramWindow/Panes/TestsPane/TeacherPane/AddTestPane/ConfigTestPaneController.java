@@ -1,11 +1,15 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane;
 
+import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
 import TestMaker.WindowTools;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 
@@ -52,10 +56,22 @@ public class ConfigTestPaneController extends TestsConstants {
     @FXML
     private ToggleGroup reTesting_toggleGroup;
 
+    private creationTestPaneController controller;
+
     @FXML
     private void initialize() {
         setEvaluationSystemVariants();
         setButtonAction();
+        setGlobalEventHAndler(main_pane);
+    }
+
+    private void setGlobalEventHAndler(Parent root) {
+        root.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
+            if (ev.getCode() == KeyCode.ENTER) {
+                startTestCreation_button.fire();
+                ev.consume();
+            }
+        });
     }
 
     private void setButtonAction() {
@@ -81,15 +97,16 @@ public class ConfigTestPaneController extends TestsConstants {
 
     private void createTest() throws IOException {
         System.out.println("Starting to create " + testName_textField.getText() + "");
+        WindowTools windowTools = new WindowTools();
+        controller = (creationTestPaneController) windowTools.openNewWindow("/TestMaker/MainProgramWindow" +
+                "/Panes/TestsPane/TeacherPane/AddTestPane/CreationTestPane/" +
+                "creationTestPane.fxml", true, Modality.APPLICATION_MODAL);
+        windowTools.closeCurrentWindow(main_pane);
 
-        TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController.setTestProperties(
-                testName_textField.getText(), evaluationSystem_choiceBox.getValue(), Integer.parseInt(questionsAmount_textField.getText()),
+        controller.setTestProperties(testName_textField.getText(), evaluationSystem_choiceBox.getValue(), Integer.parseInt(questionsAmount_textField.getText()),
                 reTestingEnabled_radioButton.isSelected(), (timeLimitEnabled_radioButton.isSelected()) ?
                         (Integer.parseInt(timeLimit_textField.getText())) : (0));
-        WindowTools.openNewWindow("/TestMaker/MainProgramWindow/Panes/TestsPane/" +
-                "TeacherPane/AddTestPane/CreationTestPane/creationTestPane.fxml", true, Modality.APPLICATION_MODAL);
-
-        WindowTools.closeCurrentWindow(main_pane);
+        controller.setPageFactory();
     }
 
     /**

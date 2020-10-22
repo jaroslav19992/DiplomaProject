@@ -49,7 +49,8 @@ public class TeacherUserInfoPaneController {
     void initialize() {
         initUserInfo();
 
-        changeInfo_button.setOnAction(event -> WindowTools.openNewWindowAndWait(
+        WindowTools windowTools = new WindowTools();
+        changeInfo_button.setOnAction(event -> windowTools.openNewWindowAndWait(
                 "/TestMaker/MainProgramWindow/Panes/UserInfoPane/ChangeUserInfoWindow/ChangeUserInfoWindow.fxml",
                 false, Modality.APPLICATION_MODAL));
     }

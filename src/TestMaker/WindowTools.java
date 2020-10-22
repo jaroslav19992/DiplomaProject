@@ -18,9 +18,10 @@ public class WindowTools {
      *
      * @param fxmlFileLocation location of window fxml file
      */
-    public static void openNewWindow(String fxmlFileLocation, boolean isResizeable, Modality modality) {
+    public Object openNewWindow(String fxmlFileLocation, boolean isResizeable, Modality modality) {
         try {
-            Parent root = FXMLLoader.load(Main.class.getResource(fxmlFileLocation));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource(fxmlFileLocation));
+            Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Diploma project KM-17, Ishchak Yaroslav");
             stage.getIcons().add(new Image(Main.class.getResourceAsStream("logo_mini.png")));
@@ -28,20 +29,26 @@ public class WindowTools {
             stage.setResizable(isResizeable);
             stage.initModality(modality);
             stage.show();
+            return loader.getController();
+
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
+            return null;
         }
+
     }
 
     /**
      * Opens new window from fxml, stops any next operations until current window will be closed
      *
      * @param fxmlFileLocation location of window fxml file
+     * @return
      */
-    public static void openNewWindowAndWait(String fxmlFileLocation, boolean isResizeable, Modality modality) {
+    public Object openNewWindowAndWait(String fxmlFileLocation, boolean isResizeable, Modality modality) {
         try {
-            Parent root = FXMLLoader.load(Main.class.getResource(fxmlFileLocation));
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = loader.load(Main.class.getResource(fxmlFileLocation));
             Stage stage = new Stage();
             stage.setTitle("Diploma project KM-17, Ishchak Yaroslav");
             stage.getIcons().add(new Image(Main.class.getResourceAsStream("logo_mini.png")));
@@ -49,19 +56,21 @@ public class WindowTools {
             stage.setResizable(isResizeable);
             stage.initModality(modality);
             stage.showAndWait();
+            return loader.getController();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
+        return null;
     }
 
     /**
      * Set new pane as a child of parent pane
      * @param rootPane parent pane, in witch child will be located
      * @param fxmlFileLocation location to fxml file of child pane
-     * @return
+     * @return class controller
      */
-    public static Object setUpNewPaneOnBorderPane(BorderPane rootPane, String fxmlFileLocation) {
+    public Object setUpNewPaneOnBorderPane(BorderPane rootPane, String fxmlFileLocation) {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource(fxmlFileLocation));
             if (!rootPane.getChildren().isEmpty()) {
@@ -80,7 +89,7 @@ public class WindowTools {
      * Close window
      * @param node child window element
      */
-    public static void closeCurrentWindow(Node node) {
+    public void closeCurrentWindow(Node node) {
         node.getScene().getWindow().hide();
     }
 }

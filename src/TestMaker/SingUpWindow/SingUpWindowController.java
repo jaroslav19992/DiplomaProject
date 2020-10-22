@@ -2,9 +2,10 @@ package TestMaker.SingUpWindow;
 
 
 import TestMaker.Assets.Animation.LoadingAnimation;
-import TestMaker.UserInfoHandler;
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
+import TestMaker.UserInfoHandler;
+import TestMaker.WindowTools;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -17,8 +18,6 @@ import javafx.stage.Modality;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static TestMaker.WindowTools.*;
 
 
 public class SingUpWindowController {
@@ -54,10 +53,11 @@ public class SingUpWindowController {
     private Button back_button;
 
     @FXML
-    private AnchorPane main_pane;
+    public AnchorPane main_pane;
 
     private static Thread singUpThread;
     private static LoadingAnimation loadingAnimation;
+    WindowTools windowTools = new WindowTools();
 
     @FXML
     public void initialize() {
@@ -79,7 +79,7 @@ public class SingUpWindowController {
         });
 
         back_button.setOnAction(event -> {
-            openNewWindow("LoginWindow/LoginWindow.fxml", false, Modality.NONE);
+            windowTools.openNewWindow("LoginWindow/LoginWindow.fxml", false, Modality.NONE);
             main_pane.getScene().getWindow().hide();
         });
     }
@@ -89,7 +89,7 @@ public class SingUpWindowController {
             if (checkForCorrectInfo()) {
                 error_label.setVisible(false);
                 if (radioButton_teacher.isSelected()) {
-                    openNewWindowAndWait("SingUpWindow/AccessWindow/AccessWindow.fxml",
+                    windowTools.openNewWindowAndWait("SingUpWindow/AccessWindow/AccessWindow.fxml",
                             false, Modality.APPLICATION_MODAL);
                 } else {
                     UserInfoHandler.isAccessGained = true;
@@ -97,7 +97,7 @@ public class SingUpWindowController {
                 if (UserInfoHandler.isAccessGained) {
                     transferUserInfo();
                     registerUser();
-                    openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
+                    windowTools.openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
                     main_pane.getScene().getWindow().hide();
                     singUpThread.interrupt();
                     loadingAnimation.interrupt();
@@ -285,6 +285,12 @@ public class SingUpWindowController {
             if (ev.getCode() == KeyCode.ESCAPE) {
                 back_button.fire();
             }
+        });
+    }
+    public void setOnCloseRequest() {
+        main_pane.getScene().getWindow().setOnCloseRequest(event -> {
+            windowTools.openNewWindow("LoginWindow/LoginWindow.fxml", false, Modality.APPLICATION_MODAL);
+            windowTools.closeCurrentWindow(main_pane);
         });
     }
 }

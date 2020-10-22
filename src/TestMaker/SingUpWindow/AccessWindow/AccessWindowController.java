@@ -2,7 +2,6 @@ package TestMaker.SingUpWindow.AccessWindow;
 
 
 import TestMaker.UserInfoHandler;
-import TestMaker.WindowTools;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -38,7 +37,7 @@ public class AccessWindowController {
         accept_button.setOnAction(event -> {
             if (isAccessGained(accessKey_textField.getText())) {
                 UserInfoHandler.isAccessGained = true;
-                WindowTools.closeCurrentWindow(main_pane);
+                main_pane.getScene().getWindow().hide();
             } else {
                 UserInfoHandler.isAccessGained = false;
                 error_label.setVisible(true);

@@ -5,8 +5,10 @@ import TestMaker.DBTools.Configs;
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.LoginWindow.NetworkSettings.NetworkSettingsConfigsReader;
+import TestMaker.SingUpWindow.SingUpWindowController;
 import TestMaker.UserDataChecker;
 import TestMaker.UserInfoHandler;
+import TestMaker.WindowTools;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -21,8 +23,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static TestMaker.WindowTools.openNewWindow;
 
 public class LoginWindowController {
 
@@ -59,6 +59,7 @@ public class LoginWindowController {
 
     private static LoadingAnimation loadingAnimation;
     private static Thread loginThread;
+    WindowTools windowTools = new WindowTools();
 
     @FXML
     void initialize() {
@@ -68,67 +69,12 @@ public class LoginWindowController {
         getLastConfigs();
         //Enter pressed listener
         setGlobalEventHandler(login_pane);
+        setButtonActions();
+        setPasswordFieldBehavior();
+    }
 
-        /*----------------------------Login button action-----------------------------*/
-        login_button.setOnAction(event -> {
-            //creating another Thread from UI, starting animation, login user, stopping animation
-            loginThread = new Thread(() -> {
-                loadingAnimation = new LoadingAnimation(login_pane);
-                loadingAnimation.start();
-                loginButtonAction();
-                loadingAnimation.interrupt();
-            });
-            loginThread.start();
-        });
-        /*----------------------------Login button action-----------------------------*/
-
-
-        /*----------------------------Registration button action-----------------------------*/
-        register_button.setOnAction(event -> {
-            openNewWindow("SingUpWindow/SingUpWindow.fxml", false, Modality.NONE);
-            login_pane.getScene().getWindow().hide();
-        });
-        /*----------------------------Registration button action-----------------------------*/
-
-
-        /*----------------------------networkSettings button action-----------------------------*/
-
-        networkSettings_button.setOnAction(event ->
-                openNewWindow("LoginWindow/NetworkSettings/NetworkSettings.fxml",
-                        false, Modality.APPLICATION_MODAL));
-        /*----------------------------networkSettings button action-----------------------------*/
-
-
-        /*----------------------------Password functions-----------------------------*/
+    private void setPasswordFieldBehavior() {
         //Password visibility
-        passwordVisibility();
-
-        //Sync password fields
-        password_passwordField.setOnKeyReleased(event -> password_textField.setText(password_passwordField.getText()));
-        password_textField.setOnKeyReleased(event -> password_passwordField.setText(password_textField.getText()));
-        /*----------------------------Password functions-----------------------------*/
-
-    }
-
-    private void getLastConfigs() {
-        NetworkSettingsConfigsReader properties = null;
-        try {
-            properties = new NetworkSettingsConfigsReader();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assert properties != null;
-        Configs.dbHost = properties.getConfig("dbHost");
-        Configs.dbPort = properties.getConfig("dbPort");
-        Configs.dbUser = properties.getConfig("dbUser");
-        Configs.dbPassword = properties.getConfig("dbPassword");
-        Configs.dbName = properties.getConfig("dbName");
-    }
-
-    /**
-     * Set up is password is visible in order to image pressed
-     */
-    private void passwordVisibility() {
         closedEye_imageView.setOnMouseClicked(event -> {
             password_textField.setVisible(true);
             password_passwordField.setVisible(false);
@@ -149,7 +95,60 @@ public class LoginWindowController {
             closedEye_imageView.toFront();
 
         });
+
+        //Sync password fields
+        password_passwordField.setOnKeyReleased(event -> password_textField.setText(password_passwordField.getText()));
+        password_textField.setOnKeyReleased(event -> password_passwordField.setText(password_textField.getText()));
     }
+
+    private void setButtonActions() {
+        /*----------------------------Login button action-----------------------------*/
+        login_button.setOnAction(event -> {
+            //creating another Thread from UI, starting animation, login user, stopping animation
+            loginThread = new Thread(() -> {
+                loadingAnimation = new LoadingAnimation(login_pane);
+                loadingAnimation.start();
+                loginButtonAction();
+                loadingAnimation.interrupt();
+            });
+            loginThread.start();
+        });
+        /*----------------------------Login button action-----------------------------*/
+
+
+        /*----------------------------Registration button action-----------------------------*/
+        register_button.setOnAction(event -> {
+            SingUpWindowController windowController;
+            windowController = (SingUpWindowController) windowTools.openNewWindow("SingUpWindow/SingUpWindow.fxml", false, Modality.NONE);
+            windowController.setOnCloseRequest();
+            login_pane.getScene().getWindow().hide();
+        });
+        /*----------------------------Registration button action-----------------------------*/
+
+
+        /*----------------------------networkSettings button action-----------------------------*/
+
+        networkSettings_button.setOnAction(event ->
+                windowTools.openNewWindow("LoginWindow/NetworkSettings/NetworkSettings.fxml",
+                        false, Modality.APPLICATION_MODAL));
+        /*----------------------------networkSettings button action-----------------------------*/
+    }
+
+    private void getLastConfigs() {
+        NetworkSettingsConfigsReader properties = null;
+        try {
+            properties = new NetworkSettingsConfigsReader();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert properties != null;
+        Configs.dbHost = properties.getConfig("dbHost");
+        Configs.dbPort = properties.getConfig("dbPort");
+        Configs.dbUser = properties.getConfig("dbUser");
+        Configs.dbPassword = properties.getConfig("dbPassword");
+        Configs.dbName = properties.getConfig("dbName");
+    }
+
 
     /**
      * What is happens when login button is pressed
@@ -181,7 +180,7 @@ public class LoginWindowController {
             UserInfoHandler.password = password_passwordField.getText();
             //Open main program window
             Platform.runLater(() -> {
-                openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
+                windowTools.openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
                 loadingAnimation.interrupt();
                 //Hide LogIn window
                 login_pane.getScene().getWindow().hide();

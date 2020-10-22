@@ -66,8 +66,8 @@ public class DOMxmlParser {
 
             question.setQuestionText(questionText);
             question.setQuestionType(questionType);
-            question.setAnswerVariants(answerVariants);
-            question.setSeveralCorrectAnswers(correctVariants);
+            question.setQuestionVariants(answerVariants);
+            question.setAnswerVariants(correctVariants);
         }
         return question;
     }

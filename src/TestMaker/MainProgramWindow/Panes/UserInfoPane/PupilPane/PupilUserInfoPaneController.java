@@ -48,8 +48,8 @@ public class PupilUserInfoPaneController {
     @FXML
     void initialize() {
         initUserInfo();
-
-        changeInfo_button.setOnAction(event -> WindowTools.openNewWindow(
+        WindowTools windowTools = new WindowTools();
+        changeInfo_button.setOnAction(event -> windowTools.openNewWindow(
                 "/TestMaker/MainProgramWindow/Panes/UserInfoPane/ChangeUserInfoWindow/ChangeUserInfoWindow.fxml",
                 false, Modality.WINDOW_MODAL));
     }

@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController">
+<StackPane fx:id="main_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController">
    <children>
       <VBox alignment="TOP_CENTER" spacing="10.0">
          <children>
@@ -24,30 +24,29 @@
             <Pagination fx:id="pagination" prefHeight="599.0" prefWidth="600.0" />
          </children>
       </VBox>
-      <HBox alignment="BOTTOM_CENTER" fillHeight="false" StackPane.alignment="BOTTOM_CENTER">
-         <children>
-            <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Попереднє">
-               <graphic>
-                  <ImageView>
-                     <image>
-                        <Image url="@../../../../../../Assets/Images/icons/circleleft32.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Наступне">
-               <graphic>
-                  <ImageView>
-                     <image>
-                        <Image url="@../../../../../../Assets/Images/icons/circleright32.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-         </children>
+      <Button fx:id="cancelTestCreation_button" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Відмінити" StackPane.alignment="BOTTOM_LEFT">
          <StackPane.margin>
-            <Insets bottom="10.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </StackPane.margin>
-      </HBox>
+         <graphic>
+            <ImageView>
+               <image>
+                  <Image url="@../../../../../../Assets/Images/icons/stop32.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="doneTestCreation_button" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Завершити" StackPane.alignment="BOTTOM_RIGHT">
+         <StackPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </StackPane.margin>
+         <graphic>
+            <ImageView fitHeight="24.0" fitWidth="20.0">
+               <image>
+                  <Image url="@../../../../../../Assets/Images/icons/check32.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </StackPane>

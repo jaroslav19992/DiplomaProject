@@ -9,7 +9,7 @@ public class TestsConstants {
     public static final String SEVERAL_ANSWERS = "Питання з кількома правильними варіантами відповіді";
     public static final String COMPLIANCE_QUESTION = "Питання на відповідність";
 
-    private int defaultNumberOfVariants = 2;
+    public static final int DEFAULT_NUMBER_OF_VARIANTS = 2;
 
     public static final double REMOVE_VARIANT_BUTTON_IMAGE_FIT_WIDTH = 20;
     public static final double REMOVE_VARIANT_BUTTON_IMAGE_FIT_HEIGHT = 20;

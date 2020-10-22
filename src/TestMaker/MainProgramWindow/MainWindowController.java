@@ -2,7 +2,10 @@ package TestMaker.MainProgramWindow;
 
 import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.ImageView;
@@ -12,8 +15,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Optional;
+
 public class MainWindowController extends WindowConstants{
 
+    private static final String CLOSE_WINDOW_CONFIRMATION_CONTENT_TEXT = "Ви дійсно хочете закрити програму TestMaker?";
+    private static final String CLOSE_WINDOW_CONFIRMATION_TITLE = "Підтвердіть дію";
     @FXML
     private Label settings_label;
 
@@ -63,6 +70,7 @@ public class MainWindowController extends WindowConstants{
     void initialize() {
         setOnHoverColorChange();
         setUpSceneOnClickChange();
+        Platform.runLater(this::setOnWindowClosed);
     }
 
 
@@ -118,6 +126,23 @@ public class MainWindowController extends WindowConstants{
         });
         settings_stackPane.setOnMouseExited(event -> {
             settings_stackPane.setStyle("");
+        });
+    }
+
+    public void setOnWindowClosed() {
+        main_pane.getScene().getWindow().setOnCloseRequest(event -> {
+            Alert closeConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            closeConfirmation.setHeaderText(null);
+            closeConfirmation.setTitle(CLOSE_WINDOW_CONFIRMATION_TITLE);
+            closeConfirmation.setContentText(CLOSE_WINDOW_CONFIRMATION_CONTENT_TEXT);
+            ButtonType close = new ButtonType("Закрити");
+            ButtonType cancel = new ButtonType("Відміна");
+            closeConfirmation.getButtonTypes().clear();
+            closeConfirmation.getButtonTypes().addAll(cancel, close);
+            Optional<ButtonType> selection = closeConfirmation.showAndWait();
+            if (selection.get() != close) {
+                event.consume();
+            }
         });
     }
 
