@@ -24,7 +24,7 @@
             <Pagination fx:id="pagination" prefHeight="599.0" prefWidth="600.0" />
          </children>
       </VBox>
-      <Button fx:id="cancelTestCreation_button" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Відмінити" StackPane.alignment="BOTTOM_LEFT">
+      <Button fx:id="removeCurrentQuestion" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Видалити" StackPane.alignment="BOTTOM_LEFT">
          <StackPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </StackPane.margin>
@@ -35,6 +35,9 @@
                </image>
             </ImageView>
          </graphic>
+         <tooltip>
+            <Tooltip text="Видалити поточне питання" />
+         </tooltip>
       </Button>
       <Button fx:id="doneTestCreation_button" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Завершити" StackPane.alignment="BOTTOM_RIGHT">
          <StackPane.margin>
@@ -47,6 +50,9 @@
                </image>
             </ImageView>
          </graphic>
+         <tooltip>
+            <Tooltip text="Завершити створення тесту" />
+         </tooltip>
       </Button>
    </children>
 </StackPane>

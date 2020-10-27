@@ -17,7 +17,7 @@ import javafx.scene.text.FontWeight;
 
 import java.util.*;
 
-public class ComplianceQuestionControllerInterface extends TestsConstants implements QuestionControllerInterface {
+public class ComplianceQuestionController implements QuestionControllerInterface, TestsConstants {
     @FXML
     private AnchorPane main_anchorPane;
 
@@ -76,8 +76,8 @@ public class ComplianceQuestionControllerInterface extends TestsConstants implem
         //Compound elements
         hBox.getChildren().addAll(button, textArea, choiceBox);
         question_vBox.getChildren().add(question_vBox.getChildren().size() - 1, hBox);
-        //Update remove button actions
-        setRemoveQuestionVariantButtonAction(button);
+        //Set remove button actions
+        button.setOnAction(event -> question_vBox.getChildren().remove(button.getParent()));
         setChoicesBoxesValues();
         //This block created to prevent duplicate choice box values. It looks for all another boxes values and equalized with them
 
@@ -91,22 +91,6 @@ public class ComplianceQuestionControllerInterface extends TestsConstants implem
                 alert.setContentText("Не можливо вибрати відповідь для пустого варіанту. \nЗаповніть вибраний варіант");
                 alert.show();
                 event.consume();
-            }
-            //Prevent user to choose empty answer variant as answer
-            for (int i = 0; i < answer_vBox.getChildren().size() - 1; i++) {
-                HBox questionHBox = (HBox) answer_vBox.getChildren().get(i);
-                String answerText = ((TextArea)questionHBox.getChildren().get(1)).getText();
-                int answerNumber = Integer.parseInt(((Label)questionHBox.getChildren().get(0)).getText());
-                if (Objects.equals(choiceBox.getValue(), answerNumber) ) {
-                    if (Objects.equals(answerText, "") || Objects.equals(answerText, null)) {
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        choiceBox.setValue(null);
-                        alert.setHeaderText(null);
-                        alert.setContentText("Не можливо вибрати пустий варіант. \nЗаповніть вибраний варіант");
-                        alert.show();
-                        event.consume();
-                    }
-                }
             }
             //Prevent user to choose 2 identical variants
             for (int j = 0; j < question_vBox.getChildren().size() - 1; j++) {
@@ -151,7 +135,6 @@ public class ComplianceQuestionControllerInterface extends TestsConstants implem
         answer_vBox.getChildren().add(answer_vBox.getChildren().size() - 1, hBox);
         //Update remove button actions
         setRemoveAnswerVariantButtonAction(button);
-//        clearChoiceBoxValues();
         setChoicesBoxesValues();
     }
 
@@ -178,19 +161,13 @@ public class ComplianceQuestionControllerInterface extends TestsConstants implem
     }
 
     /**
-     * Set button actions for all buttons which should to remove question variant
-     */
-    private void setRemoveQuestionVariantButtonAction(Button button) {
-        button.setOnAction(event -> question_vBox.getChildren().remove(button.getParent()));
-    }
-
-    /**
      * Set choice box values like answer labels
      * Set on action for every choice box to prevent duplicate answer
      */
     private void setChoicesBoxesValues() {
         //Get all labels that's used at the moment
         ArrayList<Integer> answersNumbers = new ArrayList<>();
+//        answersNumbers.add(null); TODO: I can't decide is I need that or not
         for (int i = 0; i < answer_vBox.getChildren().size() - 1; i++) {
             HBox hBox = (HBox) answer_vBox.getChildren().get(i);
             Label label = (Label) hBox.getChildren().get(0);
@@ -267,38 +244,37 @@ public class ComplianceQuestionControllerInterface extends TestsConstants implem
     }
 
     @Override
-    public void setQuestion(String questionType, String questionText, List<String> questionVariants, List<String> answerVariants) {
+    public void setQuestion(String questionType, double questionScore, String questionText, List<String> questionVariantsList, List<String> answerVariantsList) {
         question_vBox.getChildren().remove(0, question_vBox.getChildren().size() - 1);
         answer_vBox.getChildren().remove(0, answer_vBox.getChildren().size() - 1);
         numberOfAnswers = 0;
         numberOfQuestions = 0;
-        if (!questionVariants.isEmpty()) {
-            for (String variant : questionVariants) {
-                createNewQuestionVariant(variant);
-                //This is setting choice box variants (Just like: first questionVariant -> choiceBox.setValue(1);)
-//                clearChoiceBoxVariants();
-                HBox hBox = (HBox) question_vBox.getChildren().get(questionVariants.indexOf(variant));
-                ChoiceBox<Integer> choiceBox = (ChoiceBox<Integer>) hBox.getChildren().get(2);
-                choiceBox.setValue(null);
-                choiceBox.setValue(questionVariants.indexOf(variant) + 1);
-            }
-        } else {
-            createNewQuestionVariant(null);
-            createNewQuestionVariant(null);
-        }
-        if (!answerVariants.isEmpty()) {
-            for (String variant : answerVariants) {
+        if (!answerVariantsList.isEmpty()) {
+            for (String variant : answerVariantsList) {
                 createNewAnswerVariant(variant);
             }
         } else {
             createNewAnswerVariant(null);
             createNewAnswerVariant(null);
         }
+        if (!questionVariantsList.isEmpty()) {
+            for (String variant : questionVariantsList) {
+                createNewQuestionVariant(variant);
+                HBox questionHBox = (HBox) question_vBox.getChildren().get(questionVariantsList.indexOf(variant));
+                ChoiceBox<Integer> choiceBox = (ChoiceBox<Integer>) questionHBox.getChildren().get(2);
+                choiceBox.setValue(questionVariantsList.indexOf(variant) + 1);
+            }
+        } else {
+            createNewQuestionVariant(null);
+            createNewQuestionVariant(null);
+        }
     }
 
-    private void clearChoiceBoxVariants() {
-        for (int i = 0; i < question_vBox.getChildren().size() - 1; i++) {
-            HBox hBox = (HBox) question_vBox.getChildren().get(i);
+    //Don't used now, but could be useful
+    @Override
+    public void setDefaultCorrectAnswers(VBox vBoxWithChoiceBoxes) {
+        for (int i = 0; i < vBoxWithChoiceBoxes.getChildren().size() - 1; i++) {
+            HBox hBox = (HBox) vBoxWithChoiceBoxes.getChildren().get(i);
             ChoiceBox choiceBox = (ChoiceBox) hBox.getChildren().get(2);
             choiceBox.setValue(null);
         }

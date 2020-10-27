@@ -28,6 +28,7 @@ public class DOMxmlParser {
     private static final String VARIANT_TEXT = "text";
     private static final String ANSWER_VARIANTS = "answerVariants";
     private static final String CORRECT_ANSWERS = "answerVariants";
+    private static final String QUESTION_SCORE = "score";
 
 //    private static final String TEST_NAME = "testName";
 
@@ -60,6 +61,8 @@ public class DOMxmlParser {
             Element element = (Element)node;
             String questionText = element.getAttribute(QUESTION_TEXT);
             String questionType = element.getAttribute(QUESTION_TYPE);
+            double questionScore = Double.parseDouble(element.getAttribute(QUESTION_SCORE));
+
 
             ArrayList<String> answerVariants = getVariants(element, ANSWER_VARIANTS);
             ArrayList<String> correctVariants = getVariants(element, CORRECT_ANSWERS);
@@ -68,6 +71,7 @@ public class DOMxmlParser {
             question.setQuestionType(questionType);
             question.setQuestionVariants(answerVariants);
             question.setAnswerVariants(correctVariants);
+            question.setQuestionScore(questionScore);
         }
         return question;
     }
@@ -97,6 +101,10 @@ public class DOMxmlParser {
 
     public String getTestName() {
         return document.getDocumentElement().getElementsByTagName(TEST_NAME).item(0).getTextContent();
+    }
+
+    public String getTimeLimit() {
+        return document.getDocumentElement().getElementsByTagName(TIME_LIMIT).item(0).getTextContent();
     }
 
     public int getAmountOfQuestions() {

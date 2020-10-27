@@ -6,7 +6,7 @@
     <timeLimit>0</timeLimit>
     <evaluationSystem>"5-ти бальна система"</evaluationSystem>
     <Questions>
-        <Question questionType="питання з однією правильною відповіддю" questionText="перше питання">
+        <Question questionType="питання з однією правильною відповіддю" questionText="перше питання" score="1.0">
             <answerVariants>
                 <variant id="1" text="перший вар"/>
                 <variant id="2" text="другий вар"/>
@@ -16,7 +16,7 @@
                 <answer id="1" variantId="2"/>
             </severalCorrectAnswers>
         </Question>
-        <Question questionType="питання кількома правильними відповідями" questionText="друге питання">
+        <Question questionType="питання кількома правильними відповідями" questionText="друге питання" score="1.0">
             <answerVariants>
                 <variant id="1" text="перший вар"/>
                 <variant id="2" text="другий вар"/>
@@ -27,7 +27,7 @@
                 <answer id="2" variantId="3"/>
             </severalCorrectAnswers>
         </Question>
-        <Question questionType="питання на відповідність" questionText="третє питання">
+        <Question questionType="питання на відповідність" questionText="третє питання" score="1.0">
             <answerVariants>
                 <variant id="1" text="перший вар"/>
                 <variant id="2" text="другий вар"/>

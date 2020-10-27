@@ -59,12 +59,6 @@
                            </VBox.margin>
                         </Label>
                         <TextField fx:id="questionsAmount_textField" text="12" />
-                        <Label text="Система оцінювання" textAlignment="CENTER">
-                           <VBox.margin>
-                              <Insets bottom="-10.0" />
-                           </VBox.margin>
-                        </Label>
-                        <ChoiceBox fx:id="evaluationSystem_choiceBox" />
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -106,10 +100,25 @@
                   <Insets />
                </opaqueInsets>
             </HBox>
-            <Button fx:id="startTestCreation_button" defaultButton="true" mnemonicParsing="false" prefHeight="57.0" prefWidth="154.0" text="Розпочати створення тесту" textAlignment="CENTER" wrapText="true">
-               <VBox.margin>
-                  <Insets top="-20.0" />
-               </VBox.margin></Button>
+            <Label text="Система оцінювання" textAlignment="CENTER" />
+            <ChoiceBox fx:id="evaluationSystem_choiceBox" />
+            <StackPane>
+               <children>
+                  <Button fx:id="startTestCreation_button" defaultButton="true" mnemonicParsing="false" prefHeight="57.0" prefWidth="154.0" text="Розпочати створення тесту" textAlignment="CENTER" wrapText="true" StackPane.alignment="BOTTOM_RIGHT">
+                     <VBox.margin>
+                        <Insets top="-20.0" />
+                     </VBox.margin>
+                     <StackPane.margin>
+                        <Insets right="30.0" />
+                     </StackPane.margin>
+                  </Button>
+                  <Button fx:id="cancelTestCreation_button" cancelButton="true" mnemonicParsing="false" prefHeight="57.0" prefWidth="154.0" text="Скасувати створення тесту" textAlignment="CENTER" wrapText="true" StackPane.alignment="BOTTOM_LEFT">
+                     <StackPane.margin>
+                        <Insets left="20.0" right="30.0" />
+                     </StackPane.margin>
+                  </Button>
+               </children>
+            </StackPane>
          </children>
       </VBox>
    </children>

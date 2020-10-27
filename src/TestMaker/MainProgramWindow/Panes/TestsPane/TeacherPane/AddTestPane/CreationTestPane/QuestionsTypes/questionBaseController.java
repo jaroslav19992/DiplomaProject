@@ -7,40 +7,58 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class questionBaseControllerInterface extends TestsConstants implements QuestionControllerInterface {
+public class questionBaseController implements QuestionControllerInterface, TestsConstants {
 
 //    private final String FREE_ANSWER = "Питання з довільною відповіддю"; TODO: for future versions
 
-
+    @FXML
+    private TextField questionScore_textField;
     @FXML
     private TextField questionText_textField;
-
     @FXML
     private AnchorPane main_anchorPane;
-
     @FXML
     private ChoiceBox<String> questionType_choiceBox;
-
     @FXML
     private BorderPane inside_borderPane;
-
 
     private QuestionControllerInterface currentQuestionController;
     private final WindowTools windowTools = new WindowTools();
 
     @FXML
-    void initialize() {
+    public void initialize() {
         setChoiceBoxVariants();
         setOneAnswerQuestion();
         setQuestionsTypeChange();
+        setQuestionScoreListener();
+    }
+
+    private void setQuestionScoreListener() {
+        questionScore_textField.setOnKeyTyped(event -> {
+            if (!Objects.equals(questionScore_textField.getText(), "")) {
+                try {
+                    Double.valueOf(questionScore_textField.getText());
+                } catch (NumberFormatException exception) {
+                    questionScore_textField.clear();
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Помилка");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Не вірний формат поля вводу кількості балів");
+                    alert.show();
+                }
+            }
+        });
     }
 
 
@@ -107,12 +125,32 @@ public class questionBaseControllerInterface extends TestsConstants implements Q
         return currentQuestionController.getQuestionsVariantsList();
     }
 
+    @Override
+    public void setDefaultCorrectAnswers(VBox vBox) {
+        currentQuestionController.setDefaultCorrectAnswers(vBox);
+    }
+
+    public double getQuestionScore(String evaluationSystem, int amountOfQuestions) {
+        if (questionScore_textField.getText().isEmpty()) {
+            switch (evaluationSystem) {
+                case EVAL_SYSTEM_5:
+                    return (5.0 / amountOfQuestions);
+                case EVAL_SYSTEM_12:
+                    return (12.0 / amountOfQuestions);
+                case EVAL_SYSTEM_100:
+                    return (100.0 / amountOfQuestions);
+            }
+        }
+        return Double.parseDouble(questionScore_textField.getText());
+    }
+
 
     @Override
-    public void setQuestion(String questionType, String questionText, List<String> questionVariants, List<String> answerVariants) {
+    public void setQuestion(String questionType, double questionScore, String questionText, List<String> questionVariants, List<String> answerVariants) {
+        questionScore_textField.setText(String.valueOf(questionScore));
         questionText_textField.setText(questionText);
         questionType_choiceBox.setValue(questionType);
-        currentQuestionController.setQuestion(questionType, questionText, questionVariants, answerVariants);
+        currentQuestionController.setQuestion(questionType, questionScore, questionText, questionVariants, answerVariants);
     }
 
     @Override

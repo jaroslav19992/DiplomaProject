@@ -13,12 +13,15 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 
-import java.io.IOException;
+import java.util.Optional;
 
-public class ConfigTestPaneController extends TestsConstants {
+public class ConfigTestPaneController implements TestsConstants {
 
     @FXML
     private Button startTestCreation_button;
+
+    @FXML
+    private Button cancelTestCreation_button;
 
     @FXML
     private TextField questionsAmount_textField;
@@ -61,7 +64,7 @@ public class ConfigTestPaneController extends TestsConstants {
     @FXML
     private void initialize() {
         setEvaluationSystemVariants();
-        setButtonAction();
+        setButtonsActions();
         setGlobalEventHAndler(main_pane);
     }
 
@@ -74,7 +77,7 @@ public class ConfigTestPaneController extends TestsConstants {
         });
     }
 
-    private void setButtonAction() {
+    private void setButtonsActions() {
         timeLimitEnabled_radioButton.setOnAction(event -> {
             timeLimit_label.setDisable(false);
             timeLimit_textField.setDisable(false);
@@ -85,17 +88,26 @@ public class ConfigTestPaneController extends TestsConstants {
         });
         startTestCreation_button.setOnAction(event -> {
             if (checkForCorrectInfo()) {
-                try {
-                    createTest();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                createTest();
             }
         });
-
+        cancelTestCreation_button.setOnAction(event -> {
+            Alert closeConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            closeConfirmation.setHeaderText(CLOSE_WINDOW_CONFIRMATION_HEADER);
+            closeConfirmation.setTitle(CLOSE_WINDOW_CONFIRMATION_TITLE);
+            closeConfirmation.setContentText(CLOSE_WINDOW_CONFIRMATION_CONTEXT);
+            ButtonType close = new ButtonType("Закрити");
+            ButtonType cancel = new ButtonType("Відміна");
+            closeConfirmation.getButtonTypes().clear();
+            closeConfirmation.getButtonTypes().addAll(cancel, close);
+            Optional<ButtonType> selection = closeConfirmation.showAndWait();
+            if (selection.get() == close) {
+                main_pane.getScene().getWindow().hide();
+            }
+        });
     }
 
-    private void createTest() throws IOException {
+    private void createTest() {
         System.out.println("Starting to create " + testName_textField.getText() + "");
         WindowTools windowTools = new WindowTools();
         controller = (creationTestPaneController) windowTools.openNewWindow("/TestMaker/MainProgramWindow" +

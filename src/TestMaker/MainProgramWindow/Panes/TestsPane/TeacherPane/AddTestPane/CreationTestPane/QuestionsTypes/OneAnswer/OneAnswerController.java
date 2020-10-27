@@ -1,13 +1,10 @@
-package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.QuestionsTypes.SeveralAnswers;
+package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.QuestionsTypes.OneAnswer;
 
 import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.QuestionControllerInterface;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -16,9 +13,12 @@ import javafx.scene.layout.VBox;
 
 import java.util.*;
 
-public class SeveralAnswersControllerInterface extends TestsConstants implements QuestionControllerInterface {
+public class OneAnswerController implements QuestionControllerInterface, TestsConstants {
     @FXML
     private VBox answerVariants_vBox;
+
+    @FXML
+    private final ToggleGroup correctAnswer_toggleGroup = new ToggleGroup();
 
     @FXML
     private AnchorPane main_anchorPane;
@@ -30,36 +30,33 @@ public class SeveralAnswersControllerInterface extends TestsConstants implements
 
     @FXML
     void initialize() {
-        for (int i = 0; i < DEFAULT_NUMBER_OF_VARIANTS; i++) {
-            createNewVariant(null);
-        }
-        setDefaultCorrectAnswers();
+        showEmptyQuestion();
         numberOfVariants = answerVariants_vBox.getChildren().size() - 1;
-        addVariant_button.setOnAction(event -> createNewVariant(null));
-        setRemoveVariantButtonAction();
+        addVariant_button.setOnAction(event -> {
+            createNewVariant(null);
+        });
     }
 
     /**
-     * Set button actions for all buttons which should to remove answer variant
+     * Creates 2 empty variants of answer
      */
-    private void setRemoveVariantButtonAction() {
-        for (int i = 0; i < answerVariants_vBox.getChildren().size() - 1; i++) {
-            HBox hBox = (HBox) answerVariants_vBox.getChildren().get(i);
-            Button button = (Button) hBox.getChildren().get(2);
-            button.setOnAction(event -> {
-                answerVariants_vBox.getChildren().remove(button.getParent());
-            });
+    private void showEmptyQuestion() {
+        answerVariants_vBox.getChildren().remove(0, answerVariants_vBox.getChildren().size() - 1);
+        for (int i = 0; i < DEFAULT_NUMBER_OF_VARIANTS; i++) {
+            createNewVariant(null);
         }
+        setDefaultCorrectAnswers(answerVariants_vBox);
     }
 
-    public void createNewVariant(String variantText) {
+    private void createNewVariant(String variantText) {
         numberOfVariants++;
         //HBox
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(hBOX_SPACING);
         //CheckBox
-        CheckBox checkBox = new CheckBox("");
+        RadioButton radioButton = new RadioButton("");
+        radioButton.setToggleGroup(correctAnswer_toggleGroup);
         //TextField
         TextField textField = new TextField();
         HBox.setHgrow(textField, Priority.ALWAYS);
@@ -72,10 +69,10 @@ public class SeveralAnswersControllerInterface extends TestsConstants implements
         imageView.setFitWidth(REMOVE_VARIANT_BUTTON_IMAGE_FIT_HEIGHT);
         Button button = new Button("", imageView);
         //Compound elements
-        hBox.getChildren().addAll(checkBox, textField, button);
+        hBox.getChildren().addAll(radioButton, textField, button);
         answerVariants_vBox.getChildren().add(answerVariants_vBox.getChildren().size() - 1, hBox);
-        //Update remove button actions
-        setRemoveVariantButtonAction();
+        //Set remove button actions
+        button.setOnAction(event -> answerVariants_vBox.getChildren().remove(button.getParent()));
     }
 
     @Override
@@ -83,9 +80,9 @@ public class SeveralAnswersControllerInterface extends TestsConstants implements
         ArrayList<String> arrayList = new ArrayList<>();
         for (int i = 0; i < answerVariants_vBox.getChildren().size() - 1; i++) {
             HBox hBox = (HBox) answerVariants_vBox.getChildren().get(i);
-            String answerText = ((TextField) hBox.getChildren().get(1)).getText();
-            if (!Objects.equals(answerText, null) && !Objects.equals(answerText, "")) {
-                arrayList.add(answerText);
+            String questionText = ((TextField) hBox.getChildren().get(1)).getText();
+            if (questionText != null && !questionText.isEmpty()) {
+                arrayList.add(questionText);
             }
         }
         return arrayList;
@@ -96,9 +93,10 @@ public class SeveralAnswersControllerInterface extends TestsConstants implements
         ArrayList<String> arrayList = new ArrayList<>();
         for (int i = 0; i < answerVariants_vBox.getChildren().size() - 1; i++) {
             HBox hBox = (HBox) answerVariants_vBox.getChildren().get(i);
-            if (((CheckBox) hBox.getChildren().get(0)).isSelected()) {
-                String answerText= ((TextField) hBox.getChildren().get(1)).getText();
-                if (!Objects.equals(answerText, null) && !Objects.equals(answerText, "")) {
+            RadioButton radioButton = (RadioButton) hBox.getChildren().get(0);
+            if (radioButton.isSelected()) {
+                String answerText = ((TextField) hBox.getChildren().get(1)).getText();
+                if (answerText != null && !answerText.isEmpty()) {
                     arrayList.add(answerText);
                 }
             }
@@ -107,7 +105,7 @@ public class SeveralAnswersControllerInterface extends TestsConstants implements
     }
 
     @Override
-    public void setQuestion(String questionType, String questionText, List<String> questionVariants, List<String> answerVariants) {
+    public void setQuestion(String questionType, double questionScore, String questionText, List<String> questionVariants, List<String> answerVariants) {
         answerVariants_vBox.getChildren().remove(0, answerVariants_vBox.getChildren().size() - 1);
         numberOfVariants = 0;
         if (!questionVariants.isEmpty()) {
@@ -115,27 +113,20 @@ public class SeveralAnswersControllerInterface extends TestsConstants implements
                 createNewVariant(variant);
             }
         } else {
-            answerVariants_vBox.getChildren().remove(0, answerVariants_vBox.getChildren().size() - 1);
-            createNewVariant(null);
-            createNewVariant(null);
+            showEmptyQuestion();
         }
         if (!answerVariants.isEmpty()) {
             for (int i = 0; i < answerVariants_vBox.getChildren().size() - 1; i++) {
                 HBox hBox = (HBox) answerVariants_vBox.getChildren().get(i);
                 for (String answer : answerVariants) {
                     if (Objects.equals(((TextField) hBox.getChildren().get(1)).getText(), answer)) {
-                        ((CheckBox) hBox.getChildren().get(0)).setSelected(true);
+                        ((RadioButton) hBox.getChildren().get(0)).setSelected(true);
                     }
                 }
             }
         } else {
-            setDefaultCorrectAnswers();
+            setDefaultCorrectAnswers(answerVariants_vBox);
         }
-    }
-
-    private void setDefaultCorrectAnswers() {
-        HBox hBox = (HBox) answerVariants_vBox.getChildren().get(0);
-        ((ButtonBase) hBox.getChildren().get(0)).fire();
     }
 
     @Override
