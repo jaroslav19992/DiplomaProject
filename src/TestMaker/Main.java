@@ -1,5 +1,6 @@
 package TestMaker;
 
+import TestMaker.MainProgramWindow.Panes.TestsPane.Question;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class Main extends Application {
 
@@ -22,15 +24,13 @@ public class Main extends Application {
         primaryStage.show();
 
         File file = new File("src/TestMaker/testXML.xml");
-        DOMxmlParser parser = new DOMxmlParser(file);
+        DOMxmlReader parser = new DOMxmlReader(file);
         System.out.println("test name: " + parser.getTestName());
         System.out.println("q. number: " + parser.getAmountOfQuestions());
         System.out.println("is retestable : " + parser.isRetestingAllowed());
         System.out.println("ev. system: " + parser.getTestEVSystem());
-
-
-
-
+        ArrayList<Question> awd = parser.getQuestionsList();
+        System.out.println(awd.get(0).getCorrectAnswer());
     }
 
     public static void main(String[] args) {

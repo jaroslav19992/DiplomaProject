@@ -26,5 +26,7 @@ public interface TestsConstants {
     String NULLABLE_QUESTION_ALERT_CONTEXT = "Тест має одне або декілька не заповнених питань";
     String EMPTY_ANSWER_ALERT_CONTEXT = "Одне або декілька питань мають не заповнені відповіді";
     String EMPTY_QUESTION_TEXT_ALERT_CONTEXT = "Одне або декілька питань не мають тексту";
-
+    String SINGLE_QUESTION_ALERT_CONTEXT = "Одне або декілька мають лише однин варіант відповіді";
+    String DUPLICATES_VARIANTS_QUESTION_ALERT_CONTEXT = "Одне або декілька мають варіанти які дублюються";
+    String DUPLICATES_ANSWERS_QUESTION_ALERT_CONTEXT = "Одне або декілька мають варіанти відповіді які дублюються";
 }

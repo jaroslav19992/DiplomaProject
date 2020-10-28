@@ -1,5 +1,7 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane;
 
+import TestMaker.DBTools.DBHandler;
+import TestMaker.DOMxmlWriter;
 import TestMaker.MainProgramWindow.Panes.TestsPane.Question;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.QuestionsTypes.questionBaseController;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
@@ -12,12 +14,17 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 public class creationTestPaneController implements TestsConstants {
-
-
+    private static final String FILE_EXTENSION = ".xml";
     @FXML
     private StackPane main_pane;
     @FXML
@@ -82,12 +89,43 @@ public class creationTestPaneController implements TestsConstants {
         });
 
         doneTestCreation_button.setOnAction(event -> {
-            checkQuestions(event);
-            createTestFile();
+            if (checkQuestions(event)) {
+                createTestFile();
+            }
         });
     }
 
+    /**
+     * Ask user is he really want to finish test creation, if true - save create test file and save it
+     */
     private void createTestFile() {
+        System.out.println("Creating test " + testName);
+        try {
+            ButtonType create = new ButtonType("Завершити редагування тесту");
+            ButtonType cancel = new ButtonType("Продовжити створення тесту");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setContentText("Ви дійсно бажаєте завершити редагування та створити тест?");
+            alert.setHeaderText(null);
+            alert.setTitle("Підтвердіть дію");
+            alert.getButtonTypes().clear();
+            alert.getButtonTypes().addAll(create, cancel);
+            Optional<ButtonType> selection = alert.showAndWait();
+            if (selection.equals(create)) {
+                DOMxmlWriter writer = new DOMxmlWriter(testQuestions, testName, amountOfQuestions, isRetestingAllowed, timeLimit, evaluationSystem);
+                File file = writer.getTestFile(testName + FILE_EXTENSION);
+                file.createNewFile();
+
+//                DBHandler.loadDataToDB("");
+                alert.setAlertType(Alert.AlertType.INFORMATION);
+                alert.setTitle("");
+                alert.setHeaderText("Тест "+testName+" успішно створено");
+                alert.setContentText("Оновіть сторінку тестів");
+                alert.showAndWait();
+                main_pane.getScene().getWindow().hide();
+            }
+        } catch (ParserConfigurationException | IOException | SAXException | TransformerException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -161,7 +199,7 @@ public class creationTestPaneController implements TestsConstants {
      *
      * @param event create test button action
      */
-    private void checkQuestions(ActionEvent event) {
+    private boolean checkQuestions(ActionEvent event) {
         //Create question if user just fill it and push create test button
         if (!currentPageController.getQuestionText().isEmpty() ||
                 !currentPageController.getQuestionsVariantsList().isEmpty()) {
@@ -170,25 +208,49 @@ public class creationTestPaneController implements TestsConstants {
             testQuestions.set(previousPageIndex, null);
         }
 
-        //Check for empty questions and propose to remove or edit them
+        //Check all questions
         for (int i = 0; i < testQuestions.size(); i++) {
-            // If user don't create question
+            // If there is empty question
             if (testQuestions.get(i) == null) {
-                nullTestCaseAction(i, event);
-                return;
+                showTestCreationWarning(i, event, NULLABLE_QUESTION_ALERT_CONTEXT);
+                return false;
             }
+
+            ArrayList<String> variants = testQuestions.get(i).getQuestionVariants();
             ArrayList<String> answers = testQuestions.get(i).getAnswerVariants();
+
+            // If there is single answer variant
+            if (variants.size() == 1) {
+                showTestCreationWarning(i, event, SINGLE_QUESTION_ALERT_CONTEXT);
+                return false;
+            }
+            // If there is empty answer variants
             if (answers.isEmpty()) {
-                emptyAnswerCaseAction(i, event);
-                return;
+                showTestCreationWarning(i, event, EMPTY_ANSWER_ALERT_CONTEXT);
+                return false;
             }
-            if (Objects.equals(testQuestions.get(i).getQuestionText(), null)) {
-                emptyQuestionTextCaseAction(i, event);
+            // If there is question without main text
+            if (Objects.equals(testQuestions.get(i).getQuestionText(), null) ||
+                    Objects.equals(testQuestions.get(i).getQuestionText(), "")) {
+                showTestCreationWarning(i, event, EMPTY_QUESTION_TEXT_ALERT_CONTEXT);
+                return false;
+            }
+            // If there is question with duplicate variants
+            Set<String> variantsSet = new HashSet<>(variants);
+            Set<String> answerSet = new HashSet<>(answers);
+            if (variants.size() > variantsSet.size()) {
+                showTestCreationWarning(i, event, DUPLICATES_VARIANTS_QUESTION_ALERT_CONTEXT);
+                return false;
+            }
+            if (answers.size() > answerSet.size()) {
+                showTestCreationWarning(i, event, DUPLICATES_ANSWERS_QUESTION_ALERT_CONTEXT);
+                return false;
             }
         }
+        return true;
     }
 
-    private void emptyQuestionTextCaseAction(int currentQuestionIndex, ActionEvent event) {
+    private void showTestCreationWarning(int currentQuestionIndex, ActionEvent event, String warningText) {
         ArrayList<ButtonType> buttonTypeArrayList = new ArrayList<>();
         ButtonType showQuestionButton = new ButtonType("Перейти до питання");
         ButtonType removeQuestionButton = new ButtonType("Видалити питання");
@@ -197,49 +259,7 @@ public class creationTestPaneController implements TestsConstants {
         buttonTypeArrayList.add(removeQuestionButton);
         buttonTypeArrayList.add(resumeTestCreationButton);
         ButtonType buttonType = showWarningAlert(QUESTION_ALERT_TITLE, QUESTION_ALERT_HEADER,
-                EMPTY_QUESTION_TEXT_ALERT_CONTEXT, buttonTypeArrayList);
-        if (Objects.equals(buttonType, showQuestionButton)) {
-            pagination.setCurrentPageIndex(currentQuestionIndex);
-            event.consume();
-        }
-        if (Objects.equals(buttonType, removeQuestionButton)) {
-            ButtonType remove = new ButtonType("Видалити питання");
-            ButtonType cancel = new ButtonType("Скасувати");
-            Collection<ButtonType> buttonTypeList2 = new ArrayList<>();
-            buttonTypeList2.add(remove);
-            buttonTypeList2.add(cancel);
-            ButtonType warningAnswer2 = showWarningAlert(
-                    QUESTION_ALERT_TITLE,
-                    QUESTION_ALERT_HEADER,
-                    REMOVE_QUESTION_ALERT_CONTEXT, buttonTypeList2);
-            if (Objects.equals(warningAnswer2, remove)) {
-                removeCurrentQuestion(currentQuestionIndex);
-                event.consume();
-            }
-            //Cancel button actually do not do anything
-        }
-        if (Objects.equals(buttonType, resumeTestCreationButton)) {
-            pagination.setCurrentPageIndex(currentQuestionIndex);
-            event.consume();
-        }
-    }
-
-    /**
-     * Tells user if there is empty answers in test, propose remove question, show it or resume test creation
-     *
-     * @param currentQuestionIndex - question index in array
-     * @param event                create test button event
-     */
-    private void emptyAnswerCaseAction(int currentQuestionIndex, Event event) {
-        ArrayList<ButtonType> buttonTypeArrayList = new ArrayList<>();
-        ButtonType showQuestionButton = new ButtonType("Перейти до питання");
-        ButtonType removeQuestionButton = new ButtonType("Видалити питання");
-        ButtonType resumeTestCreationButton = new ButtonType("Повернутися до створення тесту");
-        buttonTypeArrayList.add(showQuestionButton);
-        buttonTypeArrayList.add(removeQuestionButton);
-        buttonTypeArrayList.add(resumeTestCreationButton);
-        ButtonType buttonType = showWarningAlert(QUESTION_ALERT_TITLE, QUESTION_ALERT_HEADER,
-                EMPTY_ANSWER_ALERT_CONTEXT, buttonTypeArrayList);
+                warningText, buttonTypeArrayList);
         if (Objects.equals(buttonType, showQuestionButton)) {
             pagination.setCurrentPageIndex(currentQuestionIndex);
             event.consume();
@@ -288,50 +308,6 @@ public class creationTestPaneController implements TestsConstants {
             this.isRetestingAllowed = false;
             this.amountOfQuestions = 0;
             main_pane.getScene().getWindow().hide();
-        }
-    }
-
-
-    /**
-     * Tells user if there is nullable questions in test, propose remove nullable question, show it or resume test creation
-     *
-     * @param currentQuestionIndex - question index in array
-     * @param event                create test button event
-     */
-    private void nullTestCaseAction(int currentQuestionIndex, Event event) {
-        ButtonType showQuestionButton = new ButtonType("Перейти до питання");
-        ButtonType removeQuestionButton = new ButtonType("Видалити питання");
-        ButtonType resumeTestCreationButton = new ButtonType("Повернутися до редагування");
-        List<ButtonType> buttonTypeList = new ArrayList<>();
-        buttonTypeList.add(showQuestionButton);
-        buttonTypeList.add(removeQuestionButton);
-        buttonTypeList.add(resumeTestCreationButton);
-        ButtonType warningAnswer = showWarningAlert(QUESTION_ALERT_TITLE,
-                QUESTION_ALERT_HEADER,
-                NULLABLE_QUESTION_ALERT_CONTEXT,
-                buttonTypeList);
-        if (warningAnswer.equals(resumeTestCreationButton)) {
-            event.consume();
-        }
-        if (warningAnswer.equals(removeQuestionButton)) {
-            ButtonType remove = new ButtonType("Видалити питання");
-            ButtonType cancel = new ButtonType("Скасувати");
-            Collection<ButtonType> buttonTypeList2 = new ArrayList<>();
-            buttonTypeList2.add(remove);
-            buttonTypeList2.add(cancel);
-            ButtonType warningAnswer2 = showWarningAlert(
-                    QUESTION_ALERT_TITLE,
-                    QUESTION_ALERT_HEADER,
-                    REMOVE_QUESTION_ALERT_CONTEXT, buttonTypeList2);
-            if (Objects.equals(warningAnswer2, remove)) {
-                removeCurrentQuestion(currentQuestionIndex);
-                event.consume();
-            }
-            //Cancel button actually do not do anything
-        }
-        if (Objects.equals(warningAnswer, showQuestionButton)) {
-            pagination.setCurrentPageIndex(currentQuestionIndex);
-            event.consume();
         }
     }
 

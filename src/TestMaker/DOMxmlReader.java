@@ -13,29 +13,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import static TestMaker.DOMConstants.*;
 
-public class DOMxmlParser {
-    private static final String ROOT_XML_TAG = "Test";
-    private static final String QUESTION_XML_TAG = "Question";
-    private static final String QUESTION_TYPE = "questionType";
-    private static final String QUESTION_TEXT = "questionText";
-    private static final String TEST_NAME = "testName";
-    private static final String IS_RETESTING_ALLOWED = "isRetestingAllowed";
-    private static final String TIME_LIMIT = "timeLimit";
-    private static final String EV_SYSTEM = "evaluationSystem";
-    private static final String NUMBER_OF_QUESTIONS = "numberOfQuestions";
-    private static final String VARIANT_ID = "id";
-    private static final String VARIANT_TEXT = "text";
-    private static final String ANSWER_VARIANTS = "answerVariants";
-    private static final String CORRECT_ANSWERS = "answerVariants";
-    private static final String QUESTION_SCORE = "score";
-
-//    private static final String TEST_NAME = "testName";
+public class DOMxmlReader {
 
     private final File xmlFile;
     private final Document document;
 
-    public DOMxmlParser(File xmlFile) throws ParserConfigurationException, IOException, SAXException {
+    public DOMxmlReader(File xmlFile) throws ParserConfigurationException, IOException, SAXException {
         this.xmlFile = xmlFile;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -43,6 +28,10 @@ public class DOMxmlParser {
         document = builder.parse(xmlFile);
     }
 
+    /**
+     * Creates array from child elements in "Questions" element
+     * @return array list of questions
+     */
     public ArrayList<Question> getQuestionsList() {
         ArrayList<Question> questionsList = new ArrayList<>();
         //Get XML root child nodes with tag "Question"
@@ -55,17 +44,21 @@ public class DOMxmlParser {
         return questionsList;
     }
 
+    /**
+     * Gets question info from xml and creates an question
+     * @param node node with question info in xml file
+     * @return question
+     */
     private Question getQuestion(Node node) {
         Question question = new Question();
         if (node.getNodeType() == Node.ELEMENT_NODE) {
-            Element element = (Element)node;
-            String questionText = element.getAttribute(QUESTION_TEXT);
-            String questionType = element.getAttribute(QUESTION_TYPE);
-            double questionScore = Double.parseDouble(element.getAttribute(QUESTION_SCORE));
+            Element questionElement = (Element)node;
+            String questionText = questionElement.getAttribute(QUESTION_TEXT_TAG);
+            String questionType = questionElement.getAttribute(QUESTION_TYPE_TAG);
+            double questionScore = Double.parseDouble(questionElement.getAttribute(QUESTION_SCORE_TAG));
 
-
-            ArrayList<String> answerVariants = getVariants(element, ANSWER_VARIANTS);
-            ArrayList<String> correctVariants = getVariants(element, CORRECT_ANSWERS);
+            ArrayList<String> answerVariants = getVariants(questionElement, ANSWER_VARIANTS_TAG);
+            ArrayList<String> correctVariants = getVariants(questionElement, CORRECT_ANSWERS_TAG);
 
             question.setQuestionText(questionText);
             question.setQuestionType(questionType);
@@ -78,7 +71,7 @@ public class DOMxmlParser {
 
     /**
      * get all variants from variants list with tag "tagName" and create arraylist from them.
-     * @param element element with several variants lists
+     * @param element question element in xml
      * @param tagName variants list tag
      * @return list of variants from xml
      */
@@ -87,7 +80,7 @@ public class DOMxmlParser {
         ArrayList<String> variants = new ArrayList<>();
         for (int i = 0; i < nodeList.getLength(); i++) {
             if (nodeList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                variants.add(nodeList.item(i).getAttributes().getNamedItem(VARIANT_TEXT).getNodeValue());
+                variants.add(nodeList.item(i).getAttributes().getNamedItem(VARIANT_TEXT_TAG).getNodeValue());
             }
         }
         return variants;
@@ -100,23 +93,23 @@ public class DOMxmlParser {
     }
 
     public String getTestName() {
-        return document.getDocumentElement().getElementsByTagName(TEST_NAME).item(0).getTextContent();
+        return document.getDocumentElement().getElementsByTagName(TEST_NAME_TAG).item(0).getTextContent();
     }
 
     public String getTimeLimit() {
-        return document.getDocumentElement().getElementsByTagName(TIME_LIMIT).item(0).getTextContent();
+        return document.getDocumentElement().getElementsByTagName(TIME_LIMIT_TAG).item(0).getTextContent();
     }
 
     public int getAmountOfQuestions() {
-        return Integer.parseInt(document.getDocumentElement().getElementsByTagName(NUMBER_OF_QUESTIONS).item(0).getTextContent());
+        return Integer.parseInt(document.getDocumentElement().getElementsByTagName(NUMBER_OF_QUESTIONS_TAG).item(0).getTextContent());
     }
 
     public boolean isRetestingAllowed() {
-        return Boolean.parseBoolean(document.getDocumentElement().getElementsByTagName(IS_RETESTING_ALLOWED).item(0).getTextContent());
+        return Boolean.parseBoolean(document.getDocumentElement().getElementsByTagName(IS_RETESTING_ALLOWED_TAG).item(0).getTextContent());
     }
 
     public String getTestEVSystem() {
-        return document.getDocumentElement().getElementsByTagName(EV_SYSTEM).item(0).getTextContent();
+        return document.getDocumentElement().getElementsByTagName(EV_SYSTEM_TAG).item(0).getTextContent();
     }
 
 }

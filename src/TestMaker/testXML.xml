@@ -8,35 +8,35 @@
     <Questions>
         <Question questionType="питання з однією правильною відповіддю" questionText="перше питання" score="1.0">
             <answerVariants>
-                <variant id="1" text="перший вар"/>
-                <variant id="2" text="другий вар"/>
-                <variant id="3" text="третій вар"/>
+                <variant text="перший вар"/>
+                <variant text="другий вар"/>
+                <variant text="третій вар"/>
             </answerVariants>
             <severalCorrectAnswers>
-                <answer id="1" variantId="2"/>
+                <answer text="другий вар"/>
             </severalCorrectAnswers>
         </Question>
         <Question questionType="питання кількома правильними відповідями" questionText="друге питання" score="1.0">
             <answerVariants>
-                <variant id="1" text="перший вар"/>
-                <variant id="2" text="другий вар"/>
-                <variant id="3" text="третій вар"/>
+                <variant text="перший вар"/>
+                <variant text="другий вар"/>
+                <variant text="третій вар"/>
             </answerVariants>
             <severalCorrectAnswers>
-                <answer id="1" variantId="2"/>
-                <answer id="2" variantId="3"/>
+                <answer text="другий вар"/>
+                <answer text="третій вар"/>
             </severalCorrectAnswers>
         </Question>
         <Question questionType="питання на відповідність" questionText="третє питання" score="1.0">
             <answerVariants>
-                <variant id="1" text="перший вар"/>
-                <variant id="2" text="другий вар"/>
-                <variant id="3" text="третій вар"/>
+                <variant text="перший вар"/>
+                <variant text="другий вар"/>
+                <variant text="третій вар"/>
             </answerVariants>
             <severalCorrectAnswers>
-                <answer id="1" variantId="2"/>
-                <answer id="2" variantId="3"/>
-                <answer id="3" variantId="1"/>
+                <answer text="2"/>
+                <answer text="3"/>
+                <answer text="1"/>
             </severalCorrectAnswers>
         </Question>
     </Questions>
