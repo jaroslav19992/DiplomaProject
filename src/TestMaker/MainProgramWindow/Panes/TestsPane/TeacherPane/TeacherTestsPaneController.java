@@ -2,7 +2,9 @@ package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane;
 
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
-import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTestFile;
+import TestMaker.MainProgramWindow.Panes.TestsPane.Pupil;
+import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.GainPupilAccessPane.GainPupilAccessPaneController;
+import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTest;
 import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
 import javafx.fxml.FXML;
@@ -24,40 +26,37 @@ public class TeacherTestsPaneController {
     @FXML
     private Button addTest_button;
     @FXML
-    private ListView<TestMakerTestFile> createdTests_listView;
+    private ListView<TestMakerTest> createdTests_listView;
     @FXML
     private AnchorPane main_pane;
     @FXML
     private Button editTest_button;
     @FXML
-    private ListView<AccessedPupil> testsAccess_listView;
+    private ListView<Pupil> testsAccess_listView;
     @FXML
     private Button gainAccess_button;
     private final int maxTestsNumber = 1000;
-
     //                       ↓test id in testsList table
-//    accessedPupilsList[6];
-//                       ^---AccessedPupil1 <-\
-//                       ^---AccessedPupil2 < -- pupils who has access to current test
-//                       ^---AccessedPupil3 <-/
+//    accessedPupilsList[3];
+//                       ^---AccessedPupil0 <-\
+//                       ^---AccessedPupil1 < -- pupils who has access to current test
+//                       ^---AccessedPupil2 <-/
     private final ArrayList[] accessedPupilsList = new ArrayList[maxTestsNumber];
 
     @FXML
     void initialize() {
         setButtonsActions();
-            try {
-                getTestsList();
-                getTestsAccessList();
-                createdTests_listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-                createdTests_listView.getSelectionModel().selectedIndexProperty().addListener((
-                        observable, oldIndex, newIndex) -> {
-                    showTestsAccess(createdTests_listView.getSelectionModel().getSelectedIndex());
-                });
-                testsAccess_listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-                showAlert(exception);
-            }
+        try {
+            getTestsList();
+            getTestsAccessList();
+            createdTests_listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            createdTests_listView.getSelectionModel().selectedIndexProperty().addListener((
+                    observable, oldIndex, newIndex) -> showTestsAccess(createdTests_listView.getSelectionModel().getSelectedIndex()));
+            testsAccess_listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            showAlert(exception);
+        }
     }
 
     /**
@@ -66,9 +65,14 @@ public class TeacherTestsPaneController {
     private void setButtonsActions() {
         addTest_button.setOnAction(event -> {
             WindowTools windowTools = new WindowTools();
-            windowTools.openNewWindow(
-                    "/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/ConfigTestPane.fxml",
+            windowTools.openNewWindowAndWait("/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/ConfigTestPane.fxml",
                     false, Modality.APPLICATION_MODAL);
+            try {
+                getTestsList();
+                updatePupilsTestsAccess();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
         });
 
         removeTest_button.setOnAction(event -> {
@@ -85,7 +89,23 @@ public class TeacherTestsPaneController {
         });
 
         gainAccess_button.setOnAction(event -> {
-
+//            try {
+            if (createdTests_listView.getSelectionModel().getSelectedItem() == null) {
+                Alert noTestAndPupilChosenAlert = new Alert(Alert.AlertType.WARNING);
+                noTestAndPupilChosenAlert.setHeaderText(null);
+                noTestAndPupilChosenAlert.setContentText("Оберіть тест для якого бажаєте надати доступ");
+                noTestAndPupilChosenAlert.showAndWait();
+            } else {
+                gainAccessToPupils();
+//                    updatePupilsTestsAccess();
+//                    showTestsAccess(createdTests_listView.getSelectionModel().getSelectedIndex());
+            }
+//            } catch (SQLException exception) {
+//                Alert alert = new Alert(Alert.AlertType.ERROR);
+//                alert.setHeaderText("Помилка виконання операції");
+//                alert.setContentText(exception.getMessage());
+//                alert.show();
+//            }
         });
 
         removeAccess_button.setOnAction(event -> {
@@ -94,14 +114,23 @@ public class TeacherTestsPaneController {
                 removePupilTestAccess();
                 updatePupilsTestsAccess();
                 showTestsAccess(createdTests_listView.getSelectionModel().getSelectedIndex());
-
             } catch (SQLException exception) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText("Помилка виконання операції видалення");
+                alert.setHeaderText("Помилка виконання операції");
                 alert.setContentText(exception.getMessage());
                 alert.show();
             }
         });
+    }
+
+    private void gainAccessToPupils() {
+        WindowTools windowTools = new WindowTools();
+        GainPupilAccessPaneController controller = (GainPupilAccessPaneController) windowTools.openNewWindow(
+                "/TestMaker/MainProgramWindow/Panes/TestsPane/" +
+                        "TeacherPane/GainPupilAccessPane/GainPupilAccessPane.fxml", true, Modality.APPLICATION_MODAL);
+        createdTests_listView.getSelectionModel().getSelectedItem().
+                setAccessedPupils(testsAccess_listView.getItems());
+        controller.setChosenTest(createdTests_listView.getSelectionModel().getSelectedItem());
     }
 
     private void removeTest() throws SQLException {
@@ -124,11 +153,9 @@ public class TeacherTestsPaneController {
 
     /**
      * Clear accessedPupilsTestList and re-adds all pupils to show correct access list
-     *
-     * @throws SQLException
      */
     private void updatePupilsTestsAccess() throws SQLException {
-        for (ArrayList<AccessedPupil> accessedPupils : accessedPupilsList) {
+        for (ArrayList<Pupil> accessedPupils : accessedPupilsList) {
             if (accessedPupils != null) {
                 accessedPupils.clear();
             }
@@ -143,18 +170,19 @@ public class TeacherTestsPaneController {
         if (createdTests_listView.getSelectionModel().getSelectedItem() == null ||
                 testsAccess_listView.getSelectionModel().getSelectedItems().isEmpty()) {
             Alert noTestAndPupilChosenAlert = new Alert(Alert.AlertType.WARNING);
+            noTestAndPupilChosenAlert.setTitle("Помилка");
             noTestAndPupilChosenAlert.setHeaderText(null);
             noTestAndPupilChosenAlert.setContentText("Оберіть тест та користувача для якого бажаєте видалити доступ до даного тесту");
             noTestAndPupilChosenAlert.showAndWait();
         } else {
             StringBuilder contentTextString = new StringBuilder("Ви дійсно бажаєте обмежити доступ користувача(ів): \n");
-            for (AccessedPupil pupil : testsAccess_listView.getSelectionModel().getSelectedItems()) {
+            for (Pupil pupil : testsAccess_listView.getSelectionModel().getSelectedItems()) {
                 contentTextString.append("\t" + pupil.getFirstName()
                         + " " + pupil.getLastName() + "\n");
             }
             contentTextString.append("до тесту: \n\t" + createdTests_listView.getSelectionModel().getSelectedItem());
             if (getRemoveConfirmation(contentTextString.toString())) {
-                for (AccessedPupil pupil : testsAccess_listView.getSelectionModel().getSelectedItems()) {
+                for (Pupil pupil : testsAccess_listView.getSelectionModel().getSelectedItems()) {
                     String SQLQuery = "DELETE FROM " + DBConstants.DB_NAME + "." + DBConstants.PUPILS_TESTS_TABLE_NAME
                             + " WHERE (`" + DBConstants.USER_NAME_HASH + "` = '"
                             + pupil.getUsernameHash() + "') and (`" + DBConstants.ID_TESTS_LIST + "` = '"
@@ -204,10 +232,11 @@ public class TeacherTestsPaneController {
      */
     private void getTestsAccessList() throws SQLException {
         String SQLQuery = "SELECT " + DBConstants.ID_TESTS_LIST + ", " + DBConstants.FIRST_NAME + ", "
-                + DBConstants.LAST_NAME + ", " + DBConstants.USER_NAME_HASH + " FROM " +
-                DBConstants.PUPILS_TESTS_TABLE_NAME + " INNER JOIN " + DBConstants.USERS_INFO_TABLE_NAME +
-                " USING (" + DBConstants.USER_NAME_HASH + ") INNER JOIN " + DBConstants.TESTS_LIST_TABLE_NAME +
-                " USING (" + DBConstants.ID_TESTS_LIST + ")";
+                + DBConstants.LAST_NAME + ", " + DBConstants.USER_NAME_HASH + ", " + DBConstants.CLASS_ROOM
+                + " FROM " + DBConstants.PUPILS_TESTS_TABLE_NAME
+                + " INNER JOIN " + DBConstants.USERS_INFO_TABLE_NAME
+                + " USING (" + DBConstants.USER_NAME_HASH + ") INNER JOIN " + DBConstants.TESTS_LIST_TABLE_NAME
+                + " USING (" + DBConstants.ID_TESTS_LIST + ")";
         ResultSet testsAccessResultSet = DBHandler.getDataFromDB(SQLQuery);
 
         //Id for current test
@@ -222,6 +251,7 @@ public class TeacherTestsPaneController {
             String firstName = testsAccessResultSet.getString(DBConstants.FIRST_NAME);
             String lastName = testsAccessResultSet.getString(DBConstants.LAST_NAME);
             currentTestId = testsAccessResultSet.getInt(DBConstants.ID_TESTS_LIST);
+            String classRoom = testsAccessResultSet.getString(DBConstants.CLASS_ROOM);
 
             /*
              * If there is no pupils added into array list cell in [currentTestId] position
@@ -230,9 +260,9 @@ public class TeacherTestsPaneController {
              */
             if (accessedPupilsList[currentTestId] == null) {
                 accessedPupilsList[currentTestId] = new ArrayList<>();
-                accessedPupilsList[currentTestId].add(new AccessedPupil(usernameHash, firstName, lastName));
+                accessedPupilsList[currentTestId].add(new Pupil(usernameHash, firstName, lastName, classRoom));
             } else {
-                accessedPupilsList[currentTestId].add(new AccessedPupil(usernameHash, firstName, lastName));
+                accessedPupilsList[currentTestId].add(new Pupil(usernameHash, firstName, lastName, classRoom));
             }
         }
     }
@@ -265,7 +295,7 @@ public class TeacherTestsPaneController {
         while (testsList.next()) {
             pointer++;
             //add testMakerFile to tests list
-            TestMakerTestFile test = new TestMakerTestFile(testsList.getInt(DBConstants.ID_TESTS_LIST),
+            TestMakerTest test = new TestMakerTest(testsList.getInt(DBConstants.ID_TESTS_LIST),
                     testsList.getString(DBConstants.TEST_NAME));
             createdTests_listView.getItems().add(pointer, test);
         }
@@ -280,11 +310,11 @@ public class TeacherTestsPaneController {
     private void showTestsAccess(int createdTests_currentIndex) {
         //if any test is chosen
         if (createdTests_currentIndex >= 0) {
-            ArrayList<AccessedPupil> accessedPupils = accessedPupilsList[createdTests_listView.getItems()
+            ArrayList<Pupil> accessedPupils = accessedPupilsList[createdTests_listView.getItems()
                     .get(createdTests_currentIndex).getIdInTestsList()];
             testsAccess_listView.getItems().clear();
             try {
-                for (AccessedPupil pupil : accessedPupils) {
+                for (Pupil pupil : accessedPupils) {
                     testsAccess_listView.getItems().add(pupil);
                 }
             } catch (NullPointerException exception) {

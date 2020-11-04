@@ -9,6 +9,7 @@ public class UserInfoHandler {
     public static String accessToken;
     public static String registrationDate;
     public static String lastVisitDate;
+    public static String classroom;
     public static boolean isAccessGained = false;
 
     /**

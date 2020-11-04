@@ -62,6 +62,11 @@
                         <Font size="36.0" />
                      </font>
                   </Label>
+                  <Label text="Клас">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
                </children>
                <opaqueInsets>
                   <Insets top="20.0" />
@@ -105,6 +110,11 @@
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="classRoom_label" text="classRoom">
                      <font>
                         <Font size="36.0" />
                      </font>

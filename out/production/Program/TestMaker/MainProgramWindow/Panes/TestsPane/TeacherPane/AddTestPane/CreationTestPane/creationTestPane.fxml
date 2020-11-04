@@ -9,9 +9,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane fx:id="main_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController">
+<StackPane fx:id="main_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="590.0" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController">
    <children>
-      <VBox alignment="TOP_CENTER" spacing="10.0">
+      <VBox alignment="TOP_CENTER" minWidth="590.0" spacing="10.0" StackPane.alignment="CENTER">
          <children>
             <Label fx:id="testName_label" text="Назва тесту">
                <VBox.margin>
@@ -21,7 +21,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Pagination fx:id="pagination" prefHeight="599.0" prefWidth="600.0" />
+            <Pagination fx:id="pagination" minWidth="590.0" prefHeight="600.0" prefWidth="600.0" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
       <Button fx:id="removeCurrentQuestion" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Видалити" StackPane.alignment="BOTTOM_LEFT">

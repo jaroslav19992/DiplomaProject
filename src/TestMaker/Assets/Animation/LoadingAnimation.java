@@ -24,7 +24,7 @@ public class LoadingAnimation extends Thread {
     private static final String CIRCLES_COLOR = ("c6dbe4");
     private static final String BACKGROUND_COLOR = "rgba(0, 0, 0, 0.28)";
     private static final Double RATE = 1.1;
-    private static final int THREAD_SLEEP_TIME = 400;
+    private static final int THREAD_SLEEP_TIME = 200;
     private final Pane pane;
     public static ArrayList<PathTransition> animatedElements = new ArrayList<>();
     AnchorPane loadingPane = new AnchorPane();
@@ -54,9 +54,6 @@ public class LoadingAnimation extends Thread {
 
         double startXPos = pane.getPrefWidth() / 2 + CIRCLE_RADIUS;
         double startYPos = pane.getPrefHeight() / 2 - LOADING_RADIUS / 2.0;
-
-        System.out.println(startXPos);
-        System.out.println(startYPos);
 
         int localDelay = 0;
         //Create Circle and animate them
@@ -106,13 +103,10 @@ public class LoadingAnimation extends Thread {
     public void play() {
         System.out.println("Play animation");
         //Platform.runLater used because simple *.toFront cause "not an JavaFX Thread exception"
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                loadingPane.toFront();
-                loadingPane.setVisible(true);
-                animatedElements.forEach(Animation::play);
-            }
+        Platform.runLater(() -> {
+            loadingPane.toFront();
+            loadingPane.setVisible(true);
+            animatedElements.forEach(Animation::play);
         });
 
     }
@@ -122,13 +116,10 @@ public class LoadingAnimation extends Thread {
      */
     public void stopAnimation() {
         //Platform.runLater used because simple *.toBach cause "not an JavaFX Thread exception"
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                animatedElements.forEach(Animation::stop);
-                loadingPane.toBack();
-                loadingPane.setVisible(false);
-            }
+        Platform.runLater(() -> {
+            animatedElements.forEach(Animation::stop);
+            loadingPane.toBack();
+            loadingPane.setVisible(false);
         });
 
     }
@@ -160,7 +151,7 @@ public class LoadingAnimation extends Thread {
     }
 
     @Override
-    public synchronized void start() {
+    public void start() {
         Platform.runLater(super::start);
     }
 }

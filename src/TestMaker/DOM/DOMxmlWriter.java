@@ -1,4 +1,4 @@
-package TestMaker;
+package TestMaker.DOM;
 
 import TestMaker.MainProgramWindow.Panes.TestsPane.Question;
 import org.w3c.dom.Document;
@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static TestMaker.DOMConstants.*;
+import static TestMaker.DOM.DOMConstants.*;
 
 public class DOMxmlWriter {
 
@@ -23,7 +23,7 @@ public class DOMxmlWriter {
 
     public DOMxmlWriter(ArrayList<Question>
                                 questionsList, String testName,
-                        int numberOfQuestions, boolean isRetestingAllowed,
+                        int numberOfQuestions, int numberOfTestingAttempts,
                         int timeLimit, String evaluationSystem) throws ParserConfigurationException, IOException, SAXException, TransformerConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -41,9 +41,9 @@ public class DOMxmlWriter {
         numberOfQuestionsElement.setTextContent(String.valueOf(numberOfQuestions));
         rootElement.appendChild(numberOfQuestionsElement);
 
-        Element isRetestingAllowedElement = document.createElement(IS_RETESTING_ALLOWED_TAG);
-        isRetestingAllowedElement.setTextContent(String.valueOf(isRetestingAllowed));
-        rootElement.appendChild(isRetestingAllowedElement);
+        Element numberOfAttempts = document.createElement(NUMBER_OF_ATTEMPTS);
+        numberOfAttempts.setTextContent(String.valueOf(numberOfTestingAttempts));
+        rootElement.appendChild(numberOfAttempts);
 
         Element timeLimitElement = document.createElement(TIME_LIMIT_TAG);
         timeLimitElement.setTextContent(String.valueOf(timeLimit));

@@ -6,10 +6,10 @@ import TestMaker.DBTools.DBHandler;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDataChecker {
+public class UserDataLoader {
     private boolean isAccessGained = false;
 
-    public UserDataChecker(){
+    public UserDataLoader(){
 
     }
 
@@ -29,6 +29,7 @@ public class UserDataChecker {
                 UserInfoHandler.firstName = userDataSet.getString(DBConstants.FIRST_NAME);
                 UserInfoHandler.lastName = userDataSet.getString(DBConstants.LAST_NAME);
                 UserInfoHandler.email = userDataSet.getString(DBConstants.EMAIL);
+                UserInfoHandler.classroom = userDataSet.getString(DBConstants.CLASS_ROOM);
                 UserInfoHandler.accessToken = userDataSet.getString(DBConstants.ACCESS_TOKEN);
                 UserInfoHandler.registrationDate = userDataSet.getString(DBConstants.REG_DATE);
                 UserInfoHandler.lastVisitDate = userDataSet.getString(DBConstants.LAST_VISIT_DATE);

@@ -13,7 +13,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.util.Optional;
 
@@ -62,9 +61,6 @@ public class MainWindowController extends WindowConstants{
 
     @FXML
     private BorderPane main_borderPane;
-
-    private Stage stage;
-
 
     @FXML
     void initialize() {

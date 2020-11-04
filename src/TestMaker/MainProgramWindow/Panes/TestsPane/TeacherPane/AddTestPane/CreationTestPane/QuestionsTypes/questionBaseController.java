@@ -45,7 +45,7 @@ public class questionBaseController implements QuestionControllerInterface, Test
     }
 
     private void setQuestionScoreListener() {
-        questionScore_textField.setOnKeyTyped(event -> {
+        questionScore_textField.setOnKeyReleased(event -> {
             if (!Objects.equals(questionScore_textField.getText(), "")) {
                 try {
                     Double.valueOf(questionScore_textField.getText());

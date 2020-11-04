@@ -9,13 +9,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="main_pane" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.ConfigTestPaneController">
+<AnchorPane fx:id="main_pane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.ConfigTestPaneController">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="243.0" layoutY="44.0" prefHeight="400.0" prefWidth="600.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="TOP_CENTER" layoutX="243.0" layoutY="44.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label text="Створення тесту">
+            <Label text="Створення тесту" VBox.vgrow="ALWAYS">
                <VBox.margin>
-                  <Insets top="20.0" />
+                  <Insets />
                </VBox.margin>
                <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0">
@@ -28,15 +28,15 @@
                   <Font name="System Bold" size="36.0" />
                </font>
             </Label>
-            <Label text="Назва тесту" />
-            <TextField fx:id="testName_textField" promptText="Введіть назву тесту" text="Тесст1">
+            <Label text="Назва тесту" VBox.vgrow="ALWAYS" />
+            <TextField fx:id="testName_textField" promptText="Введіть назву тесту" text="Тесст1" VBox.vgrow="ALWAYS">
                <VBox.margin>
-                  <Insets left="50.0" right="50.0" />
+                  <Insets />
                </VBox.margin>
             </TextField>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox alignment="TOP_CENTER" prefWidth="250.0" spacing="20.0">
+                  <VBox alignment="TOP_CENTER" prefWidth="250.0" spacing="20.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label text="Можливість повторного проходження тесту" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" wrapText="true">
                            <VBox.margin>
@@ -53,23 +53,23 @@
                               <RadioButton fx:id="reTestingDisabled_radioButton" mnemonicParsing="false" selected="true" text="Ні" toggleGroup="$reTesting_toggleGroup" />
                            </children>
                         </HBox>
-                        <Label text="Кількість питань" textAlignment="CENTER">
+                        <Label fx:id="numberOfAttempts_label" disable="true" text="Кількість спроб" textAlignment="CENTER">
                            <VBox.margin>
                               <Insets bottom="-10.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="questionsAmount_textField" text="12" />
+                        <TextField fx:id="numberOfAttempts_textField" disable="true" prefWidth="230.0" VBox.vgrow="ALWAYS" />
                      </children>
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                      <HBox.margin>
-                        <Insets bottom="20.0" left="50.0" right="20.0" top="20.0" />
+                        <Insets />
                      </HBox.margin>
                   </VBox>
-                  <VBox alignment="TOP_CENTER" prefWidth="250.0" spacing="20.0">
+                  <VBox alignment="TOP_CENTER" prefWidth="250.0" spacing="20.0" HBox.hgrow="ALWAYS">
                      <HBox.margin>
-                        <Insets bottom="20.0" left="20.0" right="50.0" top="20.0" />
+                        <Insets />
                      </HBox.margin>
                      <children>
                         <Label text="Обмеження часу для проходження тестування" textAlignment="CENTER" wrapText="true">
@@ -92,7 +92,7 @@
                               <Insets bottom="-10.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="timeLimit_textField" disable="true" />
+                        <TextField fx:id="timeLimit_textField" disable="true" prefWidth="230.0" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </children>
@@ -100,21 +100,38 @@
                   <Insets />
                </opaqueInsets>
             </HBox>
-            <Label text="Система оцінювання" textAlignment="CENTER" />
-            <ChoiceBox fx:id="evaluationSystem_choiceBox" />
-            <StackPane>
+            <HBox alignment="CENTER" spacing="40.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <Label text="Кількість питань" textAlignment="CENTER" />
+                        <TextField fx:id="questionsAmount_textField" text="12" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <Label text="Система оцінювання" textAlignment="CENTER" />
+                        <ChoiceBox fx:id="evaluationSystem_choiceBox" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <StackPane VBox.vgrow="ALWAYS">
                <children>
                   <Button fx:id="startTestCreation_button" defaultButton="true" mnemonicParsing="false" prefHeight="57.0" prefWidth="154.0" text="Розпочати створення тесту" textAlignment="CENTER" wrapText="true" StackPane.alignment="BOTTOM_RIGHT">
                      <VBox.margin>
                         <Insets top="-20.0" />
                      </VBox.margin>
                      <StackPane.margin>
-                        <Insets right="30.0" />
+                        <Insets />
                      </StackPane.margin>
                   </Button>
                   <Button fx:id="cancelTestCreation_button" cancelButton="true" mnemonicParsing="false" prefHeight="57.0" prefWidth="154.0" text="Скасувати створення тесту" textAlignment="CENTER" wrapText="true" StackPane.alignment="BOTTOM_LEFT">
                      <StackPane.margin>
-                        <Insets left="20.0" right="30.0" />
+                        <Insets />
                      </StackPane.margin>
                   </Button>
                </children>
@@ -122,4 +139,7 @@
          </children>
       </VBox>
    </children>
+   <padding>
+      <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+   </padding>
 </AnchorPane>

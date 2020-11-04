@@ -43,6 +43,9 @@ public class PupilUserInfoPaneController {
     private Button changeInfo_button;
 
     @FXML
+    private Label classRoom_label;
+
+    @FXML
     private Label accessToken_label;
 
     @FXML
@@ -61,6 +64,7 @@ public class PupilUserInfoPaneController {
         firstName_label.setText(UserInfoHandler.firstName);
         lastName_label.setText(UserInfoHandler.lastName);
         email_label.setText(UserInfoHandler.email);
+        classRoom_label.setText(UserInfoHandler.classroom);
         accessToken_label.setText(UserInfoHandler.accessToken);
         regDate_label.setText(DBConstants.REG_DATE_LABEL_TEXT + UserInfoHandler.registrationDate);
         lastVisitDate_label.setText(DBConstants.LAST_VISIT_DATE_LABEL_TEXT + UserInfoHandler.lastVisitDate);

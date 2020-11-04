@@ -2,7 +2,7 @@
 <Test>
     <testName>test1</testName>
     <numberOfQuestions>3</numberOfQuestions>
-    <isRetestingAllowed>true</isRetestingAllowed>
+    <numberOfAttempts>1</numberOfAttempts>
     <timeLimit>0</timeLimit>
     <evaluationSystem>"5-ти бальна система"</evaluationSystem>
     <Questions>

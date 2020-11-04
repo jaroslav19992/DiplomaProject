@@ -1,10 +1,12 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane;
 
+import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
-import TestMaker.DOMxmlWriter;
+import TestMaker.DOM.DOMxmlWriter;
 import TestMaker.MainProgramWindow.Panes.TestsPane.Question;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.QuestionsTypes.questionBaseController;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
+import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -19,7 +21,10 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -38,12 +43,12 @@ public class creationTestPaneController implements TestsConstants {
 
     private String testName;
     private int amountOfQuestions;
-    private boolean isRetestingAllowed;
     private int timeLimit;
     private String evaluationSystem;
     private static questionBaseController currentPageController;
     private ArrayList<Question> testQuestions;
     private Integer previousPageIndex;
+    private int numberOfAttempts;
 
     @FXML
     public void initialize() {
@@ -90,7 +95,12 @@ public class creationTestPaneController implements TestsConstants {
 
         doneTestCreation_button.setOnAction(event -> {
             if (checkQuestions(event)) {
-                createTestFile();
+                try {
+                    loadFileToDB(createTestFile());
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -98,11 +108,10 @@ public class creationTestPaneController implements TestsConstants {
     /**
      * Ask user is he really want to finish test creation, if true - save create test file and save it
      */
-    private void createTestFile() {
-        System.out.println("Creating test " + testName);
+    private File createTestFile() {
         try {
-            ButtonType create = new ButtonType("Завершити редагування тесту");
-            ButtonType cancel = new ButtonType("Продовжити створення тесту");
+            ButtonType create = new ButtonType("Створити тест");
+            ButtonType cancel = new ButtonType("Продовжити редагування");
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setContentText("Ви дійсно бажаєте завершити редагування та створити тест?");
             alert.setHeaderText(null);
@@ -110,22 +119,77 @@ public class creationTestPaneController implements TestsConstants {
             alert.getButtonTypes().clear();
             alert.getButtonTypes().addAll(create, cancel);
             Optional<ButtonType> selection = alert.showAndWait();
-            if (selection.equals(create)) {
-                DOMxmlWriter writer = new DOMxmlWriter(testQuestions, testName, amountOfQuestions, isRetestingAllowed, timeLimit, evaluationSystem);
-                File file = writer.getTestFile(testName + FILE_EXTENSION);
-                file.createNewFile();
-
-//                DBHandler.loadDataToDB("");
-                alert.setAlertType(Alert.AlertType.INFORMATION);
-                alert.setTitle("");
-                alert.setHeaderText("Тест "+testName+" успішно створено");
-                alert.setContentText("Оновіть сторінку тестів");
-                alert.showAndWait();
-                main_pane.getScene().getWindow().hide();
+            if (selection.get().equals(create)) {
+                System.out.println("Creating test " + testName);
+                DOMxmlWriter writer = new DOMxmlWriter(testQuestions, testName, amountOfQuestions, numberOfAttempts, timeLimit, evaluationSystem);
+                return writer.getTestFile(testName + FILE_EXTENSION);
             }
-        } catch (ParserConfigurationException | IOException | SAXException | TransformerException | SQLException e) {
+        } catch (ParserConfigurationException | IOException | SAXException | TransformerException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    /**
+     * Load test file to database and create record in teachers tests table to link teacher with test
+     * @param file test file
+     * @throws IOException
+     */
+    private void loadFileToDB(File file) throws IOException {
+        try {
+            //Try to insert file into table "tests list"
+            String SQLQuery = "INSERT INTO `" + DBConstants.DB_NAME + "`.`" + DBConstants.TESTS_LIST_TABLE_NAME +
+                    "` (`" + DBConstants.TEST_NAME + "`, `" + DBConstants.TEST_FILE + "`, `" + DBConstants.EV_SYSTEM+ "`, `" +
+                    DBConstants.AMOUNT_OF_QUESTIONS+ "`, `" + DBConstants.TIME_LIMIT+ "`, `" +
+                    DBConstants.NUMBER_OF_ATTEMPTS + "`) VALUES (?, ?, ?, ?, ?, ?);";
+            PreparedStatement preparedStatement = DBHandler.getDbConnection().prepareStatement(SQLQuery);
+            FileInputStream fileInputStream = new FileInputStream(file);
+            preparedStatement.setString(1, testName);
+            preparedStatement.setBinaryStream(2, fileInputStream);
+            int evSystem = 0;
+            switch (evaluationSystem) {
+                case EVAL_SYSTEM_5: evSystem = 5;
+                case EVAL_SYSTEM_12: evSystem = 12;
+                case EVAL_SYSTEM_100: evSystem = 100;
+            }
+            preparedStatement.setInt(3, evSystem);
+            preparedStatement.setInt(4, amountOfQuestions);
+            preparedStatement.setInt(5, timeLimit);
+            preparedStatement.setInt(6, numberOfAttempts);
+            preparedStatement.execute();
+
+            // get id of current test in table
+            int testId = getCurrentTestId();
+
+            // link teacher with test
+            SQLQuery = "INSERT INTO `"+DBConstants.DB_NAME+"`.`"+DBConstants.TEACHERS_TESTS_TABLE_NAME+
+                    "` (`"+DBConstants.USER_NAME_HASH+"`, `"+DBConstants.ID_TESTS_LIST+"`) VALUES ('"+
+                    UserInfoHandler.userName.hashCode() +"', '"+testId+"');";
+            DBHandler.loadDataToDB(SQLQuery);
+        } catch (SQLException e) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setContentText("Деталі помилки:\n" + e.getMessage());
+            errorAlert.setHeaderText("Помилка завантеження тесту до бази даних\nПеревірте з'єднання з мережею інтернет");
+            errorAlert.setTitle("Помилка");
+            errorAlert.showAndWait();
+            return;
+        }
+        //if no errors during test loading show success alert
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setAlertType(Alert.AlertType.INFORMATION);
+        alert.setTitle("Успіх створення тесту");
+        alert.setHeaderText("Тест " + testName + " успішно створено");
+        alert.setContentText("Оновіть сторінку тестів");
+        alert.showAndWait();
+        main_pane.getScene().getWindow().hide();
+    }
+
+    private int getCurrentTestId() throws SQLException {
+        String SQLQuery = "SELECT "+DBConstants.ID_TESTS_LIST+" FROM " + DBConstants.DB_NAME + "." +
+                DBConstants.TESTS_LIST_TABLE_NAME + " WHERE "+DBConstants.TEST_NAME+" = \""+testName+"\";";
+        ResultSet resultSet = DBHandler.getDataFromDB(SQLQuery);
+        resultSet.next();
+        return resultSet.getInt(DBConstants.ID_TESTS_LIST);
     }
 
     /**
@@ -133,16 +197,15 @@ public class creationTestPaneController implements TestsConstants {
      *
      * @param testName           name of current test
      * @param numberOfPages      number of pages in pagination/number of questions
-     * @param isRetestingAllowed can you retesting or not
      * @param timeLimit          time limit dor test
      */
     public void setTestProperties(String testName, String evaluationSystem, int numberOfPages,
-                                  boolean isRetestingAllowed, Integer timeLimit) {
+                                  int numberOfAttempts, Integer timeLimit) {
         this.evaluationSystem = evaluationSystem;
         this.testName = testName;
         this.amountOfQuestions = numberOfPages;
-        this.isRetestingAllowed = isRetestingAllowed;
         this.timeLimit = timeLimit;
+        this.numberOfAttempts = numberOfAttempts;
         testName_label.setText(testName);
         pagination.setPageCount(amountOfQuestions);
         testQuestions = createPrefilledList(amountOfQuestions);
@@ -305,7 +368,7 @@ public class creationTestPaneController implements TestsConstants {
             this.testName = null;
             this.evaluationSystem = null;
             this.timeLimit = 0;
-            this.isRetestingAllowed = false;
+            this.numberOfAttempts = 0;
             this.amountOfQuestions = 0;
             main_pane.getScene().getWindow().hide();
         }
@@ -317,7 +380,6 @@ public class creationTestPaneController implements TestsConstants {
         testQuestions.remove(questionIndex);
         amountOfQuestions = testQuestions.size();
         pagination.setPageCount(amountOfQuestions);
-        pagination.setMaxPageIndicatorCount(amountOfQuestions);
     }
 
     private ButtonType showWarningAlert(String alertTitle, String alertHeader, String alertText, Collection<? extends ButtonType> buttonsList) {

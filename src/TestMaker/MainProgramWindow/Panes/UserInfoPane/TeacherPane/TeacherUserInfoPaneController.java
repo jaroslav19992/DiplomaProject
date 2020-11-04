@@ -46,6 +46,9 @@ public class TeacherUserInfoPaneController {
     private Label accessToken_label;
 
     @FXML
+    private Label classRoom_label;
+
+    @FXML
     void initialize() {
         initUserInfo();
 
@@ -55,10 +58,6 @@ public class TeacherUserInfoPaneController {
                 false, Modality.APPLICATION_MODAL));
     }
 
-    private void updateUserInfo() {
-        initUserInfo();
-    }
-
     /**
      * Set user info into pane labels
      */
@@ -66,6 +65,7 @@ public class TeacherUserInfoPaneController {
         firstName_label.setText(UserInfoHandler.firstName);
         lastName_label.setText(UserInfoHandler.lastName);
         email_label.setText(UserInfoHandler.email);
+        classRoom_label.setText(UserInfoHandler.classroom);
         accessToken_label.setText(UserInfoHandler.accessToken);
         regDate_label.setText(DBConstants.REG_DATE_LABEL_TEXT + UserInfoHandler.registrationDate);
         lastVisitDate_label.setText(DBConstants.LAST_VISIT_DATE_LABEL_TEXT + UserInfoHandler.lastVisitDate);

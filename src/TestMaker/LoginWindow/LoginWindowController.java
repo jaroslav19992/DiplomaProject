@@ -6,7 +6,7 @@ import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.LoginWindow.NetworkSettings.NetworkSettingsConfigsReader;
 import TestMaker.SingUpWindow.SingUpWindowController;
-import TestMaker.UserDataChecker;
+import TestMaker.UserDataLoader;
 import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
 import javafx.application.Platform;
@@ -157,9 +157,9 @@ public class LoginWindowController {
         error_label.setVisible(false);
 
         /* LogIn and Password Checker from DB */
-        UserDataChecker checker = new UserDataChecker();
+        UserDataLoader loader = new UserDataLoader();
         try {
-            checker.getUserData(userName_textField.getText().hashCode(),
+            loader.getUserData(userName_textField.getText().hashCode(),
                     password_passwordField.getText().hashCode());
         } catch (Exception exception) {
             Platform.runLater(() -> {
@@ -174,7 +174,7 @@ public class LoginWindowController {
             });
         }
 
-        if (checker.isAccessGained()) {
+        if (loader.isAccessGained()) {
             setLastVisitDate();
             UserInfoHandler.userName = userName_textField.getText();
             UserInfoHandler.password = password_passwordField.getText();
@@ -182,10 +182,10 @@ public class LoginWindowController {
             Platform.runLater(() -> {
                 windowTools.openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
                 loadingAnimation.interrupt();
+                loginThread.interrupt();
                 //Hide LogIn window
                 login_pane.getScene().getWindow().hide();
             });
-
 
             System.out.println("----------------------------\n" +
                     "connected via: \n" +
@@ -195,11 +195,9 @@ public class LoginWindowController {
                     "; Password: " + Configs.dbPassword +
                     "; DBName: " + Configs.dbName +
                     "\n----------------------------");
-
         } else {
             error_label.setText("Не правильний логін та/або пароль");
             error_label.setVisible(true);
-//            loadingAnimation.interrupt();
             loginThread.interrupt();
         }
     }

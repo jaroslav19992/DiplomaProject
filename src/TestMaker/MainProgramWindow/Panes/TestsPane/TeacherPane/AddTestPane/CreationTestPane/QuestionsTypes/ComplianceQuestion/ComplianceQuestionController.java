@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -18,9 +17,6 @@ import javafx.scene.text.FontWeight;
 import java.util.*;
 
 public class ComplianceQuestionController implements QuestionControllerInterface, TestsConstants {
-    @FXML
-    private AnchorPane main_anchorPane;
-
     @FXML
     private Button addAnswerVariant_button;
 

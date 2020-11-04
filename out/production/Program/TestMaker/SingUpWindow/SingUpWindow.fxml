@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="main_pane" prefHeight="550.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.SingUpWindow.SingUpWindowController">
+<AnchorPane fx:id="main_pane" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.SingUpWindow.SingUpWindowController">
    <children>
       <VBox alignment="CENTER" layoutY="5.0" spacing="20.0">
          <children>
@@ -73,6 +73,12 @@
                   <Insets top="-20.0" />
                </VBox.margin>
             </HBox>
+            <VBox alignment="CENTER">
+               <children>
+                  <Label text="Клас" />
+                  <ChoiceBox fx:id="class_choiceBox" prefWidth="150.0" />
+               </children>
+            </VBox>
             <VBox alignment="CENTER" layoutX="179.0" layoutY="465.0" spacing="10.0">
                <children>
                   <Label fx:id="accessLevel_label" layoutX="249.0" layoutY="465.0" text="Рівень доступу" AnchorPane.rightAnchor="249.0" />
@@ -102,6 +108,5 @@
             </VBox>
          </children>
       </VBox>
-      <Button fx:id="back_button" mnemonicParsing="false" text="Назад" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
    </children>
 </AnchorPane>

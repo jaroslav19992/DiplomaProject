@@ -4,9 +4,11 @@ import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.Creat
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -21,9 +23,6 @@ public class OneAnswerController implements QuestionControllerInterface, TestsCo
     private final ToggleGroup correctAnswer_toggleGroup = new ToggleGroup();
 
     @FXML
-    private AnchorPane main_anchorPane;
-
-    @FXML
     private Button addVariant_button;
 
     private int numberOfVariants = 0;
@@ -32,9 +31,7 @@ public class OneAnswerController implements QuestionControllerInterface, TestsCo
     void initialize() {
         showEmptyQuestion();
         numberOfVariants = answerVariants_vBox.getChildren().size() - 1;
-        addVariant_button.setOnAction(event -> {
-            createNewVariant(null);
-        });
+        addVariant_button.setOnAction(event -> createNewVariant(null));
     }
 
     /**

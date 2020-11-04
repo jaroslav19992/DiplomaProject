@@ -2,11 +2,14 @@ package TestMaker.SingUpWindow;
 
 
 import TestMaker.Assets.Animation.LoadingAnimation;
+import TestMaker.ClassRooms;
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -21,37 +24,26 @@ import java.util.Date;
 
 
 public class SingUpWindowController {
-
     @FXML
     public TextField lastName_textField;
-
     @FXML
     public TextField firstName_textField;
-
     @FXML
     private TextField passwordRepeat_textField;
-
     @FXML
     public TextField email_textField;
-
     @FXML
     public TextField password_textField;
-
     @FXML
     private Label error_label;
-
     @FXML
     public TextField userName_textField;
-
     @FXML
     private RadioButton radioButton_teacher;
-
     @FXML
     private Button singUpButton;
-
     @FXML
-    private Button back_button;
-
+    private ChoiceBox<String> class_choiceBox;
     @FXML
     public AnchorPane main_pane;
 
@@ -61,11 +53,14 @@ public class SingUpWindowController {
 
     @FXML
     public void initialize() {
+        loadingAnimation = new LoadingAnimation(main_pane);
         //set keys listener
         setGlobalEventHandler(main_pane);
 
         //set no error
         error_label.setVisible(false);
+
+        setClassesVariants();
 
         //SingUp button click
         singUpButton.setOnAction(event -> {
@@ -76,11 +71,6 @@ public class SingUpWindowController {
                 loadingAnimation.interrupt();
             });
             singUpThread.start();
-        });
-
-        back_button.setOnAction(event -> {
-            windowTools.openNewWindow("LoginWindow/LoginWindow.fxml", false, Modality.NONE);
-            main_pane.getScene().getWindow().hide();
         });
     }
 
@@ -96,14 +86,18 @@ public class SingUpWindowController {
                 }
                 if (UserInfoHandler.isAccessGained) {
                     transferUserInfo();
-                    registerUser();
-                    windowTools.openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
-                    main_pane.getScene().getWindow().hide();
-                    singUpThread.interrupt();
-                    loadingAnimation.interrupt();
+                    createUserInDB();
+                    Platform.runLater(()->{
+                        windowTools.openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
+                        main_pane.getScene().getWindow().hide();
+
+                    });
                 }
             }
-        } catch (SQLException exception) {
+            Thread.sleep(100);
+            loadingAnimation.interrupt();
+            singUpThread.interrupt();
+        } catch (SQLException | InterruptedException exception) {
             Platform.runLater(() -> {
                 error_label.setVisible(false);
                 exception.printStackTrace();
@@ -112,36 +106,24 @@ public class SingUpWindowController {
                 alert.setHeaderText(null);
                 alert.setContentText("Помилка з'єднання з сервером\nПричина:\n" + exception.getMessage());
                 alert.showAndWait();
-                singUpThread.interrupt();
                 loadingAnimation.interrupt();
-                return;
             });
-
         }
     }
 
     /**
      * Register user with pupil or teacher access token
      */
-    private void registerUser() {
+    private void createUserInDB() throws SQLException {
         if (UserInfoHandler.isAccessGained) {
             //get register and visit date
             Date date = new Date();
             SimpleDateFormat formatForRegDate = new SimpleDateFormat("yyyy.MM.dd");
             SimpleDateFormat formatForVisitDate = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
-            try {
-                DBHandler.singUpNewUser(UserInfoHandler.userName, UserInfoHandler.password, UserInfoHandler.firstName,
-                        UserInfoHandler.lastName, UserInfoHandler.email, UserInfoHandler.accessToken,
-                        formatForRegDate.format(date), formatForVisitDate.format(date));
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Помилка");
-                alert.setHeaderText(null);
-                alert.setContentText("Помилка з'єднання з сервером");
-                alert.showAndWait();
-            }
+            DBHandler.singUpNewUser(UserInfoHandler.userName, UserInfoHandler.password, UserInfoHandler.firstName,
+                    UserInfoHandler.lastName, UserInfoHandler.email, UserInfoHandler.classroom, UserInfoHandler.accessToken,
+                    formatForRegDate.format(date), formatForVisitDate.format(date));
         }
     }
 
@@ -152,12 +134,21 @@ public class SingUpWindowController {
         UserInfoHandler.firstName = firstName_textField.getText();
         UserInfoHandler.lastName = lastName_textField.getText();
         UserInfoHandler.email = email_textField.getText();
+        UserInfoHandler.classroom = class_choiceBox.getValue();
         if (radioButton_teacher.isSelected()) {
             UserInfoHandler.accessToken = DBConstants.TEACHER_ACCESS_TOKEN;
         } else {
             UserInfoHandler.accessToken = DBConstants.PUPIL_ACCESS_TOKEN;
 
         }
+    }
+
+    /**
+     * set evaluation system variants and set 12-as default
+     */
+    private void setClassesVariants() {
+        ObservableList<String> evaluationSystemsList = FXCollections.observableArrayList(ClassRooms.getClassesList());
+        class_choiceBox.setItems(evaluationSystemsList);
     }
 
     /**
@@ -168,9 +159,8 @@ public class SingUpWindowController {
     private boolean checkForCorrectInfo() throws SQLException {
         /*-------------------------------Empty fields check-----------------------------*/
         if (email_textField.getText().equals("") || password_textField.getText().equals("") || firstName_textField.getText().equals("") ||
-                lastName_textField.getText().equals("") || userName_textField.getText().equals("")) {
-            error_label.setText("Заповніть усі поля");
-            error_label.setVisible(true);
+                lastName_textField.getText().equals("") || userName_textField.getText().equals("") || class_choiceBox.getValue() == null) {
+            showError("Заповніть усі поля");
             return false;
         }
         /*-------------------------------Empty fields check-----------------------------*/
@@ -178,23 +168,19 @@ public class SingUpWindowController {
 
         /*-------------------------------Password check-----------------------------*/
         if (!password_textField.getText().equals(passwordRepeat_textField.getText())) {
-            error_label.setText("Паролі не зпівпадають");
-            error_label.setVisible(true);
+            showError("Паролі не зпівпадають");
             return false;
         }
         if (validateText(password_textField.getText())) {
-            error_label.setText("Пароль не повинен містити символи  \" / \\ [ ] : ; | = , + * ? < > .");
-            error_label.setVisible(true);
+            showError("Пароль не повинен містити символи  \" / \\ [ ] : ; | = , + * ? < > .");
             return false;
         }
         if (password_textField.getText().length() < 8 || password_textField.getText().length() > 20) {
-            error_label.setText("Пароль повинен містити не менше ніж 8 символів і не більше ніж 20");
-            error_label.setVisible(true);
+            showError("Пароль повинен містити не менше ніж 8 символів і не більше ніж 20");
             return false;
         }
         if (isOnlyLatLetters(password_textField.getText())) {
-            error_label.setText("пароль повинен містити лише букви латинського алфавіту та не містити пробілів");
-            error_label.setVisible(true);
+            showError("Пароль повинен містити лише букви латинського алфавіту та не містити пробілів");
             return false;
         }
         /*-------------------------------Password check-----------------------------*/
@@ -202,18 +188,15 @@ public class SingUpWindowController {
 
         /*-------------------------------Username check-----------------------------*/
         if (validateText(userName_textField.getText())) {
-            error_label.setText("Логін не повинен містити символи  \" / \\ [ ] : ; | = , + * ? < >");
-            error_label.setVisible(true);
+            showError("Логін не повинен містити символи  \" / \\ [ ] : ; | = , + * ? < >");
             return false;
         }
         if (userName_textField.getText().length() > 20 || userName_textField.getText().length() < 5) {
-            error_label.setText("Логін не повинен складатися менше ніж з 5 і більше ніж з 20 симаолів");
-            error_label.setVisible(true);
+            showError("Логін не повинен складатися менше ніж з 5 і більше ніж з 20 симаолів");
             return false;
         }
         if (isOnlyLatLetters(userName_textField.getText())) {
-            error_label.setText("Логін повинен містити лише букви латинського алфавітута не містити пробілів");
-            error_label.setVisible(true);
+            showError("Логін повинен містити лише букви латинського алфавітута не містити пробілів");
             return false;
         }
         /*-------------------------------Username check-----------------------------*/
@@ -221,8 +204,7 @@ public class SingUpWindowController {
 
         /*-------------------------------E-mail check-----------------------------*/
         if (!email_textField.getText().contains("@") || !email_textField.getText().contains(".")) {
-            error_label.setText("Не вірний формат E-mail");
-            error_label.setVisible(true);
+            showError("Не вірний формат E-mail");
             return false;
         }
         /*-------------------------------E-mail check-----------------------------*/
@@ -236,27 +218,33 @@ public class SingUpWindowController {
 
         //username check
         if (DBHandler.getDataFromDB(SQLQueryForUsername).next()) {
-            error_label.setText("Користувач з таким ім'ям уже існує");
-            error_label.setVisible(true);
+            showError("Користувач з таким ім'ям уже існує");
             return false;
         }
         //e-mail check
         if (DBHandler.getDataFromDB(SQLQueryForEmail).next()) {
-            error_label.setText("Даний E-mail уже використовується");
-            error_label.setVisible(true);
+            showError("Даний E-mail уже використовується");
             return false;
         }
         /*----------------------------Check if no user data duplicates-----------------------------*/
-
         return true;
+    }
+
+    private void showError(String msg) {
+        Platform.runLater(() -> {
+            error_label.setText(msg);
+            error_label.setVisible(true);
+        });
+
     }
 
     //check is there is no bad symbols
     public boolean validateText(String str) {
-        return str.contains("\\") || str.contains("/") || str.contains("\"") || str.contains("[") || str.contains("]")
-                || str.contains(";") || str.contains(":") || str.contains("=") || str.contains(",") || str.contains("+")
-                || str.contains("*") || str.contains("?") || str.contains("<") || str.contains(">");
+        return str.contains("\\") && !str.contains("/") && !str.contains("\"") && !str.contains("[") && !str.contains("]")
+                && !str.contains(";") && !str.contains(":") && !str.contains("=") && !str.contains(",") && !str.contains("+")
+                && !str.contains("*") && !str.contains("?") && !str.contains("<") && !str.contains(">");
     }
+
 
     //check is there is only Latin alphabet letters or not
     public boolean isOnlyLatLetters(String str) {
@@ -271,6 +259,7 @@ public class SingUpWindowController {
         return false;
     }
 
+
     /**
      * Keys pressed handler
      *
@@ -283,14 +272,19 @@ public class SingUpWindowController {
                 ev.consume();
             }
             if (ev.getCode() == KeyCode.ESCAPE) {
-                back_button.fire();
+                windowTools.openNewWindow("LoginWindow/LoginWindow.fxml", false, Modality.NONE);
+                main_pane.getScene().getWindow().hide();
             }
         });
     }
+
     public void setOnCloseRequest() {
         main_pane.getScene().getWindow().setOnCloseRequest(event -> {
             windowTools.openNewWindow("LoginWindow/LoginWindow.fxml", false, Modality.APPLICATION_MODAL);
             windowTools.closeCurrentWindow(main_pane);
+            Thread.currentThread().stop();
+            singUpThread.interrupt();
+            loadingAnimation.interrupt();
         });
     }
 }

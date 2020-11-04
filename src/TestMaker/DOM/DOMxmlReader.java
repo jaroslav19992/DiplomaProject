@@ -1,4 +1,4 @@
-package TestMaker;
+package TestMaker.DOM;
 
 import TestMaker.MainProgramWindow.Panes.TestsPane.Question;
 import org.w3c.dom.Document;
@@ -13,15 +13,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import static TestMaker.DOMConstants.*;
+import static TestMaker.DOM.DOMConstants.*;
 
 public class DOMxmlReader {
 
-    private final File xmlFile;
     private final Document document;
 
     public DOMxmlReader(File xmlFile) throws ParserConfigurationException, IOException, SAXException {
-        this.xmlFile = xmlFile;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         //Now we have access to all xml tags in file
@@ -104,8 +102,8 @@ public class DOMxmlReader {
         return Integer.parseInt(document.getDocumentElement().getElementsByTagName(NUMBER_OF_QUESTIONS_TAG).item(0).getTextContent());
     }
 
-    public boolean isRetestingAllowed() {
-        return Boolean.parseBoolean(document.getDocumentElement().getElementsByTagName(IS_RETESTING_ALLOWED_TAG).item(0).getTextContent());
+    public int getNumberOfAttempts() {
+        return Integer.parseInt(document.getDocumentElement().getElementsByTagName(NUMBER_OF_ATTEMPTS).item(0).getTextContent());
     }
 
     public String getTestEVSystem() {

@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -18,9 +17,6 @@ import java.util.*;
 public class SeveralAnswersController implements QuestionControllerInterface, TestsConstants {
     @FXML
     private VBox answerVariants_vBox;
-
-    @FXML
-    private AnchorPane main_anchorPane;
 
     @FXML
     private Button addVariant_button;

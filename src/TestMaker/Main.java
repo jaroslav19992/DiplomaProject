@@ -1,5 +1,6 @@
 package TestMaker;
 
+import TestMaker.DOM.DOMxmlReader;
 import TestMaker.MainProgramWindow.Panes.TestsPane.Question;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,8 +16,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/ConfigTestPane.fxml"));
-//        Parent root = FXMLLoader.load(getClass().getResource("LoginWindow/LoginWindow.fxml"));
+//        Parent root = FXMLLoader.load(getClass().getResource("MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/ConfigTestPane.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("LoginWindow/LoginWindow.fxml"));
         primaryStage.setTitle("Diploma project KM-17, Ishchak Yaroslav");
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("logo_mini.png")));
         primaryStage.setScene(new Scene(root));
@@ -27,7 +28,7 @@ public class Main extends Application {
         DOMxmlReader parser = new DOMxmlReader(file);
         System.out.println("test name: " + parser.getTestName());
         System.out.println("q. number: " + parser.getAmountOfQuestions());
-        System.out.println("is retestable : " + parser.isRetestingAllowed());
+        System.out.println("is retestable : " + parser.getNumberOfAttempts());
         System.out.println("ev. system: " + parser.getTestEVSystem());
         ArrayList<Question> awd = parser.getQuestionsList();
         System.out.println(awd.get(0).getCorrectAnswer());

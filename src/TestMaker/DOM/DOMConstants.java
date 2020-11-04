@@ -1,4 +1,4 @@
-package TestMaker;
+package TestMaker.DOM;
 
 public interface DOMConstants {
     String ROOT_XML_TAG = "Test";
@@ -7,7 +7,7 @@ public interface DOMConstants {
     String QUESTION_TYPE_TAG = "questionType";
     String QUESTION_TEXT_TAG = "questionText";
     String TEST_NAME_TAG = "testName";
-    String IS_RETESTING_ALLOWED_TAG = "isRetestingAllowed";
+    String NUMBER_OF_ATTEMPTS = "numberOfAttempts";
     String TIME_LIMIT_TAG = "timeLimit";
     String EV_SYSTEM_TAG = "evaluationSystem";
     String NUMBER_OF_QUESTIONS_TAG = "numberOfQuestions";
