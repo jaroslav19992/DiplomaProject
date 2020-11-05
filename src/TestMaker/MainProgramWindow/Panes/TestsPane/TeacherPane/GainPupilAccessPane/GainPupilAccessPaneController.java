@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -139,15 +140,20 @@ public class GainPupilAccessPaneController {
      * add record to the pupils tests table to gain access
      */
     private void gainTestAccess() {
-        StringBuilder SQLQuery = new StringBuilder();
-        ObservableList<Pupil> list = chosenTest.getAccessedPupils();
+        String SQLQuery;
+        try {
+            ObservableList<Pupil> list = chosenTest.getAccessedPupils();
         for (Pupil pupil : accessedPupils_listView.getItems()) {
             if (!list.contains(pupil)) {
-                SQLQuery.append("INSERT INTO " + DBConstants.DB_NAME + "." + DBConstants.PUPILS_TESTS_TABLE_NAME + " (`"
+                SQLQuery = "INSERT INTO " + DBConstants.DB_NAME + "." + DBConstants.PUPILS_TESTS_TABLE_NAME + " (`"
                         + DBConstants.USER_NAME_HASH + "`, `" + DBConstants.ID_TESTS_LIST + "`, `" + DBConstants.MARK
-                        + "`, `" + DBConstants.USED_ATTEMPTS + "`) VALUES ('"
-                        + pupil.getUsernameHash() + "', '"
-                        + chosenTest.getIdInTestsList() + "', '" + 0 + "', '" + 0 + "');\n");
+                        + "`, `" + DBConstants.USED_ATTEMPTS + "`) VALUES (?, ?, ?, ?);\n";
+                PreparedStatement statement = DBHandler.getDbConnection().prepareStatement(SQLQuery);
+                statement.setInt(1, pupil.getUsernameHash());
+                statement.setInt(2, chosenTest.getIdInTestsList());
+                statement.setInt(3, 0);
+                statement.setInt(4, 0);
+                statement.execute();
             } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Помилка");
@@ -156,10 +162,6 @@ public class GainPupilAccessPaneController {
                 alert.showAndWait();
             }
         }
-        try {
-            if (SQLQuery.length() != 0) {
-                DBHandler.loadDataToDB(SQLQuery.toString());
-            }
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Успіх операції");
             alert.setHeaderText(null);

@@ -11,7 +11,7 @@
 
 <AnchorPane fx:id="main_pane" prefHeight="720.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.UserInfoPane.PupilPane.PupilUserInfoPaneController">
    <children>
-      <BorderPane layoutX="380.0" layoutY="260.0" prefHeight="720.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane layoutX="380.0" layoutY="260.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <Label text="Особиста інформація" BorderPane.alignment="CENTER">
                <BorderPane.margin>
@@ -29,145 +29,159 @@
                </graphic>
             </Label>
          </top>
-         <left>
-            <VBox fx:id="left_vBox" alignment="TOP_CENTER" prefHeight="665.0" prefWidth="469.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <center>
+            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label alignment="CENTER_RIGHT" text="Ім'я" textAlignment="CENTER">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
-                  <Label text="Фамілія">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
-                  <Label text="E-mail">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
-                  <Label text="Вид доступу">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </Label>
-                  <Label text="Клас">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </Label>
-               </children>
-               <opaqueInsets>
-                  <Insets top="20.0" />
-               </opaqueInsets>
-               <padding>
-                  <Insets left="120.0" top="50.0" />
-               </padding>
-            </VBox>
-         </left>
-         <right>
-            <VBox fx:id="right_vBox" alignment="TOP_CENTER" prefHeight="665.0" prefWidth="487.0" spacing="20.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Label fx:id="firstName_label" text="firstName">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
+                  <VBox fx:id="right_vBox" alignment="CENTER_RIGHT" spacing="20.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="firstName_label" text="firstName">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <opaqueInsets>
+                              <Insets top="20.0" />
+                           </opaqueInsets>
+                        </Label>
+                        <Label fx:id="lastName_label" text="lastName">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                        <Label fx:id="email_label" text="email">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                        <Label fx:id="accessToken_label" text="accessToken">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="classRoom_label" text="classRoom">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
                      <opaqueInsets>
                         <Insets top="20.0" />
                      </opaqueInsets>
-                  </Label>
-                  <Label fx:id="lastName_label" text="lastName">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
-                  <Label fx:id="email_label" text="email">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
-                  <Label fx:id="accessToken_label" text="accessToken">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="classRoom_label" text="classRoom">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </Label>
+                     <padding>
+                        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                     </padding>
+                  </VBox>
+                  <VBox fx:id="left_vBox" alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label alignment="CENTER_RIGHT" text="Ім'я" textAlignment="CENTER">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                        <Label text="Фамілія">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                        <Label text="E-mail">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                        <Label text="Вид доступу">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                        <Label text="Клас">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <opaqueInsets>
+                        <Insets top="20.0" />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                     </padding>
+                  </VBox>
                </children>
-               <opaqueInsets>
-                  <Insets top="20.0" />
-               </opaqueInsets>
-               <padding>
-                  <Insets right="120.0" top="50.0" />
-               </padding>
-            </VBox>
-         </right>
+            </HBox>
+         </center>
          <bottom>
-            <StackPane fx:id="bottom_stackPane" prefHeight="204.0" prefWidth="960.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="changeInfo_button" alignment="CENTER" mnemonicParsing="false" text="Налаштування" StackPane.alignment="BOTTOM_RIGHT">
-                     <StackPane.margin>
-                        <Insets bottom="20.0" right="20.0" />
-                     </StackPane.margin>
-                     <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0">
-                           <image>
-                              <Image url="@../../../../Assets/Images/icons/userSetings.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <tooltip>
-                        <Tooltip text="Редагувати особисту інформацію користувача" />
-                     </tooltip>
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </Button>
-                  <Label fx:id="regDate_label" text="Дата теєстрації: " textFill="#00000080" StackPane.alignment="BOTTOM_LEFT">
-                     <StackPane.margin>
-                        <Insets bottom="20.0" left="20.0" />
-                     </StackPane.margin>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lastVisitDate_label" text="Попередній вхід: " textFill="#00000080" StackPane.alignment="CENTER_LEFT">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <StackPane.margin>
-                        <Insets left="20.0" top="50.0" />
-                     </StackPane.margin>
-                  </Label>
-               </children></StackPane>
+                  <VBox alignment="CENTER_LEFT" spacing="10.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="lastVisitDate_label" text="Попередній вхід: " textFill="#00000080" StackPane.alignment="CENTER_LEFT">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <StackPane.margin>
+                              <Insets left="20.0" top="50.0" />
+                           </StackPane.margin>
+                        </Label>
+                        <Label fx:id="regDate_label" text="Дата теєстрації: " textFill="#00000080" StackPane.alignment="BOTTOM_LEFT">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <StackPane.margin>
+                              <Insets bottom="20.0" left="20.0" />
+                           </StackPane.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="changeInfo_button" alignment="CENTER" mnemonicParsing="false" text="Налаштування" StackPane.alignment="BOTTOM_RIGHT">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="35.0" fitWidth="35.0">
+                                 <image>
+                                    <Image url="@../../../../Assets/Images/icons/userSetings.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Редагувати особисту інформацію користувача" />
+                           </tooltip>
+                           <StackPane.margin>
+                              <Insets bottom="20.0" right="20.0" />
+                           </StackPane.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </BorderPane.margin>
+            </HBox>
          </bottom>
       </BorderPane>
    </children>

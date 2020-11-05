@@ -16,7 +16,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-//        Parent root = FXMLLoader.load(getClass().getResource("MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/ConfigTestPane.fxml"));
+//        Parent root = FXMLLoader.load(getClass().getResource("MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/EditConfigTestPane.fxml"));
         Parent root = FXMLLoader.load(getClass().getResource("LoginWindow/LoginWindow.fxml"));
         primaryStage.setTitle("Diploma project KM-17, Ishchak Yaroslav");
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("logo_mini.png")));

@@ -89,7 +89,6 @@ public class TeacherTestsPaneController {
         });
 
         gainAccess_button.setOnAction(event -> {
-//            try {
             if (createdTests_listView.getSelectionModel().getSelectedItem() == null) {
                 Alert noTestAndPupilChosenAlert = new Alert(Alert.AlertType.WARNING);
                 noTestAndPupilChosenAlert.setHeaderText(null);
@@ -97,15 +96,7 @@ public class TeacherTestsPaneController {
                 noTestAndPupilChosenAlert.showAndWait();
             } else {
                 gainAccessToPupils();
-//                    updatePupilsTestsAccess();
-//                    showTestsAccess(createdTests_listView.getSelectionModel().getSelectedIndex());
             }
-//            } catch (SQLException exception) {
-//                Alert alert = new Alert(Alert.AlertType.ERROR);
-//                alert.setHeaderText("Помилка виконання операції");
-//                alert.setContentText(exception.getMessage());
-//                alert.show();
-//            }
         });
 
         removeAccess_button.setOnAction(event -> {
@@ -272,10 +263,11 @@ public class TeacherTestsPaneController {
      * create TestMakerTestFile exemplars without file inside
      */
     private void getTestsList() throws SQLException {
-        String SQLQuery = "SELECT " + DBConstants.ID_TESTS_LIST + ", " + DBConstants.TEST_NAME + " FROM " +
-                DBConstants.TEACHERS_TESTS_TABLE_NAME + " INNER JOIN " + DBConstants.USERS_INFO_TABLE_NAME +
-                " USING (" + DBConstants.USER_NAME_HASH + ") INNER JOIN " + DBConstants.TESTS_LIST_TABLE_NAME +
-                " USING (" + DBConstants.ID_TESTS_LIST + ") WHERE " + DBConstants.USER_NAME_HASH + " = " +
+        String SQLQuery = "SELECT " + DBConstants.ID_TESTS_LIST + ", " + DBConstants.TEST_NAME + ", " + DBConstants.EV_SYSTEM
+                + ", " + DBConstants.AMOUNT_OF_QUESTIONS + ", " + DBConstants.TIME_LIMIT + ", " + DBConstants.NUMBER_OF_ATTEMPTS
+                + " FROM " + DBConstants.TEACHERS_TESTS_TABLE_NAME + " INNER JOIN " + DBConstants.USERS_INFO_TABLE_NAME
+                + " USING (" + DBConstants.USER_NAME_HASH + ") INNER JOIN " + DBConstants.TESTS_LIST_TABLE_NAME
+                + " USING (" + DBConstants.ID_TESTS_LIST + ") WHERE " + DBConstants.USER_NAME_HASH + " = " +
                 UserInfoHandler.userName.hashCode() + ";";
         ResultSet testsList = DBHandler.getDataFromDB(SQLQuery);
         showTestsList(testsList);
@@ -296,7 +288,9 @@ public class TeacherTestsPaneController {
             pointer++;
             //add testMakerFile to tests list
             TestMakerTest test = new TestMakerTest(testsList.getInt(DBConstants.ID_TESTS_LIST),
-                    testsList.getString(DBConstants.TEST_NAME));
+                    testsList.getString(DBConstants.TEST_NAME), testsList.getInt(DBConstants.EV_SYSTEM),
+                    testsList.getInt(DBConstants.AMOUNT_OF_QUESTIONS), testsList.getInt(DBConstants.TIME_LIMIT),
+                    testsList.getInt(DBConstants.NUMBER_OF_ATTEMPTS));
             createdTests_listView.getItems().add(pointer, test);
         }
 

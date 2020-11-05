@@ -1,8 +1,15 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane;
 
+import TestMaker.DBTools.DBConstants;
+import TestMaker.DBTools.DBHandler;
 import javafx.collections.ObservableList;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class TestMakerTest {
     private final Integer idInTestsList;
@@ -30,11 +37,16 @@ public class TestMakerTest {
     }
 
     //usually for teacher
-    public TestMakerTest(int idInTestsList, String testName) {
-        this.testName = testName;
+    public TestMakerTest(int idInTestsList, String testName, int evSystem,
+                         int amountOfQuestions, int timeLimit, int numberOfAttempts) {
         this.idInTestsList = idInTestsList;
-        this.testFile = null;
-        currentUserMark = 0;
+        this.testName = testName;
+        this.evSystem = evSystem;
+        this.amountOfQuestions = amountOfQuestions;
+        this.timeLimit = timeLimit;
+        this.numberOfAttempts = numberOfAttempts;
+        testFile = null;
+        this.currentUserMark = 0.0;
     }
 
     public ObservableList<Pupil> getAccessedPupils() {
@@ -82,6 +94,27 @@ public class TestMakerTest {
     }
 
     public File getTestFile() {
+        return testFile;
+    }
+
+    public File getTestFileFromBD() throws SQLException {
+        if (testFile == null) {
+            ResultSet resultSet = DBHandler.getDataFromDB("SELECT " + DBConstants.TEST_FILE + " FROM " + DBConstants.DB_NAME + "."
+                    + DBConstants.TESTS_LIST_TABLE_NAME + " WHERE " + DBConstants.ID_TESTS_LIST + " = '" + idInTestsList + "';");
+            resultSet.next();
+            Blob testFileInBlob = resultSet.getBlob(DBConstants.TEST_FILE);
+            File tempFile = null;
+            try {
+                tempFile = File.createTempFile("tempFile", "xml");
+                FileOutputStream out = new FileOutputStream(tempFile);
+                out.write(resultSet.getBlob(DBConstants.TEST_FILE).getBytes(0,
+                        (int) resultSet.getBlob(DBConstants.TEST_FILE).length()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            testFile = tempFile;
+            tempFile.delete();
+        }
         return testFile;
     }
 

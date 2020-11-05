@@ -1,8 +1,8 @@
-package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane;
+package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.EditTestPane;
 
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
-import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController;
+import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.EditTestPane.editTestQuestionsPane.editTestQuestionsPaneController;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
 import TestMaker.WindowTools;
 import javafx.collections.FXCollections;
@@ -19,49 +19,73 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class ConfigTestPaneController implements TestsConstants {
-    @FXML
-    private Button startTestCreation_button;
-    @FXML
-    private Button cancelTestCreation_button;
-    @FXML
-    private TextField questionsAmount_textField;
+public class EditConfigTestPaneController implements TestsConstants {
     @FXML
     private TextField testName_textField;
+
     @FXML
     private TextField numberOfAttempts_textField;
+
     @FXML
     private AnchorPane main_pane;
+
     @FXML
     private Label numberOfAttempts_label;
-    @FXML
-    private RadioButton reTestingEnabled_radioButton;
-    @FXML
-    private RadioButton reTestingDisabled_radioButton;
+
     @FXML
     private TextField timeLimit_textField;
+
+    @FXML
+    private Button startTestQuestionsEdit_button;
+
+    @FXML
+    private RadioButton reTestingDisabled_radioButton;
+
     @FXML
     private RadioButton timeLimitDisabled_radioButton;
-    @FXML
-    private RadioButton timeLimitEnabled_radioButton;
-    @FXML
-    private Label timeLimit_label;
+
     @FXML
     private ChoiceBox<String> evaluationSystem_choiceBox;
 
-    private creationTestPaneController controller;
+    @FXML
+    private ToggleGroup timeLimit_toggleGroup;
+
+    @FXML
+    private RadioButton reTestingEnabled_radioButton;
+
+    @FXML
+    private RadioButton timeLimitEnabled_radioButton;
+
+    @FXML
+    private Label timeLimit_label;
+
+    @FXML
+    private Button finishTestEdit_button;
+
+    @FXML
+    private Button cancelTestEdit_button;
+
+    @FXML
+    private ToggleGroup reTesting_toggleGroup;
+
+    private editTestQuestionsPaneController controller;
 
     @FXML
     private void initialize() {
         setEvaluationSystemVariants();
         setButtonsActions();
         setGlobalEventHAndler(main_pane);
+        setTestProperties();
+    }
+
+    private void setTestProperties() {
+
     }
 
     private void setGlobalEventHAndler(Parent root) {
         root.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
             if (ev.getCode() == KeyCode.ENTER) {
-                startTestCreation_button.fire();
+                finishTestEdit_button.fire();
                 ev.consume();
             }
         });
@@ -84,12 +108,12 @@ public class ConfigTestPaneController implements TestsConstants {
             timeLimit_label.setDisable(true);
             timeLimit_textField.setDisable(true);
         });
-        startTestCreation_button.setOnAction(event -> {
+        startTestQuestionsEdit_button.setOnAction(event -> {
             if (checkForCorrectInfo()) {
-                createTest();
+                editQuestions();
             }
         });
-        cancelTestCreation_button.setOnAction(event -> {
+        cancelTestEdit_button.setOnAction(event -> {
             Alert closeConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
             closeConfirmation.setHeaderText(CLOSE_WINDOW_CONFIRMATION_HEADER);
             closeConfirmation.setTitle(CLOSE_WINDOW_CONFIRMATION_TITLE);
@@ -105,19 +129,19 @@ public class ConfigTestPaneController implements TestsConstants {
         });
     }
 
-    private void createTest() {
-        System.out.println("Starting to create " + testName_textField.getText() + "");
+    private void editQuestions() {
+        System.out.println("Starting to edit " + testName_textField.getText() + "");
         WindowTools windowTools = new WindowTools();
-        controller = (creationTestPaneController) windowTools.openNewWindow("/TestMaker/MainProgramWindow" +
-                "/Panes/TestsPane/TeacherPane/AddTestPane/CreationTestPane/" +
+        controller = (editTestQuestionsPaneController) windowTools.openNewWindow("/TestMaker/MainProgramWindow/Panes/" +
+                "TestsPane/TeacherPane/EditTestPane/EditConfigTestPaneController.java" +
                 "editTestQuestionsPane.fxml", true, Modality.APPLICATION_MODAL);
         windowTools.closeCurrentWindow(main_pane);
 
-        controller.setTestProperties(testName_textField.getText(), evaluationSystem_choiceBox.getValue(),
-                Integer.parseInt(questionsAmount_textField.getText()),
-                (reTestingEnabled_radioButton.isSelected()) ? (Integer.parseInt(numberOfAttempts_textField.getText())) : (1),
-                (timeLimitEnabled_radioButton.isSelected()) ? (Integer.parseInt(timeLimit_textField.getText())) : (0));
-        controller.setPageFactory();
+//        controller.setTestProperties(testName_textField.getText(), evaluationSystem_choiceBox.getValue(),
+//                Integer.parseInt(questionsAmount_textField.getText()),
+//                (reTestingEnabled_radioButton.isSelected()) ? (Integer.parseInt(numberOfAttempts_textField.getText())) : (1),
+//                (timeLimitEnabled_radioButton.isSelected()) ? (Integer.parseInt(timeLimit_textField.getText())) : (0));
+//        controller.setPageFactory();
     }
 
     /**
@@ -176,20 +200,6 @@ public class ConfigTestPaneController implements TestsConstants {
             if (Integer.parseInt(numberOfAttempts_textField.getText()) == 1) {
                 showAlert("Кількість спроб для проходження тесту повинна бути бульшою ніж 1.\n" +
                         "В іншому випадку відмініть можливість повторного проходження");
-                return false;
-            }
-        }
-
-        //Questions amount check
-        if (questionsAmount_textField.getText().equals("")) {
-            showAlert("Поле вводу кількості питань не повинне бути пусттим");
-            return false;
-        } else {
-            if (!isNumeric(questionsAmount_textField.getText())) {
-                showAlert("Поле вводу кількості питань повинне містити тільки цифри");
-                return false;
-            } else if (Integer.parseInt(questionsAmount_textField.getText()) <= 0) {
-                showAlert("Неможлива кількість питань");
                 return false;
             }
         }
