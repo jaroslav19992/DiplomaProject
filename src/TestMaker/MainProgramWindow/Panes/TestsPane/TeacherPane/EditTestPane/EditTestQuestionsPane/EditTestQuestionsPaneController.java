@@ -32,6 +32,8 @@ public class EditTestQuestionsPaneController implements TestsConstants {
     @FXML
     private Button removeCurrentQuestion;
     @FXML
+    private Button addQuestion_button;
+    @FXML
     private Button doneTestCreation_button;
     @FXML
     private Pagination pagination;
@@ -60,20 +62,6 @@ public class EditTestQuestionsPaneController implements TestsConstants {
         pagination.setPageFactory(this::createPage);
     }
 
-    /**
-     * Creates array list where all elements are null
-     *
-     * @param size number of elements in array list
-     * @return created array list
-     */
-    public static ArrayList<Question> createPrefilledList(int size) {
-        ArrayList<Question> list = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            list.add(null);
-        }
-        return list;
-    }
-
 
     private void setButtonActions() {
         removeCurrentQuestion.setOnAction(event -> {
@@ -89,6 +77,13 @@ public class EditTestQuestionsPaneController implements TestsConstants {
             } else {
                 event.consume();
             }
+        });
+
+        addQuestion_button.setOnAction(event -> {
+            pagination.setPageCount(pagination.getPageCount() + 1);
+            testQuestions.add(null);
+            pagination.setCurrentPageIndex(pagination.getPageCount());
+            amountOfQuestions++;
         });
 
         doneTestCreation_button.setOnAction(event -> {
@@ -137,9 +132,9 @@ public class EditTestQuestionsPaneController implements TestsConstants {
         try {
             //Try to insert file into table "tests list"
             String SQLQuery = "UPDATE `" + DBConstants.DB_NAME + "`.`" + DBConstants.TESTS_LIST_TABLE_NAME + "` SET `"
-                    + DBConstants.TEST_NAME + "` = ?, `"+ DBConstants.TEST_FILE+"` = ?, `"+ DBConstants.EV_SYSTEM+"` = ?,"
-                    +" `"+ DBConstants.AMOUNT_OF_QUESTIONS+"` = ?, `"+ DBConstants.TIME_LIMIT
-                    +"` = ?, `"+DBConstants.NUMBER_OF_ATTEMPTS+"` = ? WHERE (`"+ DBConstants.ID_TESTS_LIST+"` = '"+currentTestId+"');";
+                    + DBConstants.TEST_NAME + "` = ?, `" + DBConstants.TEST_FILE + "` = ?, `" + DBConstants.EV_SYSTEM + "` = ?,"
+                    + " `" + DBConstants.AMOUNT_OF_QUESTIONS + "` = ?, `" + DBConstants.TIME_LIMIT
+                    + "` = ?, `" + DBConstants.NUMBER_OF_ATTEMPTS + "` = ? WHERE (`" + DBConstants.ID_TESTS_LIST + "` = '" + currentTestId + "');";
             PreparedStatement preparedStatement = DBHandler.getDbConnection().prepareStatement(SQLQuery);
             FileInputStream fileInputStream = new FileInputStream(file);
             preparedStatement.setString(1, testName);
@@ -358,6 +353,7 @@ public class EditTestQuestionsPaneController implements TestsConstants {
         testQuestions.remove(questionIndex);
         amountOfQuestions = testQuestions.size();
         pagination.setPageCount(amountOfQuestions);
+        pagination.setCurrentPageIndex(previousPageIndex);
     }
 
     private ButtonType showWarningAlert(String alertTitle, String alertHeader, String alertText, Collection<? extends ButtonType> buttonsList) {

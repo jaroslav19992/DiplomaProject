@@ -41,7 +41,7 @@
             <Tooltip text="Видалити поточне питання" />
          </tooltip>
       </Button>
-      <Button fx:id="doneTestCreation_button" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Завершити" StackPane.alignment="BOTTOM_RIGHT">
+      <Button fx:id="doneTestCreation_button" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Завершити" StackPane.alignment="TOP_RIGHT">
          <StackPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </StackPane.margin>
@@ -55,6 +55,18 @@
          <tooltip>
             <Tooltip text="Завершити створення тесту" />
          </tooltip>
+      </Button>
+      <Button fx:id="addQuestion_button" mnemonicParsing="false" prefWidth="120.0" text="Додати" StackPane.alignment="BOTTOM_RIGHT">
+         <graphic>
+            <ImageView>
+               <image>
+                  <Image url="@../../../../../../Assets/Images/icons/plus32.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <StackPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </StackPane.margin>
       </Button>
    </children>
 </StackPane>

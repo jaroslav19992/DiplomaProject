@@ -2,11 +2,14 @@ package TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane;
 
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
+import TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane.PassingTestPaneController;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTest;
 import TestMaker.UserInfoHandler;
+import TestMaker.WindowTools;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,13 +43,14 @@ public class PupilTestsPaneController {
 
     @FXML
     private Button startTest_button;
+    private final String EMPTY_INFO_LABEL_TEXT = "...";
     private final String CONTINUE_TESTING_TEXT = "Пройти тест";
     private final String CANCEL_TESTING_TEXT = "Скасувати";
 
     @FXML
     void initialize() {
-        setTestProperties("Оберіть тест", "...", "...",
-                "...", "...", "...");
+        setTestProperties("Оберіть тест", EMPTY_INFO_LABEL_TEXT, EMPTY_INFO_LABEL_TEXT,
+                EMPTY_INFO_LABEL_TEXT, EMPTY_INFO_LABEL_TEXT, EMPTY_INFO_LABEL_TEXT);
         ResultSet testsDataSet;
         try {
             testsDataSet = getTestsList();
@@ -71,14 +75,14 @@ public class PupilTestsPaneController {
             if (currentTest != null) {
                 if (currentTest.getCurrentUserUsedAttempts() >= currentTest.getNumberOfAttempts()) {
                     alert.setContentText("У вас не залишилося спроб для проходження даного тесту");
-                    alert.show();
+                    alert.showAndWait();
                 } else {
                     ButtonType continueButton = new ButtonType(CONTINUE_TESTING_TEXT);
                     ButtonType cancelButton = new ButtonType(CANCEL_TESTING_TEXT);
                     int timeLimit = availableTests_listView.getSelectionModel().getSelectedItem().getTimeLimit();
                     if (currentTest.getNumberOfAttempts() == 1) {
-                        alert.setHeaderText(alert.getHeaderText() + "\nТест не має можливості повторного проходження");
-                        alert.setContentText(alert.getContentText() + "\n\tОбраний тест не має можливості можливого проходження.\n" +
+                        alert.setHeaderText(alert.getHeaderText() + "Тест не має можливості повторного проходження");
+                        alert.setContentText(alert.getContentText() + "\tОбраний тест не має можливості можливого проходження.\n" +
                                 "Ви можете пройти його лише раз");
                     }
                     if (timeLimit != 0) {
@@ -92,7 +96,11 @@ public class PupilTestsPaneController {
                     alert.getButtonTypes().addAll(continueButton, cancelButton);
                     Optional<ButtonType> selection = alert.showAndWait();
                     if (selection.get().equals(continueButton)) {
-                        System.out.println("Start test " + availableTests_listView.getSelectionModel().getSelectedItem().getTestName());
+                        WindowTools windowTools = new WindowTools();
+                        PassingTestPaneController controller = (PassingTestPaneController) windowTools.openNewWindow(
+                                "/TestMaker/MainProgramWindow/Panes/TestsPane/PupilPane" +
+                                        "/PassingTestPane/PassingTestPane.fxml",false, Modality.APPLICATION_MODAL);
+                        controller.setTimer(1);
                     } else {
                         event.consume();
                     }

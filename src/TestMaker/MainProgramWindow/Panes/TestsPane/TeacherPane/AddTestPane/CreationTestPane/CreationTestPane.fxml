@@ -13,7 +13,7 @@
    <children>
       <VBox alignment="TOP_CENTER" minWidth="590.0" spacing="10.0" StackPane.alignment="CENTER">
          <children>
-            <Label fx:id="testName_label" text="Назва тесту">
+            <Label fx:id="testName_label" text="Назва тесту" textAlignment="CENTER" wrapText="true">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
@@ -21,7 +21,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Pagination fx:id="pagination" minWidth="590.0" prefHeight="600.0" prefWidth="600.0" VBox.vgrow="ALWAYS" />
+            <Pagination fx:id="pagination" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
       <Button fx:id="removeCurrentQuestion" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Видалити" StackPane.alignment="BOTTOM_LEFT">

@@ -71,6 +71,7 @@ public class LoginWindowController {
         setGlobalEventHandler(login_pane);
         setButtonActions();
         setPasswordFieldBehavior();
+        userName_textField.requestFocus();
     }
 
     private void setPasswordFieldBehavior() {
@@ -196,9 +197,11 @@ public class LoginWindowController {
                     "; DBName: " + Configs.dbName +
                     "\n----------------------------");
         } else {
-            error_label.setText("Не правильний логін та/або пароль");
-            error_label.setVisible(true);
-            loginThread.interrupt();
+            Platform.runLater(() -> {
+                error_label.setText("Не правильний логін та/або пароль");
+                error_label.setVisible(true);
+                loginThread.interrupt();
+            });
         }
     }
 

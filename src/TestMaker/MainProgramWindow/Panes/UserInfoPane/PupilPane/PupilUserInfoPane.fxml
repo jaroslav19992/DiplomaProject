@@ -32,7 +32,54 @@
          <center>
             <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox fx:id="right_vBox" alignment="CENTER_RIGHT" spacing="20.0" HBox.hgrow="ALWAYS">
+                  <VBox fx:id="left_vBox" alignment="CENTER_RIGHT" spacing="20.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label alignment="CENTER_RIGHT" text="Ім'я" textAlignment="CENTER">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                        <Label text="Фамілія">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                        <Label text="E-mail">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                        <Label text="Вид доступу">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                        <Label text="Клас">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <opaqueInsets>
+                        <Insets top="20.0" />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                     </padding>
+                  </VBox>
+                  <VBox fx:id="right_vBox" alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="firstName_label" text="firstName">
                            <font>
@@ -70,53 +117,6 @@
                            </font>
                         </Label>
                         <Label fx:id="classRoom_label" text="classRoom">
-                           <font>
-                              <Font size="36.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <opaqueInsets>
-                        <Insets top="20.0" />
-                     </opaqueInsets>
-                     <padding>
-                        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-                     </padding>
-                  </VBox>
-                  <VBox fx:id="left_vBox" alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
-                     <children>
-                        <Label alignment="CENTER_RIGHT" text="Ім'я" textAlignment="CENTER">
-                           <font>
-                              <Font size="36.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Label>
-                        <Label text="Фамілія">
-                           <font>
-                              <Font size="36.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Label>
-                        <Label text="E-mail">
-                           <font>
-                              <Font size="36.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Label>
-                        <Label text="Вид доступу">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <font>
-                              <Font size="36.0" />
-                           </font>
-                        </Label>
-                        <Label text="Клас">
                            <font>
                               <Font size="36.0" />
                            </font>

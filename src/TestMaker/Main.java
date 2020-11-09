@@ -1,6 +1,7 @@
 package TestMaker;
 
 import TestMaker.DOM.DOMxmlReader;
+import TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane.PassingTestPaneController;
 import TestMaker.MainProgramWindow.Panes.TestsPane.Question;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +33,9 @@ public class Main extends Application {
         System.out.println("ev. system: " + parser.getTestEVSystem());
         ArrayList<Question> awd = parser.getQuestionsList();
         System.out.println(awd.get(0).getCorrectAnswer());
+
+//        PassingTestPaneController controller = new PassingTestPaneController();
+//        controller.setTimer(1);
     }
 
     public static void main(String[] args) {

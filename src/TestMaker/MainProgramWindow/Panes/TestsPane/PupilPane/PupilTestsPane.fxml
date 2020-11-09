@@ -12,7 +12,7 @@
    <children>
       <StackPane layoutX="-9.0" prefHeight="718.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox prefHeight="718.0" prefWidth="969.0" StackPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="718.0" prefWidth="969.0" StackPane.alignment="CENTER">
                <children>
                   <HBox alignment="CENTER" prefHeight="99.0" prefWidth="960.0">
                      <children>
@@ -60,9 +60,9 @@
                                  <children>
                                     <HBox prefHeight="400.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                          <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="NEVER">
                                                    <children>
                                                       <ImageView>
                                                          <image>
@@ -76,7 +76,7 @@
                                                       </Label>
                                                    </children>
                                                 </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="NEVER">
                                                    <children>
                                                       <ImageView>
                                                          <image>
@@ -90,7 +90,7 @@
                                                       </Label>
                                                    </children>
                                                 </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="NEVER">
                                                    <children>
                                                       <ImageView>
                                                          <image>
@@ -104,7 +104,7 @@
                                                       </Label>
                                                    </children>
                                                 </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="NEVER">
                                                    <children>
                                                       <ImageView>
                                                          <image>
@@ -118,7 +118,7 @@
                                                       </Label>
                                                    </children>
                                                 </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="NEVER">
                                                    <children>
                                                       <ImageView>
                                                          <image>
@@ -134,9 +134,9 @@
                                                 </HBox>
                                              </children>
                                           </VBox>
-                                          <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                          <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" VBox.vgrow="NEVER">
                                                    <children>
                                                       <Label fx:id="evSystem_label" text="testEvSystem">
                                                          <font>
@@ -148,7 +148,7 @@
                                                       <Insets left="10.0" />
                                                    </VBox.margin>
                                                 </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" VBox.vgrow="NEVER">
                                                    <children>
                                                       <Label fx:id="amountOfQuestions_label" text="testAmount of questions">
                                                          <font>
@@ -160,7 +160,7 @@
                                                       <Insets left="10.0" />
                                                    </VBox.margin>
                                                 </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" VBox.vgrow="NEVER">
                                                    <children>
                                                       <Label fx:id="testMark_label" text="testMark">
                                                          <font>
@@ -172,7 +172,7 @@
                                                       <Insets left="10.0" />
                                                    </VBox.margin>
                                                 </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" VBox.vgrow="NEVER">
                                                    <children>
                                                       <Label fx:id="time_limit_label" text="testTimeLimit">
                                                          <font>
@@ -184,7 +184,7 @@
                                                       <Insets left="10.0" />
                                                    </VBox.margin>
                                                 </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" VBox.vgrow="NEVER">
                                                    <children>
                                                       <Label fx:id="attempts_label" text="attempts">
                                                          <font>
@@ -228,6 +228,9 @@
                         <Insets />
                      </VBox.margin></HBox>
                </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
             </VBox>
          </children>
       </StackPane>
