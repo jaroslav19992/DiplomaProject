@@ -2,14 +2,18 @@ package TestMaker.MainProgramWindow.Panes.TestsPane;
 
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
+import TestMaker.DOM.DOMxmlReader;
 import javafx.collections.ObservableList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class TestMakerTest {
     private final Integer idInTestsList;
@@ -107,7 +111,7 @@ public class TestMakerTest {
             try {
                 tempFile = File.createTempFile("tempFile", "xml");
                 FileOutputStream out = new FileOutputStream(tempFile);
-                out.write(resultSet.getBlob(DBConstants.TEST_FILE).getBytes(0,
+                out.write(resultSet.getBlob(DBConstants.TEST_FILE).getBytes(1,
                         (int) resultSet.getBlob(DBConstants.TEST_FILE).length()));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -116,6 +120,16 @@ public class TestMakerTest {
             tempFile.delete();
         }
         return testFile;
+    }
+
+    public ArrayList<Question> getTestQuestions() {
+        try {
+            DOMxmlReader reader = new DOMxmlReader(getTestFileFromBD());
+            return reader.getQuestionsList();
+        } catch (ParserConfigurationException | IOException | SAXException | SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public int getIdInTestsList() {

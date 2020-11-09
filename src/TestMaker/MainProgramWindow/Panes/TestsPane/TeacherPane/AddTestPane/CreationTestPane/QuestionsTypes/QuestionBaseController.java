@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class questionBaseController implements QuestionControllerInterface, TestsConstants {
+public class QuestionBaseController implements QuestionControllerInterface, TestsConstants {
 
 //    private final String FREE_ANSWER = "Питання з довільною відповіддю"; TODO: for future versions
 
@@ -130,14 +130,14 @@ public class questionBaseController implements QuestionControllerInterface, Test
         currentQuestionController.setDefaultCorrectAnswers(vBox);
     }
 
-    public double getQuestionScore(String evaluationSystem, int amountOfQuestions) {
+    public double getQuestionScore(int evaluationSystem, int amountOfQuestions) {
         if (questionScore_textField.getText().isEmpty()) {
             switch (evaluationSystem) {
-                case EVAL_SYSTEM_5:
+                case 5:
                     return (5.0 / amountOfQuestions);
-                case EVAL_SYSTEM_12:
+                case 12:
                     return (12.0 / amountOfQuestions);
-                case EVAL_SYSTEM_100:
+                case 100:
                     return (100.0 / amountOfQuestions);
             }
         }

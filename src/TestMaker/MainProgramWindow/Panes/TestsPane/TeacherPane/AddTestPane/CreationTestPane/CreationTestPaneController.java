@@ -1,9 +1,10 @@
-package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.EditTestPane.editTestQuestionsPane;
+package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane;
 
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.DOM.DOMxmlWriter;
 import TestMaker.MainProgramWindow.Panes.TestsPane.Question;
+import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.QuestionsTypes.QuestionBaseController;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
 import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
@@ -27,7 +28,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class editTestQuestionsPaneController implements TestsConstants {
+public class CreationTestPaneController implements TestsConstants {
     private static final String FILE_EXTENSION = ".xml";
     @FXML
     private StackPane main_pane;
@@ -43,8 +44,8 @@ public class editTestQuestionsPaneController implements TestsConstants {
     private String testName;
     private int amountOfQuestions;
     private int timeLimit;
-    private String evaluationSystem;
-    private static questionBaseController currentPageController;
+    private int evaluationSystem;
+    private static QuestionBaseController currentPageController;
     private ArrayList<Question> testQuestions;
     private Integer previousPageIndex;
     private int numberOfAttempts;
@@ -145,13 +146,7 @@ public class editTestQuestionsPaneController implements TestsConstants {
             FileInputStream fileInputStream = new FileInputStream(file);
             preparedStatement.setString(1, testName);
             preparedStatement.setBinaryStream(2, fileInputStream);
-            int evSystem = 0;
-            switch (evaluationSystem) {
-                case EVAL_SYSTEM_5: evSystem = 5;
-                case EVAL_SYSTEM_12: evSystem = 12;
-                case EVAL_SYSTEM_100: evSystem = 100;
-            }
-            preparedStatement.setInt(3, evSystem);
+            preparedStatement.setInt(3, evaluationSystem);
             preparedStatement.setInt(4, amountOfQuestions);
             preparedStatement.setInt(5, timeLimit);
             preparedStatement.setInt(6, numberOfAttempts);
@@ -198,7 +193,7 @@ public class editTestQuestionsPaneController implements TestsConstants {
      * @param numberOfPages      number of pages in pagination/number of questions
      * @param timeLimit          time limit dor test
      */
-    public void setTestProperties(String testName, String evaluationSystem, int numberOfPages,
+    public void setTestProperties(String testName, int evaluationSystem, int numberOfPages,
                                   int numberOfAttempts, Integer timeLimit) {
         this.evaluationSystem = evaluationSystem;
         this.testName = testName;
@@ -213,10 +208,10 @@ public class editTestQuestionsPaneController implements TestsConstants {
     private Node createPage(Integer currentPageIndex) {
         BorderPane mainQuestionPane = new BorderPane();
         WindowTools windowTools = new WindowTools();
-        questionBaseController previousPageController = currentPageController;
-        currentPageController = (questionBaseController) windowTools.setUpNewPaneOnBorderPane(mainQuestionPane,
+        QuestionBaseController previousPageController = currentPageController;
+        currentPageController = (QuestionBaseController) windowTools.setUpNewPaneOnBorderPane(mainQuestionPane,
                 "/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/CreationTestPane" +
-                        "/QuestionsTypes/questionBase.fxml");
+                        "/QuestionsTypes/QuestionBase.fxml");
 
         //if it is not first shown page
         if (previousPageIndex != null) {
@@ -245,7 +240,7 @@ public class editTestQuestionsPaneController implements TestsConstants {
      *
      * @param controller page controller with question information
      */
-    private void createQuestion(questionBaseController controller) {
+    private void createQuestion(QuestionBaseController controller) {
         testQuestions.set(previousPageIndex, new Question(
                 controller.getQuestionType(),
                 controller.getQuestionScore(evaluationSystem, amountOfQuestions),
@@ -365,7 +360,7 @@ public class editTestQuestionsPaneController implements TestsConstants {
             this.previousPageIndex = null;
             this.testQuestions = null;
             this.testName = null;
-            this.evaluationSystem = null;
+            this.evaluationSystem = 0;
             this.timeLimit = 0;
             this.numberOfAttempts = 0;
             this.amountOfQuestions = 0;

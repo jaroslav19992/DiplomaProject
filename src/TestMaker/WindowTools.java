@@ -30,7 +30,6 @@ public class WindowTools {
             stage.initModality(modality);
             stage.show();
             return loader.getController();
-
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -79,7 +78,6 @@ public class WindowTools {
             rootPane.setCenter(loader.load());
             return loader.getController();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
         }
         return null;

@@ -24,7 +24,7 @@ public class DOMxmlWriter {
     public DOMxmlWriter(ArrayList<Question>
                                 questionsList, String testName,
                         int numberOfQuestions, int numberOfTestingAttempts,
-                        int timeLimit, String evaluationSystem) throws ParserConfigurationException, IOException, SAXException, TransformerConfigurationException {
+                        int timeLimit, int evaluationSystem) throws ParserConfigurationException, IOException, SAXException, TransformerConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         //Now we have access to all xml tags in file
@@ -63,6 +63,7 @@ public class DOMxmlWriter {
 
     /**
      * Creates question element with all it's child from Question exemplar
+     *
      * @param question Question class exemplar
      * @return question element
      */
@@ -72,6 +73,7 @@ public class DOMxmlWriter {
         //Set question attributes
         questionElement.setAttribute(QUESTION_TYPE_TAG, question.getQuestionType());
         questionElement.setAttribute(QUESTION_TEXT_TAG, question.getQuestionText());
+        questionElement.setAttribute(QUESTION_SCORE_TAG, String.valueOf(question.getQuestionScore()));
         //Create child question elements for answer variants
         Element answerVariants = document.createElement(ANSWER_VARIANTS_TAG);
         Element correctAnswers = document.createElement(CORRECT_ANSWERS_TAG);
@@ -92,24 +94,33 @@ public class DOMxmlWriter {
             correctAnswers.appendChild(variant);
         }
         return questionElement;
-     }
+    }
 
     /**
      * Creates test file from early created document
+     *
      * @param testFileName desired question name
      * @return created testFile
      * @throws TransformerException
      */
-     public File getTestFile(String testFileName) throws TransformerException {
-         TransformerFactory transformerFactory = TransformerFactory.newInstance();
-         Transformer transformer = transformerFactory.newTransformer();
-         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-         DOMSource source = new DOMSource(document);
-         File testFile = new File(testFileName);
-         StreamResult console = new StreamResult(System.out);
-         StreamResult testFileStream = new StreamResult(testFile);
-         transformer.transform(source, console);
-         transformer.transform(source, testFileStream);
-         return testFile;
-     }
+    public File getTestFile(String testFileName) throws TransformerException {
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            DOMSource source = new DOMSource(document);
+
+            File tempTestFile = File.createTempFile(testFileName, "xml");
+            tempTestFile.deleteOnExit();
+
+            StreamResult console = new StreamResult(System.out);
+            StreamResult testFileStream = new StreamResult(tempTestFile);
+            transformer.transform(source, console);
+            transformer.transform(source, testFileStream);
+            return tempTestFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

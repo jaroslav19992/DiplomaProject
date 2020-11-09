@@ -2,7 +2,7 @@ package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane;
 
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
-import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.creationTestPaneController;
+import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.CreationTestPaneController;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
 import TestMaker.WindowTools;
 import javafx.collections.FXCollections;
@@ -49,7 +49,7 @@ public class ConfigTestPaneController implements TestsConstants {
     @FXML
     private ChoiceBox<String> evaluationSystem_choiceBox;
 
-    private creationTestPaneController controller;
+    private CreationTestPaneController controller;
 
     @FXML
     private void initialize() {
@@ -108,12 +108,17 @@ public class ConfigTestPaneController implements TestsConstants {
     private void createTest() {
         System.out.println("Starting to create " + testName_textField.getText() + "");
         WindowTools windowTools = new WindowTools();
-        controller = (creationTestPaneController) windowTools.openNewWindow("/TestMaker/MainProgramWindow" +
-                "/Panes/TestsPane/TeacherPane/AddTestPane/CreationTestPane/" +
-                "editTestQuestionsPane.fxml", true, Modality.APPLICATION_MODAL);
+        controller = (CreationTestPaneController) windowTools.openNewWindow("/TestMaker/MainProgramWindow/Panes/" +
+                "TestsPane/TeacherPane/AddTestPane/CreationTestPane/" +
+                "CreationTestPane.fxml", true, Modality.APPLICATION_MODAL);
         windowTools.closeCurrentWindow(main_pane);
-
-        controller.setTestProperties(testName_textField.getText(), evaluationSystem_choiceBox.getValue(),
+        int evSystem = 0;
+        switch(evaluationSystem_choiceBox.getValue()) {
+            case EVAL_SYSTEM_5: { evSystem = 5; break;}
+            case EVAL_SYSTEM_12: { evSystem = 12; break;}
+            case EVAL_SYSTEM_100: { evSystem = 100; break;}
+        }
+        controller.setTestProperties(testName_textField.getText(), evSystem,
                 Integer.parseInt(questionsAmount_textField.getText()),
                 (reTestingEnabled_radioButton.isSelected()) ? (Integer.parseInt(numberOfAttempts_textField.getText())) : (1),
                 (timeLimitEnabled_radioButton.isSelected()) ? (Integer.parseInt(timeLimit_textField.getText())) : (0));

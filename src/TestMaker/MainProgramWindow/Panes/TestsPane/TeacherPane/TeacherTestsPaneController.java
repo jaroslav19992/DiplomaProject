@@ -3,6 +3,7 @@ package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane;
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.MainProgramWindow.Panes.TestsPane.Pupil;
+import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.EditTestPane.EditConfigTestPaneController;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.GainPupilAccessPane.GainPupilAccessPaneController;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTest;
 import TestMaker.UserInfoHandler;
@@ -35,6 +36,8 @@ public class TeacherTestsPaneController {
     private ListView<Pupil> testsAccess_listView;
     @FXML
     private Button gainAccess_button;
+    @FXML
+    private Button reload_button;
     private final int maxTestsNumber = 1000;
     //                       ↓test id in testsList table
 //    accessedPupilsList[3];
@@ -65,13 +68,29 @@ public class TeacherTestsPaneController {
     private void setButtonsActions() {
         addTest_button.setOnAction(event -> {
             WindowTools windowTools = new WindowTools();
-            windowTools.openNewWindowAndWait("/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/ConfigTestPane.fxml",
+            windowTools.openNewWindowAndWait("/TestMaker/MainProgramWindow/" +
+                            "Panes/TestsPane/TeacherPane/AddTestPane/ConfigTestPane.fxml",
                     false, Modality.APPLICATION_MODAL);
             try {
                 getTestsList();
                 updatePupilsTestsAccess();
             } catch (SQLException exception) {
                 exception.printStackTrace();
+            }
+        });
+
+        editTest_button.setOnAction(event -> {
+            if (createdTests_listView.getSelectionModel().getSelectedItem() == null) {
+                Alert noTestAndPupilChosenAlert = new Alert(Alert.AlertType.WARNING);
+                noTestAndPupilChosenAlert.setHeaderText(null);
+                noTestAndPupilChosenAlert.setContentText("Оберіть тест");
+                noTestAndPupilChosenAlert.showAndWait();
+            } else {
+                WindowTools windowTools = new WindowTools();
+                EditConfigTestPaneController controller = (EditConfigTestPaneController) windowTools.openNewWindow(
+                        "/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/EditTestPane/EditConfigTestPane.fxml",
+                        false, Modality.APPLICATION_MODAL);
+                controller.setTestProperties(createdTests_listView.getSelectionModel().getSelectedItem());
             }
         });
 
@@ -112,6 +131,14 @@ public class TeacherTestsPaneController {
                 alert.show();
             }
         });
+        reload_button.setOnAction(event -> {
+            try {
+                getTestsList();
+                updatePupilsTestsAccess();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 
     private void gainAccessToPupils() {
@@ -133,10 +160,23 @@ public class TeacherTestsPaneController {
         } else {
             if (getRemoveConfirmation("Ви дійсно бажаєте видалити тест \"" +
                     createdTests_listView.getSelectionModel().getSelectedItem() + "\"?")) {
+                //Remove from teacher tests list
                 String SQLQuery = "DELETE FROM " + DBConstants.DB_NAME + "." + DBConstants.TEACHERS_TESTS_TABLE_NAME
                         + " WHERE (`" + DBConstants.USER_NAME_HASH + "` = '"
                         + UserInfoHandler.userName.hashCode() + "') and (`" + DBConstants.ID_TESTS_LIST + "` = '"
                         + createdTests_listView.getSelectionModel().getSelectedItem().getIdInTestsList() + "');";
+                DBHandler.loadDataToDB(SQLQuery);
+
+                //Remove from pupils tests list
+                SQLQuery = "DELETE FROM " + DBConstants.DB_NAME + "." + DBConstants.PUPILS_TESTS_TABLE_NAME
+                        + " WHERE (`" + DBConstants.ID_TESTS_LIST + "` = '" +
+                        createdTests_listView.getSelectionModel().getSelectedItem().getIdInTestsList() + "');";
+                DBHandler.loadDataToDB(SQLQuery);
+
+                //Remove from tests list
+                SQLQuery = "DELETE FROM " + DBConstants.DB_NAME + "." + DBConstants.TESTS_LIST_TABLE_NAME
+                        + " WHERE (`" + DBConstants.ID_TESTS_LIST + "` = '" +
+                        createdTests_listView.getSelectionModel().getSelectedItem().getIdInTestsList() + "');";
                 DBHandler.loadDataToDB(SQLQuery);
             }
         }

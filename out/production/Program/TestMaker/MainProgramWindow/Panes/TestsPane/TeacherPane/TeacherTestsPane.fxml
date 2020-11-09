@@ -132,5 +132,20 @@
                </children>
             </VBox>
          </children></StackPane>
+      <Button fx:id="reload_button" layoutX="919.0" layoutY="-11.0" mnemonicParsing="false" text="Оновити" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <graphic>
+            <ImageView>
+               <image>
+                  <Image url="@../../../../Assets/Images/icons/exchange32.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
    </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
 </AnchorPane>

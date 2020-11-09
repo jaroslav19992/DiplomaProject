@@ -2,7 +2,8 @@ package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.EditTestPane;
 
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
-import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.EditTestPane.editTestQuestionsPane.editTestQuestionsPaneController;
+import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.EditTestPane.EditTestQuestionsPane.EditTestQuestionsPaneController;
+import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTest;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
 import TestMaker.WindowTools;
 import javafx.collections.FXCollections;
@@ -15,7 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -68,18 +69,54 @@ public class EditConfigTestPaneController implements TestsConstants {
     @FXML
     private ToggleGroup reTesting_toggleGroup;
 
-    private editTestQuestionsPaneController controller;
+    private EditTestQuestionsPaneController controller;
+    private TestMakerTest currentTest;
 
     @FXML
     private void initialize() {
         setEvaluationSystemVariants();
         setButtonsActions();
         setGlobalEventHAndler(main_pane);
-        setTestProperties();
     }
 
-    private void setTestProperties() {
+    public void setTestProperties(TestMakerTest test) {
+        this.currentTest = test;
+        testName_textField.setText(test.getTestName());
+        switch (test.getEvSystem()) {
+            case 5: {
+                evaluationSystem_choiceBox.setValue(EVAL_SYSTEM_5);
+                break;
+            }
+            case 12: {
+                evaluationSystem_choiceBox.setValue(EVAL_SYSTEM_12);
+                break;
+            }
+            case 100: {
+                evaluationSystem_choiceBox.setValue(EVAL_SYSTEM_100);
+                break;
+            }
+        }
+        if (test.getNumberOfAttempts() == 1) {
+            reTestingDisabled_radioButton.setSelected(true);
+            numberOfAttempts_textField.setDisable(true);
+            numberOfAttempts_label.setDisable(true);
+        } else {
+            reTestingEnabled_radioButton.setSelected(true);
+            numberOfAttempts_textField.setDisable(false);
+            numberOfAttempts_label.setDisable(false);
+            numberOfAttempts_textField.setText(String.valueOf(test.getNumberOfAttempts()));
+        }
 
+        if (test.getTimeLimit() == 0) {
+            timeLimitDisabled_radioButton.setSelected(true);
+            timeLimit_textField.setDisable(true);
+            timeLimit_label.setDisable(true);
+        } else {
+            timeLimitEnabled_radioButton.setSelected(true);
+            timeLimit_textField.setDisable(false);
+            timeLimit_label.setDisable(false);
+            timeLimit_textField.setText(String.valueOf(test.getTimeLimit()));
+        }
     }
 
     private void setGlobalEventHAndler(Parent root) {
@@ -127,21 +164,81 @@ public class EditConfigTestPaneController implements TestsConstants {
                 main_pane.getScene().getWindow().hide();
             }
         });
+
+        finishTestEdit_button.setOnAction(event1 -> {
+            Alert finishConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            finishConfirmation.setHeaderText("Підвердіть дію");
+            finishConfirmation.setTitle("Підтвердіть дію");
+            finishConfirmation.setContentText("Ви дійсно бажаєте завершити редагування тесту?");
+            ButtonType finish = new ButtonType("Заверщити");
+            ButtonType cancel = new ButtonType("Відміна");
+            finishConfirmation.getButtonTypes().clear();
+            finishConfirmation.getButtonTypes().addAll(cancel, finish);
+            Optional<ButtonType> selection = finishConfirmation.showAndWait();
+            if (selection.get() == finish) {
+                try {
+                    //Try to insert file into table "tests list"
+                    String SQLQuery = "UPDATE `" + DBConstants.DB_NAME + "`.`" + DBConstants.TESTS_LIST_TABLE_NAME + "` SET `"
+                            + DBConstants.TEST_NAME + "` = ?, `"+ DBConstants.EV_SYSTEM+"` = ?, `"+ DBConstants.TIME_LIMIT
+                            +"` = ?, `"+DBConstants.NUMBER_OF_ATTEMPTS+"` = ? WHERE (`"+ DBConstants.ID_TESTS_LIST+"` = ?);";
+                    PreparedStatement preparedStatement = DBHandler.getDbConnection().prepareStatement(SQLQuery);
+                    preparedStatement.setString(1, testName_textField.getText());
+
+                    preparedStatement.setInt(2, getEvSystem());
+                    preparedStatement.setInt(3, (timeLimitEnabled_radioButton.isSelected()) ?
+                            (Integer.parseInt(timeLimit_textField.getText())) : (0));
+                    preparedStatement.setInt(4, (reTestingEnabled_radioButton.isSelected()) ?
+                            (Integer.parseInt(numberOfAttempts_textField.getText())) : (1));
+                    preparedStatement.setInt(5, currentTest.getIdInTestsList());
+                    preparedStatement.execute();
+                    //if no errors during test loading show success alert
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setAlertType(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Успіх створення тесту");
+                    alert.setHeaderText("Тест " + testName_textField.getText() + " успішно створено");
+                    alert.setContentText("Оновіть сторінку тестів");
+                    alert.showAndWait();
+                    main_pane.getScene().getWindow().hide();
+                } catch (SQLException exception) {
+                    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                    errorAlert.setContentText("Деталі помилки:\n" + exception.getMessage());
+                    errorAlert.setHeaderText("Помилка завантеження тесту до бази даних\nПеревірте з'єднання з мережею інтернет");
+                    errorAlert.setTitle("Помилка");
+                    errorAlert.showAndWait();
+                }
+            }
+        });
     }
 
     private void editQuestions() {
         System.out.println("Starting to edit " + testName_textField.getText() + "");
         WindowTools windowTools = new WindowTools();
-        controller = (editTestQuestionsPaneController) windowTools.openNewWindow("/TestMaker/MainProgramWindow/Panes/" +
-                "TestsPane/TeacherPane/EditTestPane/EditConfigTestPaneController.java" +
-                "editTestQuestionsPane.fxml", true, Modality.APPLICATION_MODAL);
+        controller = (EditTestQuestionsPaneController) windowTools.openNewWindow("/TestMaker/MainProgramWindow/Panes/" +
+                "TestsPane/TeacherPane/EditTestPane/EditTestQuestionsPane/" +
+                "EditTestQuestionsPane.fxml", true, Modality.APPLICATION_MODAL);
         windowTools.closeCurrentWindow(main_pane);
 
-//        controller.setTestProperties(testName_textField.getText(), evaluationSystem_choiceBox.getValue(),
-//                Integer.parseInt(questionsAmount_textField.getText()),
-//                (reTestingEnabled_radioButton.isSelected()) ? (Integer.parseInt(numberOfAttempts_textField.getText())) : (1),
-//                (timeLimitEnabled_radioButton.isSelected()) ? (Integer.parseInt(timeLimit_textField.getText())) : (0));
-//        controller.setPageFactory();
+        controller.setTestProperties(currentTest.getIdInTestsList(), testName_textField.getText(),
+                getEvSystem(), currentTest.getAmountOfQuestions(),
+                (reTestingEnabled_radioButton.isSelected()) ? (Integer.parseInt(numberOfAttempts_textField.getText())) : (1),
+                (timeLimitEnabled_radioButton.isSelected()) ? (Integer.parseInt(timeLimit_textField.getText())) : (0),
+                currentTest.getTestQuestions());
+        controller.setPageFactory();
+    }
+
+    private int getEvSystem() {
+        switch (evaluationSystem_choiceBox.getValue()) {
+            case EVAL_SYSTEM_5: {
+                return 5;
+                            }
+            case EVAL_SYSTEM_12: {
+                return 12;
+            }
+            case EVAL_SYSTEM_100: {
+                return 100;
+            }
+        }
+        return 0;
     }
 
     /**
@@ -150,20 +247,6 @@ public class EditConfigTestPaneController implements TestsConstants {
      * @return
      */
     private boolean checkForCorrectInfo() {
-        String SQLQuery = "SELECT " + DBConstants.TEST_NAME + " FROM " + DBConstants.DB_NAME + "."
-                + DBConstants.TESTS_LIST_TABLE_NAME + ";";
-        try {
-            ResultSet resultSet = DBHandler.getDataFromDB(SQLQuery);
-            while (resultSet.next()) {
-                if (resultSet.getString(DBConstants.TEST_NAME).equals(testName_textField.getText())) {
-                    showAlert("Тест з такою назвою уже існує\n Оберіть іншу назву");
-                    return false;
-                }
-            }
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
         //Test Name check
         if (testName_textField.getText().equals("")) {
             showAlert("Поле вводу назви тесту не повинне бути пустим");

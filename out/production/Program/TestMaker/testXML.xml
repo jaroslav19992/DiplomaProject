@@ -4,7 +4,7 @@
     <numberOfQuestions>3</numberOfQuestions>
     <numberOfAttempts>1</numberOfAttempts>
     <timeLimit>0</timeLimit>
-    <evaluationSystem>"5-ти бальна система"</evaluationSystem>
+    <evaluationSystem>"5"</evaluationSystem>
     <Questions>
         <Question questionType="питання з однією правильною відповіддю" questionText="перше питання" score="1.0">
             <answerVariants>
