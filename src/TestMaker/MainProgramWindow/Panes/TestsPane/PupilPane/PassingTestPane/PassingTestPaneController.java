@@ -1,15 +1,17 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane;
 
-import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.QuestionsTypes.QuestionBaseController;
+import TestMaker.MainProgramWindow.Panes.TestsPane.Question;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTest;
 import TestMaker.WindowTools;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class PassingTestPaneController {
@@ -31,14 +33,14 @@ public class PassingTestPaneController {
     private TestMakerTest currentTest;
     private Thread timerThread;
     private TestingQuestionBaseController currentPageController;
+    private ArrayList<Question> questionsList;
+    private Integer previousPageIndex;
 
     @FXML
     public void initialize() {
         setButtonActions();
         Platform.runLater(() -> {
-            mainPane.getScene().getWindow().setOnCloseRequest(event -> {
-                cancelTesting_button.fire();
-            });
+            mainPane.getScene().getWindow().setOnCloseRequest(this::cancelTestConfirmation);
         });
     }
 
@@ -51,33 +53,43 @@ public class PassingTestPaneController {
         WindowTools windowTools = new WindowTools();
         TestingQuestionBaseController previousPageController = currentPageController;
         currentPageController = (TestingQuestionBaseController) windowTools.setUpNewPaneOnBorderPane(mainQuestionPane,
-                "/TestMaker/MainProgramWindow/Panes/TestsPane/TeacherPane/AddTestPane/CreationTestPane" +
-                        "/QuestionsTypes/QuestionBase.fxml");
-        //TODO: CONTINUE creation this block
-        return null;
+                "/TestMaker/MainProgramWindow/Panes/TestsPane/PupilPane/PassingTestPane/TestingQuestionBase.fxml");
+
+        //If there is question on index [currentPageIndex] available load this question information to current page
+        currentPageController.setQuestion(
+                questionsList.get(currentPageIndex).getQuestionType(),
+                questionsList.get(currentPageIndex).getQuestionScore(),
+                questionsList.get(currentPageIndex).getQuestionText(),
+                questionsList.get(currentPageIndex).getQuestionVariants(),
+                questionsList.get(currentPageIndex).getAnswerVariants());
+
+        previousPageIndex = currentPageIndex;
+        return mainQuestionPane;
     }
 
     private void setButtonActions() {
-        cancelTesting_button.setOnAction(event -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setHeaderText("Скасувати проходження тесту?");
-            alert.setContentText(CANCEL_TEST_PASSING_ALERT_CONTEXT_TEXT);
-            ButtonType accept = new ButtonType("Продовжити");
-            ButtonType cancel = new ButtonType("Відміна");
-            alert.getButtonTypes().setAll(accept, cancel);
-            Optional<ButtonType> selection = alert.showAndWait();
-            if (selection.get() == accept) {
-                finishTesting();
-            } else {
-                event.consume();
-            }
-        });
+        cancelTesting_button.setOnAction(this::cancelTestConfirmation);
 
         finishTesting_button.setOnAction(event -> {
             if (checkQuestions()) {
                 finishTesting();
             }
         });
+    }
+
+    private void cancelTestConfirmation(Event event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Скасувати проходження тесту?");
+        alert.setContentText(CANCEL_TEST_PASSING_ALERT_CONTEXT_TEXT);
+        ButtonType accept = new ButtonType("Продовжити");
+        ButtonType cancel = new ButtonType("Відміна");
+        alert.getButtonTypes().setAll(accept, cancel);
+        Optional<ButtonType> selection = alert.showAndWait();
+        if (selection.get() == accept) {
+            finishTesting();
+        } else {
+            event.consume();
+        }
     }
 
     private boolean checkQuestions() {
@@ -101,6 +113,7 @@ public class PassingTestPaneController {
                     synchronized (this) {
                         try {
                             while (true) {
+                                Platform.runLater(() -> showTime(minutes, seconds));
                                 Thread.currentThread().wait(1000);
                                 if (minutes == 0 && seconds == 0) {
                                     System.out.println("Time out");
@@ -109,10 +122,9 @@ public class PassingTestPaneController {
                                 else if (seconds == 0) {
                                     minutes--;
                                     seconds = 60;
+                                } else {
+                                    seconds--;
                                 }
-
-                                Platform.runLater(() -> showTime(minutes, seconds));
-                                seconds--;
                             }
                         } catch (InterruptedException e) {
                             finishTesting();
@@ -144,5 +156,10 @@ public class PassingTestPaneController {
 
     private void finishTesting() {
 
+    }
+
+    public void setTest(TestMakerTest test) {
+    this.currentTest = test;
+    this.questionsList = test.getTestQuestions();
     }
 }

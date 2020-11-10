@@ -100,7 +100,9 @@ public class PupilTestsPaneController {
                         PassingTestPaneController controller = (PassingTestPaneController) windowTools.openNewWindow(
                                 "/TestMaker/MainProgramWindow/Panes/TestsPane/PupilPane" +
                                         "/PassingTestPane/PassingTestPane.fxml",false, Modality.APPLICATION_MODAL);
-                        controller.setTimer(1);
+                        controller.setTest(availableTests_listView.getSelectionModel().getSelectedItem());
+                        controller.setPageFactory();
+                        controller.setTimer(timeLimit);
                     } else {
                         event.consume();
                     }
