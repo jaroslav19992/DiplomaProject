@@ -17,7 +17,7 @@
                                 <Label text="Зміст питання" textAlignment="CENTER" />
                             </children>
                         </VBox>
-                  <TextArea editable="false" prefHeight="0.0" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <TextArea fx:id="questionText_textArea" editable="false" prefHeight="0.0" wrapText="true" VBox.vgrow="ALWAYS" />
                         <BorderPane fx:id="inside_borderPane" prefHeight="400.0" />
                     </children>
                 </VBox>

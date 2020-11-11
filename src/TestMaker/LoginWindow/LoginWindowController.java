@@ -25,35 +25,24 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LoginWindowController {
-
     @FXML
     private ImageView openEye_imageView;
-
     @FXML
     private ImageView closedEye_imageView;
-
-
     @FXML
     private Button networkSettings_button;
-
     @FXML
     private Label error_label;
-
     @FXML
     private TextField userName_textField;
-
     @FXML
     private PasswordField password_passwordField;
-
     @FXML
     private Button login_button;
-
     @FXML
     private Button register_button;
-
     @FXML
     private TextField password_textField;
-
     @FXML
     private StackPane login_pane;
 
@@ -72,6 +61,13 @@ public class LoginWindowController {
         setButtonActions();
         setPasswordFieldBehavior();
         userName_textField.requestFocus();
+        Platform.runLater(() -> {
+            login_pane.getScene().getWindow().setOnCloseRequest(event -> {
+                loginThread.interrupt();
+                loadingAnimation.interrupt();
+                System.exit(0);
+            });
+        });
     }
 
     private void setPasswordFieldBehavior() {

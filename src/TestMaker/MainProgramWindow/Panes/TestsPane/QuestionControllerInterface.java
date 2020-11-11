@@ -1,4 +1,4 @@
-package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane;
+package TestMaker.MainProgramWindow.Panes.TestsPane;
 
 import javafx.scene.control.ButtonBase;
 import javafx.scene.layout.HBox;

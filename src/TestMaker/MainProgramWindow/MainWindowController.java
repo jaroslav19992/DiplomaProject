@@ -136,9 +136,10 @@ public class MainWindowController extends WindowConstants{
             closeConfirmation.getButtonTypes().clear();
             closeConfirmation.getButtonTypes().addAll(cancel, close);
             Optional<ButtonType> selection = closeConfirmation.showAndWait();
-            if (selection.get() != close) {
+            if (selection.get() == cancel) {
                 event.consume();
             }
+            System.exit(0);
         });
     }
 

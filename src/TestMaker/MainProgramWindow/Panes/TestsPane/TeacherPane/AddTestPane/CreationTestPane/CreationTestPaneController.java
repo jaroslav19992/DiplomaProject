@@ -78,6 +78,7 @@ public class CreationTestPaneController implements TestsConstants {
 
 
     private void setButtonActions() {
+        //Ask is user really wants to remove current question
         removeCurrentQuestion.setOnAction(event -> {
             ButtonType remove = new ButtonType("Видалити");
             ButtonType cancel = new ButtonType("Скасувати");
@@ -86,8 +87,10 @@ public class CreationTestPaneController implements TestsConstants {
             buttonTypeList.add(cancel);
             ButtonType warningAnswer = showWarningAlert("Підтвердіть дію", null,
                     "Видалити поточне питання?", buttonTypeList);
+            //remove question and show question previous to removed
             if (warningAnswer.equals(remove)) {
                 removeCurrentQuestion(pagination.getCurrentPageIndex());
+                pagination.setCurrentPageIndex(previousPageIndex-1);
             } else {
                 event.consume();
             }
@@ -265,8 +268,12 @@ public class CreationTestPaneController implements TestsConstants {
             testQuestions.set(previousPageIndex, null);
         }
 
+        //Used to check for correct score (should be >= EV_SYSTEM)
+        Double globalMaxScore = 0.0;
+
         //Check all questions
         for (int i = 0; i < testQuestions.size(); i++) {
+            globalMaxScore += testQuestions.get(i).getQuestionScore();
             // If there is empty question
             if (testQuestions.get(i) == null) {
                 showTestCreationWarning(i, event, NULLABLE_QUESTION_ALERT_CONTEXT);
@@ -303,6 +310,10 @@ public class CreationTestPaneController implements TestsConstants {
                 showTestCreationWarning(i, event, DUPLICATES_ANSWERS_QUESTION_ALERT_CONTEXT);
                 return false;
             }
+        }
+        if (globalMaxScore < evaluationSystem) {
+            showTestCreationWarning(0, event, GLOBAL_MAX_SCORE_ALERT_CONTEXT);
+            return false;
         }
         return true;
     }

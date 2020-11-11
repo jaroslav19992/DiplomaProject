@@ -1,6 +1,6 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.QuestionsTypes.SeveralAnswers;
 
-import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.QuestionControllerInterface;
+import TestMaker.MainProgramWindow.Panes.TestsPane.QuestionControllerInterface;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -27,6 +27,7 @@ public class SeveralAnswersController implements QuestionControllerInterface, Te
     void initialize() {
         showEmptyQuestion();
         numberOfVariants = answerVariants_vBox.getChildren().size() - 1;
+        addVariant_button.graphicProperty().setValue(new ImageView("/TestMaker/Assets/Images/icons/plus32.png"));
         addVariant_button.setOnAction(event -> createNewVariant(null));
     }
 

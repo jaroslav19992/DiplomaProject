@@ -98,8 +98,8 @@ public class PupilTestsPaneController {
                     if (selection.get().equals(continueButton)) {
                         WindowTools windowTools = new WindowTools();
                         PassingTestPaneController controller = (PassingTestPaneController) windowTools.openNewWindow(
-                                "/TestMaker/MainProgramWindow/Panes/TestsPane/PupilPane" +
-                                        "/PassingTestPane/PassingTestPane.fxml",false, Modality.APPLICATION_MODAL);
+                                "/TestMaker/MainProgramWindow/Panes/TestsPane/PupilPane/" +
+                                        "PassingTestPane/PassingTestPane.fxml",false, Modality.APPLICATION_MODAL);
                         controller.setTest(availableTests_listView.getSelectionModel().getSelectedItem());
                         controller.setPageFactory();
                         controller.setTimer(timeLimit);

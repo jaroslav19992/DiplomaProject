@@ -1,4 +1,4 @@
-package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.QuestionsTypes.ComplianceQuestion;
+package TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane.TestPassingQuestions.ComplianceTestingQuestion;
 
 import TestMaker.MainProgramWindow.Panes.TestsPane.QuestionControllerInterface;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -16,39 +15,18 @@ import javafx.scene.text.FontWeight;
 
 import java.util.*;
 
-public class ComplianceQuestionController implements QuestionControllerInterface, TestsConstants {
-    @FXML
-    private Button addAnswerVariant_button;
-
+public class ComplianceTestingQuestion implements QuestionControllerInterface, TestsConstants {
     @FXML
     private VBox question_vBox;
 
     @FXML
     private VBox answer_vBox;
 
-    @FXML
-    private Button addQuestionVariant_button;
-    private final String TO_LITTLE_NUMBER_OF_ANSWERS_ALERT_TEXT = "Кількість варіантів зправа не повинна " +
-            "бути меншою ніж кількість варіантів зліва.";
-
     private int numberOfQuestions = 0;
     private int numberOfAnswers = 0;
 
     @FXML
     void initialize() {
-        for (int i = 0; i < DEFAULT_NUMBER_OF_VARIANTS; i++) {
-            createNewQuestionVariant(null);
-            createNewAnswerVariant(null);
-        }
-        numberOfQuestions = question_vBox.getChildren().size() - 1;
-        numberOfAnswers = answer_vBox.getChildren().size() - 1;
-        addQuestionVariant_button.setOnAction(event -> createNewQuestionVariant(null));
-        addQuestionVariant_button.graphicProperty().setValue(new ImageView("/TestMaker/Assets/Images/icons/plus32.png"));
-
-        addAnswerVariant_button.setOnAction(event -> createNewAnswerVariant(null));
-        addAnswerVariant_button.graphicProperty().setValue(new ImageView("/TestMaker/Assets/Images/icons/plus32.png"));
-
-        setChoicesBoxesValues();
     }
 
     public void createNewQuestionVariant(String variantText) {
@@ -58,43 +36,26 @@ public class ComplianceQuestionController implements QuestionControllerInterface
         hBox.setAlignment(Pos.CENTER);
         //CheckBox
         ChoiceBox<Integer> choiceBox = new ChoiceBox<>();
-//        setChoicesBoxesValues();
+//            setChoicesBoxesValues(); TODO: THIS I JUST COMMENT
         //TextField
         TextArea textArea = new TextArea();
         HBox.setHgrow(textArea, Priority.ALWAYS);
         textArea.setText(variantText);
-        textArea.setPromptText("Питання " + numberOfQuestions);
         textArea.setPrefWidth(TEXT_FIELD_PREF_WIDTH);
-        textArea.setWrapText(true);
         textArea.setPrefHeight(TEXT_AREA_PREF_HEIGHT);
-        //Remove variant button
-        ImageView imageView = new ImageView("/TestMaker/Assets/Images/icons/minus32.png");
-        imageView.setFitHeight(REMOVE_VARIANT_BUTTON_IMAGE_FIT_WIDTH);
-        imageView.setFitWidth(REMOVE_VARIANT_BUTTON_IMAGE_FIT_HEIGHT);
-        Button button = new Button("", imageView);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
         //Compound elements
-        hBox.getChildren().addAll(button, textArea, choiceBox);
-        question_vBox.getChildren().add(question_vBox.getChildren().size() - 1, hBox);
-        //Set remove button actions
-        button.setOnAction(event -> question_vBox.getChildren().remove(button.getParent()));
-//        setChoicesBoxesValues();
+        hBox.getChildren().addAll(textArea, choiceBox);
+        question_vBox.getChildren().add(question_vBox.getChildren().size(), hBox);
 
         //This block created to prevent duplicate choice box values. It looks for all another boxes values and equalized with them
         choiceBox.setOnAction(event -> {
-            //Prevent user to choose answer for empty question variant
-                String questionText = textArea.getText();
-            if (Objects.equals(questionText, "") || Objects.equals(questionText, null)) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                choiceBox.setValue(null);
-                alert.setHeaderText(null);
-                alert.setContentText("Не можливо вибрати відповідь для пустого варіанту. \nЗаповніть вибраний варіант");
-                alert.show();
-                event.consume();
-            }
             //Prevent user to choose 2 identical variants
-            for (int j = 0; j < question_vBox.getChildren().size() - 1; j++) {
+            for (int j = 0; j < question_vBox.getChildren().size(); j++) {
                 HBox questionHBox = (HBox) question_vBox.getChildren().get(j);
-                ChoiceBox choiceBox1 = (ChoiceBox) questionHBox.getChildren().get(2);
+                ChoiceBox choiceBox1 = (ChoiceBox) questionHBox.getChildren().get(1);
                 if (choiceBox1 != choiceBox) {
                     if (choiceBox1.getValue() == choiceBox.getValue() && choiceBox.getValue() != null && choiceBox1.getValue() != null) {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -120,43 +81,15 @@ public class ComplianceQuestionController implements QuestionControllerInterface
         TextArea textArea = new TextArea();
         HBox.setHgrow(textArea, Priority.ALWAYS);
         textArea.setText(variantText);
-        textArea.setPromptText("Відповідь " + numberOfAnswers);
         textArea.setPrefWidth(TEXT_FIELD_PREF_WIDTH);
-        textArea.setWrapText(true);
         textArea.setPrefHeight(TEXT_AREA_PREF_HEIGHT);
-        //Remove variant button
-        ImageView imageView = new ImageView("/TestMaker/Assets/Images/icons/minus32.png");
-        imageView.setFitHeight(REMOVE_VARIANT_BUTTON_IMAGE_FIT_WIDTH);
-        imageView.setFitWidth(REMOVE_VARIANT_BUTTON_IMAGE_FIT_HEIGHT);
-        Button button = new Button("", imageView);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
         //Compound elements
-        hBox.getChildren().addAll(numberLabel, textArea, button);
-        answer_vBox.getChildren().add(answer_vBox.getChildren().size() - 1, hBox);
-        //Update remove button actions
-        setRemoveAnswerVariantButtonAction(button);
-//        setChoicesBoxesValues();
-    }
-
-    /**
-     * Set button actions for all buttons which should to remove answer variant
-     */
-    private void setRemoveAnswerVariantButtonAction(Button button) {
-        button.setOnAction(event -> {
-            int questionsVariants = question_vBox.getChildren().size() - 1;
-            int answersVariants = answer_vBox.getChildren().size() - 1;
-
-            if (answersVariants - 1 >= questionsVariants){
-                answer_vBox.getChildren().remove(button.getParent());
-                setChoicesBoxesValues();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Помилка");
-                alert.setHeaderText(null);
-                alert.setContentText(TO_LITTLE_NUMBER_OF_ANSWERS_ALERT_TEXT);
-                alert.show();
-            }
-        });
-
+        hBox.getChildren().addAll(numberLabel, textArea);
+        answer_vBox.getChildren().add(answer_vBox.getChildren().size(), hBox);
+//            setChoicesBoxesValues();
     }
 
     /**
@@ -167,24 +100,23 @@ public class ComplianceQuestionController implements QuestionControllerInterface
         //Get all labels that's used at the moment
         ArrayList<Integer> answersNumbers = new ArrayList<>();
 //        answersNumbers.add(null); TODO: I can't decide is I need that or not
-        for (int i = 0; i < answer_vBox.getChildren().size() - 1; i++) {
+        for (int i = 0; i < answer_vBox.getChildren().size(); i++) {
             HBox hBox = (HBox) answer_vBox.getChildren().get(i);
             Label label = (Label) hBox.getChildren().get(0);
             answersNumbers.add(Integer.parseInt(label.getText()));
         }
         //Create list of them and use that list as a list of choice box variants
         ObservableList<Integer> observableList = FXCollections.observableList(answersNumbers);
-        for (int i = 0; i < question_vBox.getChildren().size() - 1; i++) {
+        for (int i = 0; i < question_vBox.getChildren().size(); i++) {
             HBox hBox = (HBox) question_vBox.getChildren().get(i);
-            ChoiceBox<Integer> choiceBox = (ChoiceBox<Integer>) hBox.getChildren().get(2);
+            ChoiceBox<Integer> choiceBox = (ChoiceBox<Integer>) hBox.getChildren().get(1);
             //This block created just to save current variant when choice box values are updating
-            if (choiceBox.getValue() != null) {
-                int currentNumber = choiceBox.getValue();
-                choiceBox.setItems(observableList);
-                choiceBox.setValue(currentNumber);
-            } else {
-                choiceBox.setItems(observableList);
-            }
+//                if (choiceBox.getValue() != null) {
+//                    choiceBox.setItems(observableList);
+//                    choiceBox.setValue(currentNumber);
+//                } else {
+            choiceBox.setItems(observableList);
+//                }
         }
     }
 
@@ -196,7 +128,7 @@ public class ComplianceQuestionController implements QuestionControllerInterface
     @Override
     public ArrayList<String> getQuestionsVariantsList() {
         ArrayList<String> arrayList = new ArrayList<>();
-        for (int i = 0; i < question_vBox.getChildren().size() - 1; i++) {
+        for (int i = 0; i < question_vBox.getChildren().size(); i++) {
             HBox hBox = (HBox) question_vBox.getChildren().get(i);
             String questionText = ((TextArea) hBox.getChildren().get(1)).getText();
             if (!Objects.equals(questionText, null) && !Objects.equals(questionText, "")) {
@@ -208,7 +140,7 @@ public class ComplianceQuestionController implements QuestionControllerInterface
 
     /**
      * Situate answer variants in order of questions:
-     * questions added to arraylist just in the order in which they are recorded
+     * questions added to arraylist just in the order in which they are recorded.
      * method searching label with number equal to number in choice box near the question
      * unused answers adding to the end of array list
      *
@@ -217,10 +149,10 @@ public class ComplianceQuestionController implements QuestionControllerInterface
     @Override
     public ArrayList<String> getAnswersVariantsList() {
         ArrayList<String> arrayList = new ArrayList<>();
-        for (int i = 0; i < question_vBox.getChildren().size() - 1; i++) {
+        for (int i = 0; i < question_vBox.getChildren().size(); i++) {
             HBox hBox = (HBox) question_vBox.getChildren().get(i);
-            ChoiceBox choiceBox = (ChoiceBox) hBox.getChildren().get(2);
-            for (int j = 0; j < answer_vBox.getChildren().size() - 1; j++) {
+            ChoiceBox choiceBox = (ChoiceBox) hBox.getChildren().get(1);
+            for (int j = 0; j < answer_vBox.getChildren().size(); j++) {
                 HBox answerHBox = (HBox) answer_vBox.getChildren().get(j);
                 Label label = (Label) answerHBox.getChildren().get(0);
                 if (label.getText().equals(String.valueOf(choiceBox.getValue()))) {
@@ -232,7 +164,7 @@ public class ComplianceQuestionController implements QuestionControllerInterface
             }
         }
 
-        for (int j = 0; j < answer_vBox.getChildren().size() - 1; j++) {
+        for (int j = 0; j < answer_vBox.getChildren().size(); j++) {
             HBox answerHBox = (HBox) answer_vBox.getChildren().get(j);
             String answerText = ((TextArea) answerHBox.getChildren().get(1)).getText();
             if (!arrayList.contains(answerText) && !Objects.equals(answerText, null) && !Objects.equals(answerText, "")) {
@@ -244,29 +176,14 @@ public class ComplianceQuestionController implements QuestionControllerInterface
 
     @Override
     public void setQuestion(String questionType, double questionScore, String questionText, List<String> questionVariantsList, List<String> answerVariantsList) {
-        question_vBox.getChildren().remove(0, question_vBox.getChildren().size() - 1);
-        answer_vBox.getChildren().remove(0, answer_vBox.getChildren().size() - 1);
         numberOfAnswers = 0;
         numberOfQuestions = 0;
 
-        if (!questionVariantsList.isEmpty()) {
-            for (String variant : questionVariantsList) {
-                createNewQuestionVariant(variant);
-                HBox questionHBox = (HBox) question_vBox.getChildren().get(questionVariantsList.indexOf(variant));
-                ChoiceBox<Integer> choiceBox = (ChoiceBox<Integer>) questionHBox.getChildren().get(2);
-                choiceBox.setValue(questionVariantsList.indexOf(variant) + 1);
-            }
-        } else {
-            createNewQuestionVariant(null);
-            createNewQuestionVariant(null);
+        for (String variant : questionVariantsList) {
+            createNewQuestionVariant(variant);
         }
-        if (!answerVariantsList.isEmpty()) {
-            for (String variant : answerVariantsList) {
-                createNewAnswerVariant(variant);
-            }
-        } else {
-            createNewAnswerVariant(null);
-            createNewAnswerVariant(null);
+        for (String variant : answerVariantsList) {
+            createNewAnswerVariant(variant);
         }
         setChoicesBoxesValues();
     }
@@ -274,9 +191,9 @@ public class ComplianceQuestionController implements QuestionControllerInterface
     //Don't used now, but could be useful
     @Override
     public void setDefaultCorrectAnswers(VBox vBoxWithChoiceBoxes) {
-        for (int i = 0; i < vBoxWithChoiceBoxes.getChildren().size() - 1; i++) {
+        for (int i = 0; i < vBoxWithChoiceBoxes.getChildren().size(); i++) {
             HBox hBox = (HBox) vBoxWithChoiceBoxes.getChildren().get(i);
-            ChoiceBox choiceBox = (ChoiceBox) hBox.getChildren().get(2);
+            ChoiceBox choiceBox = (ChoiceBox) hBox.getChildren().get(1);
             choiceBox.setValue(null);
         }
     }
