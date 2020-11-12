@@ -11,13 +11,13 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 public class PassingTestPaneController implements TestsConstants {
+    @FXML
+    private Label testName_label;
     @FXML
     private AnchorPane mainPane;
     @FXML
@@ -30,15 +30,19 @@ public class PassingTestPaneController implements TestsConstants {
     private Label attempt_label;
     @FXML
     private Button finishTesting_button;
+    private static final String RESULTS_BACKGROUND_COLOR = "rgba(0, 0, 0, 0.28)";
     private static final String CANCEL_TEST_PASSING_ALERT_CONTEXT_TEXT = "Використану спробу не буде відновлено. " +
             "Якщо тест не має можливості повторного проходження ви отримаєте" +
             " результат складений на основі питань на які ви дали відповідь.\nПродовжити?";
+    private static final String EMPTY_QUESTION_ALERT_CONTEXT_TEXT = "Одне або декілька питань не мають варіанту відповіді";
     private TestMakerTest currentTest;
     private Thread timerThread;
     private TestingQuestionBaseController currentPageController;
     private ArrayList<Question> questionsList;
     private Integer previousPageIndex;
     private ArrayList<ArrayList<String>> userAnswers;
+    //used for save correct order of compliance answer variants
+    private ArrayList<ArrayList<String>> notShuffledAnswers;
 
     @FXML
     public void initialize() {
@@ -126,7 +130,29 @@ public class PassingTestPaneController implements TestsConstants {
     }
 
     private boolean checkQuestions() {
-        return true;
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Завершити проходження тесту?");
+        alert.setContentText(null);
+        for(ArrayList<String> questionAnswerList: userAnswers) {
+            if (questionAnswerList.isEmpty()) {
+                alert.setContentText(EMPTY_QUESTION_ALERT_CONTEXT_TEXT);
+                ButtonType finishTesting = new ButtonType("Завершити тестування");
+                ButtonType showQuestion = new ButtonType("Перейти до питання");
+                alert.getButtonTypes().setAll(finishTesting, showQuestion);
+                Optional<ButtonType> selection = alert.showAndWait();
+                if (selection.get() == finishTesting) {
+                    return true;
+                } else {
+                    pagination.setCurrentPageIndex(userAnswers.indexOf(questionAnswerList));
+                    return false;
+                }
+            }
+        }
+        ButtonType finishTesting = new ButtonType("Завершити тестування");
+        ButtonType continueTesting = new ButtonType("Продовжити тестування");
+        alert.getButtonTypes().setAll(finishTesting, continueTesting);
+        Optional<ButtonType> selection = alert.showAndWait();
+        return selection.get() == finishTesting;
     }
 
     /**
@@ -150,9 +176,12 @@ public class PassingTestPaneController implements TestsConstants {
                             while (true) {
                                 Platform.runLater(() -> showTime(minutes, seconds));
                                 Thread.currentThread().wait(1000);
+                                if (minutes == 0 && seconds <= 30) {
+                                    timer_label.setTextFill(Color.RED);
+                                }
                                 if (minutes == 0 && seconds == 0) {
                                     Thread.currentThread().wait(1000);
-                                    System.out.println("Time out");
+                                    finishTesting();
                                     this.interrupt();
                                 } else if (seconds == 0) {
                                     Thread.currentThread().wait(1000);
@@ -163,7 +192,7 @@ public class PassingTestPaneController implements TestsConstants {
                                 }
                             }
                         } catch (InterruptedException e) {
-                            finishTesting();
+                            System.out.println("Timer was stopped");
                         }
                     }
                 }
@@ -194,6 +223,7 @@ public class PassingTestPaneController implements TestsConstants {
 
     public void setTest(TestMakerTest test) {
         this.currentTest = test;
+        testName_label.setText(test.getTestName());
         if (test.getNumberOfAttempts() ==  1) {
             attempt_label.setVisible(false);
         } else {
@@ -201,18 +231,24 @@ public class PassingTestPaneController implements TestsConstants {
             attempt_label.setText("Спроба " + (test.getCurrentUserUsedAttempts() + 1) + " з " + test.getNumberOfAttempts());
         }
         this.questionsList = test.getTestQuestions();
-        shuffleVariants(questionsList);
+
         userAnswers = createPrefilledList(questionsList.size());
+        //used for save correct order of compliance answer variants
+        notShuffledAnswers = createPrefilledList(questionsList.size());
+
+        shuffleVariants(questionsList);
     }
 
     /**
      * Randomly re situated variants in questions variants list, if this is one or several answers questions, OR
      * in answer variants list if this is compliance question
-     * @param questionsList
+     * @param list list witch elements will be shuffle
      */
-    private void shuffleVariants(ArrayList<Question> questionsList) {
-        for (Question question: questionsList) {
+    private void shuffleVariants(ArrayList<Question> list) {
+        for (Question question: list) {
             if (question.getQuestionType().equals(COMPLIANCE_QUESTION)) {
+                ArrayList<String> notShuffledAnswerVariants = new ArrayList<>(question.getAnswerVariants());
+                notShuffledAnswers.set(questionsList.indexOf(question), notShuffledAnswerVariants);
                 Collections.shuffle(question.getAnswerVariants(), new Random(System.currentTimeMillis()));
             } else {
                 Collections.shuffle(question.getQuestionVariants(), new Random(System.currentTimeMillis()));
@@ -221,11 +257,28 @@ public class PassingTestPaneController implements TestsConstants {
     }
 
     private void finishTesting() {
-        for (ArrayList<String> list: userAnswers) {
-            for(String str: list) {
-                System.out.print(str+", ");
+        stopTimer();
+        //Get test score
+        double score = 0;
+        for (Question question: questionsList) {
+            if (question.getQuestionType().equals(COMPLIANCE_QUESTION)) {
+                //if userAnswerVariants array list equal questionAnswerVariants array list
+                if (notShuffledAnswers.get(questionsList.indexOf(question)).
+                        equals(userAnswers.get(questionsList.indexOf(question)))) {
+                    score += question.getQuestionScore();
+                }
+            } else {
+                HashSet<String> answers = new HashSet<>(question.getAnswerVariants());
+                int oldSize = answers.size();
+                answers.addAll(userAnswers.get(questionsList.indexOf(question)));
+                int newSize = answers.size();
+                if (oldSize == newSize) {
+                    score += question.getQuestionScore();
+                }
             }
-            System.out.println();
         }
+
+        //TODO: LOAD NUMBER OF ATTEMPTS TO DB, load score to DB, show test results
+
     }
 }

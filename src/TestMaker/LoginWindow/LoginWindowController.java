@@ -63,8 +63,6 @@ public class LoginWindowController {
         userName_textField.requestFocus();
         Platform.runLater(() -> {
             login_pane.getScene().getWindow().setOnCloseRequest(event -> {
-                loginThread.interrupt();
-                loadingAnimation.interrupt();
                 System.exit(0);
             });
         });
