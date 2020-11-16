@@ -1,5 +1,6 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane.TestResultsPane;
 
+import TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane.PassingTestPaneController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,15 +26,16 @@ public class TestResultsPaneController {
     @FXML
     private Label proverb_label;
     private Pane parentPane;
+    private PassingTestPaneController parentController;
 
     //TODO: завантажити сюди фхмл якось
-    
+
     public TestResultsPaneController(AnchorPane pane) {
         parentPane = pane;
     }
 
     public void setTestResults(Double score, int evSystem, int leftAttempts) {
-        score_Label.setText(score+" зі "+evSystem);
+        score_Label.setText(score + " зі " + evSystem);
         attempts_label.setText(String.valueOf(leftAttempts));
         showProverb();
         setButtonActions();
@@ -46,7 +48,7 @@ public class TestResultsPaneController {
         ArrayList<String> proverbs = new ArrayList<>();
         //read proverbs from file line by line
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(new File("/TestMaker/Assets/proverbs.txt")));
+            BufferedReader reader = new BufferedReader(new FileReader(new File("./src/TestMaker/Assets/proverbs.txt")));
             String line = reader.readLine();
             while (line != null) {
                 proverbs.add(line);
@@ -62,10 +64,18 @@ public class TestResultsPaneController {
         closeTest_button.setOnAction(event -> {
             parentPane.getScene().getWindow().hide();
         });
-        
+
         showResults_button.setOnAction(event -> {
-            
+            AnchorPane rootPane = (AnchorPane) parentPane.getParent();
+            rootPane.getChildren().remove(parentPane);
+            parentController.removeTestButtons();
+            parentController.getMainPane().getScene().getWindow().setOnCloseRequest(event1 -> {
+            });
+            parentController.showCorrectAnswers();
         });
     }
 
+    public void giveAccess(PassingTestPaneController parentController) {
+        this.parentController = parentController;
+    }
 }

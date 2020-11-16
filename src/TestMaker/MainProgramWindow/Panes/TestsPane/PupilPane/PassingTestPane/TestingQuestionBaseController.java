@@ -25,6 +25,8 @@ public class TestingQuestionBaseController {
 
     private QuestionControllerInterface currentQuestionController;
     private final WindowTools windowTools = new WindowTools();
+    private ArrayList<String> correctAnswers;
+    private boolean isAnswersShown;
 
     @FXML
     public void initialize() {
@@ -63,10 +65,18 @@ public class TestingQuestionBaseController {
                 break;
             }
         }
+        if (isAnswersShown) {
+            currentQuestionController.showAnswers(correctAnswers);
+        }
         currentQuestionController.setQuestion(questionType, questionScore, questionText, questionVariants, answerVariants);
     }
     public Parent getMainPane() {
         return main_anchorPane;
+    }
+
+    public void showAnswers(ArrayList<String> correctAnswers) {
+        this.isAnswersShown = true;
+        this.correctAnswers = correctAnswers;
     }
 }
 

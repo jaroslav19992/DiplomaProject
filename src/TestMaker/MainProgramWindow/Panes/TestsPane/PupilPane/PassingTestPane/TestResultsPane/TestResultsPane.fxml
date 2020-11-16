@@ -9,8 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane prefHeight="350.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="400.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox layoutX="92.0" layoutY="100.0" prefHeight="400.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -30,7 +29,7 @@
                               </ImageView>
                            </graphic>
                         </Label>
-                        <Label text="Кількість спроб" textAlignment="RIGHT" underline="true" wrapText="true">
+                        <Label text="Спроб залишилось" textAlignment="RIGHT" underline="true" wrapText="true">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -79,7 +78,10 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </Separator>
-                  <Label fx:id="proverb_label" text="Proverb" textAlignment="CENTER" wrapText="true" />
+                  <Label fx:id="proverb_label" text="Proverb" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Label>
                   <Separator opacity="0.8" prefWidth="200.0">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

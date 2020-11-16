@@ -1,18 +1,27 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane;
 
+import TestMaker.DBTools.DBConstants;
+import TestMaker.DBTools.DBHandler;
+import TestMaker.Main;
+import TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane.TestResultsPane.TestResultsPaneController;
 import TestMaker.MainProgramWindow.Panes.TestsPane.Question;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTest;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
+import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 public class PassingTestPaneController implements TestsConstants {
@@ -27,13 +36,15 @@ public class PassingTestPaneController implements TestsConstants {
     @FXML
     private Label timer_label;
     @FXML
+    private StackPane content_stackPane;
+    @FXML
     private Label attempt_label;
     @FXML
     private Button finishTesting_button;
-    private static final String RESULTS_BACKGROUND_COLOR = "rgba(0, 0, 0, 0.28)";
+    private static final String RESULTS_BACKGROUND_COLOR = "f5f5f5";
     private static final String CANCEL_TEST_PASSING_ALERT_CONTEXT_TEXT = "Використану спробу не буде відновлено. " +
             "Якщо тест не має можливості повторного проходження ви отримаєте" +
-            " результат складений на основі питань на які ви дали відповідь.\nПродовжити?";
+            " результат складений на основі питань на які ви дали відповідь.\nПерервати тестуавння?";
     private static final String EMPTY_QUESTION_ALERT_CONTEXT_TEXT = "Одне або декілька питань не мають варіанту відповіді";
     private TestMakerTest currentTest;
     private Thread timerThread;
@@ -43,6 +54,7 @@ public class PassingTestPaneController implements TestsConstants {
     private ArrayList<ArrayList<String>> userAnswers;
     //used for save correct order of compliance answer variants
     private ArrayList<ArrayList<String>> notShuffledAnswers;
+    private boolean isAnswersShown = false;
 
     @FXML
     public void initialize() {
@@ -58,10 +70,15 @@ public class PassingTestPaneController implements TestsConstants {
         pagination.setPageFactory(this::createPage);
     }
 
+    public Pane getMainPane() {
+        return mainPane;
+    }
+
     /**
      * Creating page with question.
      * Creating pane, open base question pane and allow it to choose type of question itself after using set question method
      * When user chose some page data from previous page loading to the userAnswers arrayList
+     *
      * @param currentPageIndex index of just chosen page
      * @return pane with question
      */
@@ -75,6 +92,14 @@ public class PassingTestPaneController implements TestsConstants {
         currentPageController = (TestingQuestionBaseController) windowTools.setUpNewPaneOnBorderPane(mainQuestionPane,
                 "/TestMaker/MainProgramWindow/Panes/TestsPane/PupilPane/PassingTestPane/TestingQuestionBase.fxml");
 
+        //Show correct and wrong answers
+        if (isAnswersShown) {
+            if (questionsList.get(currentPageIndex).getQuestionType().equals(COMPLIANCE_QUESTION)) {
+                currentPageController.showAnswers(notShuffledAnswers.get(currentPageIndex));
+            } else {
+                currentPageController.showAnswers(questionsList.get(currentPageIndex).getAnswerVariants());
+            }
+        }
         //load question information to current page
         currentPageController.setQuestion(questionsList.get(currentPageIndex).getQuestionType(),
                 questionsList.get(currentPageIndex).getQuestionScore(),
@@ -83,7 +108,6 @@ public class PassingTestPaneController implements TestsConstants {
                 (userAnswers.get(currentPageIndex).isEmpty() && questionsList.get(currentPageIndex).getQuestionType().equals(COMPLIANCE_QUESTION)
                         ? (questionsList.get(currentPageIndex).getAnswerVariants())
                         : (userAnswers.get(currentPageIndex))));
-
         previousPageIndex = currentPageIndex;
         return mainQuestionPane;
     }
@@ -104,8 +128,8 @@ public class PassingTestPaneController implements TestsConstants {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Скасувати проходження тесту?");
         alert.setContentText(CANCEL_TEST_PASSING_ALERT_CONTEXT_TEXT);
-        ButtonType accept = new ButtonType("Продовжити");
-        ButtonType cancel = new ButtonType("Відміна");
+        ButtonType accept = new ButtonType("Перервати");
+        ButtonType cancel = new ButtonType("Продовжити");
         alert.getButtonTypes().setAll(accept, cancel);
         Optional<ButtonType> selection = alert.showAndWait();
         if (selection.get() == accept) {
@@ -133,7 +157,7 @@ public class PassingTestPaneController implements TestsConstants {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Завершити проходження тесту?");
         alert.setContentText(null);
-        for(ArrayList<String> questionAnswerList: userAnswers) {
+        for (ArrayList<String> questionAnswerList : userAnswers) {
             if (questionAnswerList.isEmpty()) {
                 alert.setContentText(EMPTY_QUESTION_ALERT_CONTEXT_TEXT);
                 ButtonType finishTesting = new ButtonType("Завершити тестування");
@@ -181,7 +205,9 @@ public class PassingTestPaneController implements TestsConstants {
                                 }
                                 if (minutes == 0 && seconds == 0) {
                                     Thread.currentThread().wait(1000);
-                                    finishTesting();
+                                    Platform.runLater(() -> {
+                                        finishTesting();
+                                    });
                                     this.interrupt();
                                 } else if (seconds == 0) {
                                     Thread.currentThread().wait(1000);
@@ -224,7 +250,7 @@ public class PassingTestPaneController implements TestsConstants {
     public void setTest(TestMakerTest test) {
         this.currentTest = test;
         testName_label.setText(test.getTestName());
-        if (test.getNumberOfAttempts() ==  1) {
+        if (test.getNumberOfAttempts() == 1) {
             attempt_label.setVisible(false);
         } else {
             attempt_label.setVisible(true);
@@ -242,10 +268,11 @@ public class PassingTestPaneController implements TestsConstants {
     /**
      * Randomly re situated variants in questions variants list, if this is one or several answers questions, OR
      * in answer variants list if this is compliance question
+     *
      * @param list list witch elements will be shuffle
      */
     private void shuffleVariants(ArrayList<Question> list) {
-        for (Question question: list) {
+        for (Question question : list) {
             if (question.getQuestionType().equals(COMPLIANCE_QUESTION)) {
                 ArrayList<String> notShuffledAnswerVariants = new ArrayList<>(question.getAnswerVariants());
                 notShuffledAnswers.set(questionsList.indexOf(question), notShuffledAnswerVariants);
@@ -260,7 +287,7 @@ public class PassingTestPaneController implements TestsConstants {
         stopTimer();
         //Get test score
         double score = 0;
-        for (Question question: questionsList) {
+        for (Question question : questionsList) {
             if (question.getQuestionType().equals(COMPLIANCE_QUESTION)) {
                 //if userAnswerVariants array list equal questionAnswerVariants array list
                 if (notShuffledAnswers.get(questionsList.indexOf(question)).
@@ -268,17 +295,90 @@ public class PassingTestPaneController implements TestsConstants {
                     score += question.getQuestionScore();
                 }
             } else {
-                HashSet<String> answers = new HashSet<>(question.getAnswerVariants());
+                HashSet<String> answers = new HashSet<>(userAnswers.get(questionsList.indexOf(question)));
                 int oldSize = answers.size();
-                answers.addAll(userAnswers.get(questionsList.indexOf(question)));
+                answers.addAll(question.getAnswerVariants());
                 int newSize = answers.size();
                 if (oldSize == newSize) {
                     score += question.getQuestionScore();
                 }
             }
         }
+        //Increment user used attempts
+        currentTest.setCurrentUserUsedAttempts(currentTest.getCurrentUserUsedAttempts() + 1);
 
-        //TODO: LOAD NUMBER OF ATTEMPTS TO DB, load score to DB, show test results
+        //Load data to DB
+        String SQLQuery = "UPDATE `" + DBConstants.DB_NAME + "`.`" + DBConstants.PUPILS_TESTS_TABLE_NAME + "` SET `"
+                + DBConstants.MARK + "` = '" + score + "', `" + DBConstants.USED_ATTEMPTS + "` = '"
+                + currentTest.getCurrentUserUsedAttempts() + "' WHERE (`" + DBConstants.USER_NAME_HASH
+                + "` = '" + UserInfoHandler.userName.hashCode() + "') and (`" + DBConstants.ID_TESTS_LIST
+                + "` = '" + currentTest.getIdInTestsList() + "')";
+        try {
+            DBHandler.loadDataToDB(SQLQuery);
+        } catch (SQLException exception) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Помилка з'єднання з базою даних");
+            alert.setContentText(null);
+            alert.showAndWait();
+        }
 
+        //Show test score on new pane which will cover testing pane
+        AnchorPane resultsAnchorPane = new AnchorPane();
+        AnchorPane.setBottomAnchor(resultsAnchorPane, 0.0);
+        AnchorPane.setTopAnchor(resultsAnchorPane, 0.0);
+        AnchorPane.setLeftAnchor(resultsAnchorPane, 0.0);
+        AnchorPane.setRightAnchor(resultsAnchorPane, 0.0);
+        resultsAnchorPane.setStyle("-fx-background-color: " + RESULTS_BACKGROUND_COLOR + ";");
+
+        VBox contentVBox = new VBox();
+        AnchorPane.setBottomAnchor(contentVBox, 0.0);
+        AnchorPane.setTopAnchor(contentVBox, 0.0);
+        AnchorPane.setLeftAnchor(contentVBox, 0.0);
+        AnchorPane.setRightAnchor(contentVBox, 0.0);
+        contentVBox.setAlignment(Pos.CENTER);
+        resultsAnchorPane.getChildren().add(contentVBox);
+
+        mainPane.getChildren().add(resultsAnchorPane);
+        resultsAnchorPane.toFront();
+        content_stackPane.toBack();
+        TestResultsPaneController controller = new TestResultsPaneController(resultsAnchorPane);
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/TestMaker/MainProgramWindow/Panes/TestsPane/" +
+                "PupilPane/PassingTestPane/TestResultsPane/TestResultsPane.fxml"));
+        loader.setController(controller);
+        try {
+            Parent parent = loader.load();
+            contentVBox.getChildren().add(parent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        controller.setTestResults(score, currentTest.getEvSystem(),
+                currentTest.getNumberOfAttempts() - currentTest.getCurrentUserUsedAttempts());
+        //Give access to results test pane controller to have possibility use it's buttons
+        controller.giveAccess(this);
     }
+
+    /**
+     * Hide cancel test  and finish testing button
+     */
+    public void removeTestButtons() {
+        cancelTesting_button.setVisible(false);
+        cancelTesting_button.setDisable(true);
+        finishTesting_button.setVisible(false);
+        finishTesting_button.setDisable(true);
+    }
+
+    /**
+     * Show witch answers user choose correct and witch are not
+     */
+    public void showCorrectAnswers() {
+        isAnswersShown = true;
+//        To avoid of showing previous page with not marked as right and wrong answers
+        if (previousPageIndex == 0) {
+            pagination.setCurrentPageIndex(1);
+        }
+        pagination.setCurrentPageIndex(0);
+    }
+
+
 }

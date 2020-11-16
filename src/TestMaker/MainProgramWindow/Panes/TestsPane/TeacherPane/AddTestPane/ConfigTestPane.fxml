@@ -29,7 +29,7 @@
                </font>
             </Label>
             <Label text="Назва тесту" VBox.vgrow="ALWAYS" />
-            <TextField fx:id="testName_textField" promptText="Введіть назву тесту" text="Тесст1" VBox.vgrow="ALWAYS">
+            <TextField fx:id="testName_textField" promptText="Введіть назву тесту" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
@@ -58,7 +58,7 @@
                               <Insets bottom="-10.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="numberOfAttempts_textField" disable="true" prefWidth="230.0" VBox.vgrow="ALWAYS" />
+                        <TextField fx:id="numberOfAttempts_textField" disable="true" prefWidth="230.0" promptText="Оберіть кількість спроб" VBox.vgrow="ALWAYS" />
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -92,7 +92,7 @@
                               <Insets bottom="-10.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="timeLimit_textField" disable="true" prefWidth="230.0" VBox.vgrow="ALWAYS" />
+                        <TextField fx:id="timeLimit_textField" disable="true" prefWidth="230.0" promptText="Оберіть кількість часу" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </children>
@@ -105,7 +105,7 @@
                   <VBox alignment="CENTER">
                      <children>
                         <Label text="Кількість питань" textAlignment="CENTER" />
-                        <TextField fx:id="questionsAmount_textField" text="12" />
+                        <TextField fx:id="questionsAmount_textField" promptText="Оберіть кількість питань" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER">

@@ -16,4 +16,8 @@ public interface QuestionControllerInterface {
         HBox hBox = (HBox) vBox.getChildren().get(0);
         ((ButtonBase) hBox.getChildren().get(0)).fire();
     }
+
+    default void showAnswers(ArrayList<String> correctAnswers) {
+        return;
+    }
 }

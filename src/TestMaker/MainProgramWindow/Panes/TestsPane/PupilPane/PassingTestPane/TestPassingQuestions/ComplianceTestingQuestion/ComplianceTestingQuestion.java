@@ -24,6 +24,9 @@ public class ComplianceTestingQuestion implements QuestionControllerInterface, T
 
     private int numberOfQuestions = 0;
     private int numberOfAnswers = 0;
+    private ArrayList<String> correctAnswers;
+    private boolean isAnswerShown = false;
+
 
     @FXML
     void initialize() {
@@ -89,7 +92,6 @@ public class ComplianceTestingQuestion implements QuestionControllerInterface, T
         //Compound elements
         hBox.getChildren().addAll(numberLabel, textArea);
         answer_vBox.getChildren().add(answer_vBox.getChildren().size(), hBox);
-//            setChoicesBoxesValues();
     }
 
     /**
@@ -99,7 +101,6 @@ public class ComplianceTestingQuestion implements QuestionControllerInterface, T
     private void setChoicesBoxesValues() {
         //Get all labels that's used at the moment
         ArrayList<Integer> answersNumbers = new ArrayList<>();
-//        answersNumbers.add(null); TODO: I can't decide is I need that or not
         for (int i = 0; i < answer_vBox.getChildren().size(); i++) {
             HBox hBox = (HBox) answer_vBox.getChildren().get(i);
             Label label = (Label) hBox.getChildren().get(0);
@@ -110,13 +111,7 @@ public class ComplianceTestingQuestion implements QuestionControllerInterface, T
         for (int i = 0; i < question_vBox.getChildren().size(); i++) {
             HBox hBox = (HBox) question_vBox.getChildren().get(i);
             ChoiceBox<Integer> choiceBox = (ChoiceBox<Integer>) hBox.getChildren().get(1);
-            //This block created just to save current variant when choice box values are updating
-//                if (choiceBox.getValue() != null) {
-//                    choiceBox.setItems(observableList);
-//                    choiceBox.setValue(currentNumber);
-//                } else {
             choiceBox.setItems(observableList);
-//                }
         }
     }
 
@@ -142,7 +137,8 @@ public class ComplianceTestingQuestion implements QuestionControllerInterface, T
      * Situate answer variants in order of questions:
      * questions added to arraylist just in the order in which they are recorded.
      * method searching label with number equal to number in choice box near the question
-     * unused answers adding to the end of array list
+     * unused answers adding to the end of array list.
+     * If any choice box hav not chosen value look for answer witch is not used
      *
      * @return arraylist of answers
      */
@@ -152,6 +148,23 @@ public class ComplianceTestingQuestion implements QuestionControllerInterface, T
         for (int i = 0; i < question_vBox.getChildren().size(); i++) {
             HBox hBox = (HBox) question_vBox.getChildren().get(i);
             ChoiceBox choiceBox = (ChoiceBox) hBox.getChildren().get(1);
+            // If used don't choose variant in choice box
+            if (choiceBox.getValue() == null) {
+                // look for unused value
+                while (true) {
+                    Integer oppositeNumber = getOppositeVariantNumber(choiceBox);
+                    choiceBox = getChoiceBoxBySelectedValue(oppositeNumber);
+                    if (choiceBox == null) {
+                        HBox answerHBox= (HBox) answer_vBox.getChildren().get(oppositeNumber-1);
+                        String answerText = ((TextArea) answerHBox.getChildren().get(1)).getText();
+                        arrayList.add(answerText);
+                        hBox = (HBox) question_vBox.getChildren().get(i);
+                        choiceBox = (ChoiceBox) hBox.getChildren().get(1);
+                        break;
+                    }
+                }
+            }
+            //add unused answers to the end
             for (int j = 0; j < answer_vBox.getChildren().size(); j++) {
                 HBox answerHBox = (HBox) answer_vBox.getChildren().get(j);
                 Label label = (Label) answerHBox.getChildren().get(0);
@@ -174,6 +187,41 @@ public class ComplianceTestingQuestion implements QuestionControllerInterface, T
         return arrayList;
     }
 
+    /**
+     * Looks for {currentChoiceBox}
+     * @param currentChoiceBox choice box for which we are looking for the opposite label
+     * @return opposite to {currentChoiceBox} label number
+     */
+    private Integer getOppositeVariantNumber(ChoiceBox currentChoiceBox) {
+            for (int i = 0; i < question_vBox.getChildren().size(); i++) {
+                HBox hBox = (HBox) question_vBox.getChildren().get(i);
+                ChoiceBox choiceBox = (ChoiceBox) hBox.getChildren().get(1);
+                if (choiceBox.equals(currentChoiceBox)) {
+                    HBox answerHBox = (HBox) answer_vBox.getChildren().get(i);
+                    Label numberLabel = (Label) answerHBox.getChildren().get(0);
+                    return Integer.valueOf(numberLabel.getText());
+                }
+        }
+        return null;
+    }
+
+    /**
+     * Looks for choice box with variant <answerNumber>.
+     *
+     * @param answerNumber label with number of answer
+     * @return choice box with such number
+     */
+    private ChoiceBox getChoiceBoxBySelectedValue(Integer answerNumber) {
+        for (int i = 0; i < question_vBox.getChildren().size(); i++) {
+            HBox hBox = (HBox) question_vBox.getChildren().get(i);
+            ChoiceBox choiceBox = (ChoiceBox) hBox.getChildren().get(1);
+            if (choiceBox.getValue() == answerNumber) {
+                return choiceBox;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void setQuestion(String questionType, double questionScore, String questionText, List<String> questionVariantsList, List<String> answerVariantsList) {
         numberOfAnswers = 0;
@@ -186,6 +234,21 @@ public class ComplianceTestingQuestion implements QuestionControllerInterface, T
             createNewAnswerVariant(variant);
         }
         setChoicesBoxesValues();
+        if (isAnswerShown) {
+            for (int i = 0; i < correctAnswers.size(); i++) {
+                HBox questionHBox = (HBox) question_vBox.getChildren().get(i);
+                questionHBox.getChildren().get(1).setDisable(true);
+                HBox answerHBox = (HBox) answer_vBox.getChildren().get(i);
+                TextArea answerArea = (TextArea) answerHBox.getChildren().get(1);
+                if (answerArea.getText().equals(correctAnswers.get(i))) {
+                    questionHBox.setStyle("-fx-background-color: " + RIGHT_ANSWER_COLOR);
+                    answerHBox.setStyle("-fx-background-color: " + RIGHT_ANSWER_COLOR);
+                } else {
+                    questionHBox.setStyle("-fx-background-color: " + WRONG_ANSWER_COLOR);
+                    answerHBox.setStyle("-fx-background-color: " + WRONG_ANSWER_COLOR);
+                }
+            }
+        }
     }
 
     //Don't used now, but could be useful
@@ -196,6 +259,12 @@ public class ComplianceTestingQuestion implements QuestionControllerInterface, T
             ChoiceBox choiceBox = (ChoiceBox) hBox.getChildren().get(1);
             choiceBox.setValue(null);
         }
+    }
+
+    @Override
+    public void showAnswers(ArrayList<String> correctAnswers) {
+        this.correctAnswers = correctAnswers;
+        this.isAnswerShown = true;
     }
 
     @Override

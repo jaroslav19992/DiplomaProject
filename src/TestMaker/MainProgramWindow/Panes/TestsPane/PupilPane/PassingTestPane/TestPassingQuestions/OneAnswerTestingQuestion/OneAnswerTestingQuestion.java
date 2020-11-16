@@ -21,10 +21,9 @@ public class OneAnswerTestingQuestion implements QuestionControllerInterface, Te
     private final ToggleGroup correctAnswer_toggleGroup = new ToggleGroup();
 
     private int numberOfVariants = 0;
+    private boolean isAnswersShown;
+    private ArrayList<String> correctAnswers;
 
-    @FXML
-    void initialize() {
-    }
 
     private void createNewVariant(String variantText) {
         numberOfVariants++;
@@ -82,14 +81,28 @@ public class OneAnswerTestingQuestion implements QuestionControllerInterface, Te
         for (String variant : questionVariants) {
             createNewVariant(variant);
         }
+        if (isAnswersShown) {
+            for (int i = 0; i < answerVariants_vBox.getChildren().size(); i++) {
+                HBox hBox = (HBox) answerVariants_vBox.getChildren().get(i);
+                ((RadioButton) hBox.getChildren().get(0)).setDisable(true);
+                for (String answer : correctAnswers) {
+                    if (Objects.equals(((TextField) hBox.getChildren().get(1)).getText(), answer)) {
+                        hBox.setStyle("-fx-background-color:"+RIGHT_ANSWER_COLOR);//TODO: backColor
+                    }
+                }
+            }
+        }
         if (!answerVariants.isEmpty()) {
             for (int i = 0; i < answerVariants_vBox.getChildren().size(); i++) {
                 HBox hBox = (HBox) answerVariants_vBox.getChildren().get(i);
                 for (String answer : answerVariants) {
                     if (Objects.equals(((TextField) hBox.getChildren().get(1)).getText(), answer)) {
                         ((RadioButton) hBox.getChildren().get(0)).setSelected(true);
-                        break;
+                        if (!correctAnswers.contains(answer)) {
+                            hBox.setStyle("-fx-background-color:"+WRONG_ANSWER_COLOR);
+                        }
                     }
+
                 }
             }
         }
@@ -101,6 +114,12 @@ public class OneAnswerTestingQuestion implements QuestionControllerInterface, Te
         ArrayList<String> questionsVariantsList = getQuestionsVariantsList();
         Set<String> tempSet = new HashSet<>(questionsVariantsList);
         return tempSet.size() < questionsVariantsList.size();
+    }
+
+    @Override
+    public void showAnswers(ArrayList<String> userAnswers) {
+        this.correctAnswers = userAnswers;
+        this.isAnswersShown = true;
     }
 
 }

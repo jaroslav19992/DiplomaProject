@@ -134,7 +134,7 @@ public class ComplianceQuestionController implements QuestionControllerInterface
         answer_vBox.getChildren().add(answer_vBox.getChildren().size() - 1, hBox);
         //Update remove button actions
         setRemoveAnswerVariantButtonAction(button);
-//        setChoicesBoxesValues();
+        setChoicesBoxesValues();
     }
 
     /**
@@ -161,12 +161,11 @@ public class ComplianceQuestionController implements QuestionControllerInterface
 
     /**
      * Set choice box values like answer labels
-     * Set on action for every choice box to prevent duplicate answer
      */
     private void setChoicesBoxesValues() {
         //Get all labels that's used at the moment
         ArrayList<Integer> answersNumbers = new ArrayList<>();
-//        answersNumbers.add(null); TODO: I can't decide is I need that or not
+        answersNumbers.add(null);
         for (int i = 0; i < answer_vBox.getChildren().size() - 1; i++) {
             HBox hBox = (HBox) answer_vBox.getChildren().get(i);
             Label label = (Label) hBox.getChildren().get(0);

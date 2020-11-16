@@ -49,6 +49,15 @@ public class PupilTestsPaneController {
 
     @FXML
     void initialize() {
+        updateTestsList();
+        setUpListViewAction();
+        setUpButtonActions();
+    }
+
+    /**
+     * Show that no test is selected, get tests list and show it in tests list list view
+     */
+    private void updateTestsList() {
         setTestProperties("Оберіть тест", EMPTY_INFO_LABEL_TEXT, EMPTY_INFO_LABEL_TEXT,
                 EMPTY_INFO_LABEL_TEXT, EMPTY_INFO_LABEL_TEXT, EMPTY_INFO_LABEL_TEXT);
         ResultSet testsDataSet;
@@ -62,8 +71,6 @@ public class PupilTestsPaneController {
             alert.setContentText("Помилка з'єднання з сервером\n" + exception.getMessage());
             alert.showAndWait();
         }
-        setUpListViewAction();
-        setUpButtonActions();
     }
 
     private void setUpButtonActions() {
@@ -99,10 +106,15 @@ public class PupilTestsPaneController {
                         WindowTools windowTools = new WindowTools();
                         PassingTestPaneController controller = (PassingTestPaneController) windowTools.openNewWindow(
                                 "/TestMaker/MainProgramWindow/Panes/TestsPane/PupilPane/" +
-                                        "PassingTestPane/PassingTestPane.fxml",false, Modality.APPLICATION_MODAL);
+                                        "PassingTestPane/PassingTestPane.fxml", false, Modality.APPLICATION_MODAL);
                         controller.setTest(availableTests_listView.getSelectionModel().getSelectedItem());
                         controller.setPageFactory();
                         controller.setTimer(timeLimit);
+
+                        //update tests list when test is closed
+                        controller.getMainPane().getScene().getWindow().setOnHidden(event1 -> {
+                            updateTestsList();
+                        });
                     } else {
                         event.consume();
                     }
@@ -121,13 +133,15 @@ public class PupilTestsPaneController {
      */
     private void setUpListViewAction() {
         availableTests_listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        availableTests_listView.getSelectionModel().selectedIndexProperty().addListener((
-                observable, oldIndex, newIndex) -> {
-            TestMakerTest test = availableTests_listView.getItems().get((Integer) newIndex);
-            setTestProperties(test.getTestName(), String.valueOf(test.getEvSystem()), String.valueOf(test.getAmountOfQuestions()),
-                    (test.getCurrentUserMark() == 0) ? ("Тест не пройдено") : (String.valueOf(test.getCurrentUserMark())),
-                    (test.getTimeLimit() == 0) ? ("Відсутній") : (test.getTimeLimit() + " хв."),
-                    test.getCurrentUserUsedAttempts() + " використано із " + test.getNumberOfAttempts());
+        availableTests_listView.getSelectionModel().selectedIndexProperty().addListener((observable, oldIndex, newIndex) -> {
+            //To avoid exception when list is cleared and index become -1
+            if ((int)newIndex >= 0) {
+                TestMakerTest test = availableTests_listView.getItems().get((Integer) newIndex);
+                setTestProperties(test.getTestName(), String.valueOf(test.getEvSystem()), String.valueOf(test.getAmountOfQuestions()),
+                        (test.getCurrentUserMark() == 0) ? ("Тест не пройдено") : (String.valueOf(test.getCurrentUserMark())),
+                        (test.getTimeLimit() == 0) ? ("Відсутній") : (test.getTimeLimit() + " хв."),
+                        test.getCurrentUserUsedAttempts() + " використано із " + test.getNumberOfAttempts());
+            }
         });
     }
 

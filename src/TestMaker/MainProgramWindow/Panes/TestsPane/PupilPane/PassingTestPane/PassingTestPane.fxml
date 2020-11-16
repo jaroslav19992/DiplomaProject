@@ -12,17 +12,12 @@
 
 <AnchorPane fx:id="mainPane" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane.PassingTestPaneController">
    <children>
-      <StackPane layoutX="183.0" layoutY="210.0" prefHeight="650.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="content_stackPane" layoutX="183.0" layoutY="210.0" prefHeight="650.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox alignment="CENTER">
                <children>
                   <StackPane prefHeight="50.0" prefWidth="200.0" VBox.vgrow="NEVER">
                      <children>
-                        <Label fx:id="testName_label" text="TestName" textAlignment="CENTER" wrapText="true">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
                         <Label fx:id="timer_label" text="time 60:00" textAlignment="CENTER" textFill="#00000080" StackPane.alignment="CENTER_RIGHT">
                            <font>
                               <Font size="18.0" />
@@ -45,6 +40,15 @@
                         </Label>
                      </children>
                   </StackPane>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Label fx:id="testName_label" alignment="CENTER" text="TestName" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
                   <Pagination fx:id="pagination" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>

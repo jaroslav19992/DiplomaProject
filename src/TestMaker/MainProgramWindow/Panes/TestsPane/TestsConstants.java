@@ -31,4 +31,8 @@ public interface TestsConstants {
     String SINGLE_QUESTION_ALERT_CONTEXT = "Одне або декілька мають лише однин варіант відповіді";
     String DUPLICATES_VARIANTS_QUESTION_ALERT_CONTEXT = "Одне або декілька мають варіанти які дублюються";
     String DUPLICATES_ANSWERS_QUESTION_ALERT_CONTEXT = "Одне або декілька мають варіанти відповіді які дублюються";
+
+    String RIGHT_ANSWER_COLOR = "b3f297";
+    String WRONG_ANSWER_COLOR = "c86e6e";
+
 }
