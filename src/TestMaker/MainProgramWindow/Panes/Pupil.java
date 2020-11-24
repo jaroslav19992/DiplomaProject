@@ -1,17 +1,11 @@
-package TestMaker.MainProgramWindow.Panes.TestsPane;
+package TestMaker.MainProgramWindow.Panes;
 
 public class Pupil {
     private final int usernameHash;
     private final String firstName;
     private final String lastName;
     private String classroom;
-
-    public Pupil(int usernameHash, String firstName, String lastName) {
-        this.usernameHash = usernameHash;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.classroom = "";
-    }
+    private double currentTestMark = 0;
 
     public Pupil(int usernameHash, String firstName, String lastName, String classroom) {
         this.usernameHash = usernameHash;
@@ -20,6 +14,13 @@ public class Pupil {
         this.classroom = classroom;
     }
 
+    public Pupil(int usernameHash, String firstName, String lastName, String classroom, double currentTestMark) {
+        this.usernameHash = usernameHash;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.classroom = classroom;
+        this.currentTestMark = currentTestMark;
+    }
 
     public int getUsernameHash() {
         return usernameHash;
@@ -40,6 +41,15 @@ public class Pupil {
     public void setClassroom(String classroom) {
         this.classroom = classroom;
     }
+
+    public double getCurrentTestMark() {
+        return currentTestMark;
+    }
+
+    public void setCurrentTestMark(double currentTestMark) {
+        this.currentTestMark = currentTestMark;
+    }
+
 
     @Override
     public String toString() {

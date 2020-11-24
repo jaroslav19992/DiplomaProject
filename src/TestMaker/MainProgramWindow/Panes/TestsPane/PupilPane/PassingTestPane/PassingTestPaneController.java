@@ -5,7 +5,7 @@ import TestMaker.DBTools.DBHandler;
 import TestMaker.Main;
 import TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane.TestResultsPane.TestResultsPaneController;
 import TestMaker.MainProgramWindow.Panes.TestsPane.Question;
-import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTest;
+import TestMaker.MainProgramWindow.Panes.TestMakerTest;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
 import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;

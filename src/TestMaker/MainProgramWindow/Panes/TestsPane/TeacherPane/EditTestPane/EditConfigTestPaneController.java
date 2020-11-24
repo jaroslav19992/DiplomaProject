@@ -3,7 +3,7 @@ package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.EditTestPane;
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.EditTestPane.EditTestQuestionsPane.EditTestQuestionsPaneController;
-import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTest;
+import TestMaker.MainProgramWindow.Panes.TestMakerTest;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TestsConstants;
 import TestMaker.WindowTools;
 import javafx.collections.FXCollections;

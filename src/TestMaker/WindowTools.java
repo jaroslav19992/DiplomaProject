@@ -13,6 +13,8 @@ import java.io.IOException;
 
 
 public class WindowTools {
+    private static final String WINDOWS_TITLE = "Diploma project KM-17, Ishchak Yaroslav";
+
     /**
      * Opens new window from fxml
      *
@@ -49,7 +51,7 @@ public class WindowTools {
             FXMLLoader loader = new FXMLLoader();
             Parent root = loader.load(Main.class.getResource(fxmlFileLocation));
             Stage stage = new Stage();
-            stage.setTitle("Diploma project KM-17, Ishchak Yaroslav");
+            stage.setTitle(WINDOWS_TITLE);
             stage.getIcons().add(new Image(Main.class.getResourceAsStream("logo_mini.png")));
             stage.setScene(new Scene(root));
             stage.setResizable(isResizeable);

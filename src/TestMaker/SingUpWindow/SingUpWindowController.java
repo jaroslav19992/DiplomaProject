@@ -49,7 +49,8 @@ public class SingUpWindowController {
 
     private static Thread singUpThread;
     private static LoadingAnimation loadingAnimation;
-    WindowTools windowTools = new WindowTools();
+    private final WindowTools windowTools = new WindowTools();
+    private boolean isSingingUp = false;
 
     @FXML
     public void initialize() {
@@ -267,9 +268,12 @@ public class SingUpWindowController {
      */
     private void setGlobalEventHandler(Parent root) {
         root.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
-            if (ev.getCode() == KeyCode.ENTER) {
-                singUpButton.fire();
-                ev.consume();
+            if (!isSingingUp) {
+                if (ev.getCode() == KeyCode.ENTER) {
+                    isSingingUp = true;
+                    singUpButton.fire();
+                    ev.consume();
+                }
             }
             if (ev.getCode() == KeyCode.ESCAPE) {
                 windowTools.openNewWindow("LoginWindow/LoginWindow.fxml", false, Modality.NONE);
@@ -282,7 +286,7 @@ public class SingUpWindowController {
         main_pane.getScene().getWindow().setOnCloseRequest(event -> {
             windowTools.openNewWindow("LoginWindow/LoginWindow.fxml", false, Modality.APPLICATION_MODAL);
             windowTools.closeCurrentWindow(main_pane);
-            Thread.currentThread().stop();
+            Thread.currentThread().interrupt();
             singUpThread.interrupt();
             loadingAnimation.interrupt();
         });

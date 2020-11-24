@@ -2,10 +2,10 @@ package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane;
 
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
-import TestMaker.MainProgramWindow.Panes.TestsPane.Pupil;
+import TestMaker.MainProgramWindow.Panes.Pupil;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.EditTestPane.EditConfigTestPaneController;
 import TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.GainPupilAccessPane.GainPupilAccessPaneController;
-import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTest;
+import TestMaker.MainProgramWindow.Panes.TestMakerTest;
 import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
 import javafx.fxml.FXML;

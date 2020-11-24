@@ -3,8 +3,8 @@ package TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.GainPupilAccessP
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.MainProgramWindow.Panes.TestsPane.Classroom;
-import TestMaker.MainProgramWindow.Panes.TestsPane.Pupil;
-import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTest;
+import TestMaker.MainProgramWindow.Panes.Pupil;
+import TestMaker.MainProgramWindow.Panes.TestMakerTest;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

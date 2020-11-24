@@ -49,6 +49,7 @@ public class LoginWindowController {
     private static LoadingAnimation loadingAnimation;
     private static Thread loginThread;
     WindowTools windowTools = new WindowTools();
+    private boolean isLogging;
 
     @FXML
     void initialize() {
@@ -99,6 +100,7 @@ public class LoginWindowController {
     private void setButtonActions() {
         /*----------------------------Login button action-----------------------------*/
         login_button.setOnAction(event -> {
+            isLogging = true;
             //creating another Thread from UI, starting animation, login user, stopping animation
             loginThread = new Thread(() -> {
                 loadingAnimation = new LoadingAnimation(login_pane);
@@ -156,19 +158,6 @@ public class LoginWindowController {
         try {
             loader.getUserData(userName_textField.getText().hashCode(),
                     password_passwordField.getText().hashCode());
-        } catch (Exception exception) {
-            Platform.runLater(() -> {
-                error_label.setVisible(false);
-                exception.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Помилка");
-                alert.setHeaderText(null);
-                alert.setContentText("Помилка з'єднання з сервером\nПричина:\n" + exception.getMessage());
-                alert.showAndWait();
-                loginThread.interrupt();
-            });
-        }
-
         if (loader.isAccessGained()) {
             setLastVisitDate();
             UserInfoHandler.userName = userName_textField.getText();
@@ -194,6 +183,18 @@ public class LoginWindowController {
             Platform.runLater(() -> {
                 error_label.setText("Не правильний логін та/або пароль");
                 error_label.setVisible(true);
+                loginThread.interrupt();
+            });
+        }
+        } catch (Exception exception) {
+            error_label.setVisible(false);
+            Platform.runLater(() -> {
+                exception.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Помилка");
+                alert.setHeaderText(null);
+                alert.setContentText("Помилка з'єднання з сервером\nПричина:\n" + exception.getMessage());
+                alert.show();
                 loginThread.interrupt();
             });
         }
@@ -223,7 +224,9 @@ public class LoginWindowController {
     private void setGlobalEventHandler(Parent root) {
         root.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
             if (ev.getCode() == KeyCode.ENTER) {
-                login_button.fire();
+                if (!isLogging) {
+                    login_button.fire();
+                }
                 ev.consume();
             }
         });

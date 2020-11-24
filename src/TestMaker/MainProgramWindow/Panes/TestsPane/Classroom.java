@@ -1,5 +1,7 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane;
 
+import TestMaker.MainProgramWindow.Panes.Pupil;
+
 import java.util.ArrayList;
 
 public class Classroom {

@@ -1,17 +1,12 @@
 package TestMaker;
 
-import TestMaker.DOM.DOMxmlReader;
-import TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane.PassingTestPaneController;
-import TestMaker.MainProgramWindow.Panes.TestsPane.Question;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.util.ArrayList;
 
 public class Main extends Application {
 
@@ -25,17 +20,7 @@ public class Main extends Application {
         primaryStage.setResizable(false);
         primaryStage.show();
 
-        File file = new File("src/TestMaker/testXML.xml");
-        DOMxmlReader parser = new DOMxmlReader(file);
-        System.out.println("test name: " + parser.getTestName());
-        System.out.println("q. number: " + parser.getAmountOfQuestions());
-        System.out.println("is retestable : " + parser.getNumberOfAttempts());
-        System.out.println("ev. system: " + parser.getTestEVSystem());
-        ArrayList<Question> awd = parser.getQuestionsList();
-        System.out.println(awd.get(0).getCorrectAnswer());
-
-//        PassingTestPaneController controller = new PassingTestPaneController();
-//        controller.setTimer(1);
+        Platform.setImplicitExit(true);
     }
 
     public static void main(String[] args) {

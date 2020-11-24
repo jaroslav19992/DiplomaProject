@@ -1,5 +1,6 @@
 package TestMaker.MainProgramWindow;
 
+import TestMaker.Assets.Animation.LoadingAnimation;
 import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
 import javafx.application.Platform;
@@ -16,7 +17,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.Optional;
 
-public class MainWindowController extends WindowConstants{
+public class MainWindowController extends WindowConstants {
 
     private static final String CLOSE_WINDOW_CONFIRMATION_CONTENT_TEXT = "Ви дійсно хочете закрити програму TestMaker?";
     private static final String CLOSE_WINDOW_CONFIRMATION_TITLE = "Підтвердіть дію";
@@ -37,6 +38,9 @@ public class MainWindowController extends WindowConstants{
 
     @FXML
     private StackPane tests_stackPane;
+
+    @FXML
+    private StackPane journal_stackPane;
 
     @FXML
     private AnchorPane leftSide_anchorPane;
@@ -61,6 +65,8 @@ public class MainWindowController extends WindowConstants{
 
     @FXML
     private BorderPane main_borderPane;
+    private Thread loadingThread;
+    private LoadingAnimation loadingAnimation;
 
     @FXML
     void initialize() {
@@ -82,6 +88,16 @@ public class MainWindowController extends WindowConstants{
             } else if (UserInfoHandler.accessToken.equals("pupilAT")) {
                 windowTools.setUpNewPaneOnBorderPane(main_borderPane,
                         "/TestMaker/MainProgramWindow/Panes/UserInfoPane/PupilPane/PupilUserInfoPane.fxml");
+            }
+        });
+
+        journal_stackPane.setOnMouseClicked(event -> {
+            if (UserInfoHandler.accessToken.equals("teacherAT")) {
+                windowTools.setUpNewPaneOnBorderPane(main_borderPane,
+                        "/TestMaker/MainProgramWindow/Panes/JournalPane/TeacherJournalPane/TeacherJournalPane.fxml");
+            } else {
+                windowTools.setUpNewPaneOnBorderPane(main_borderPane,
+                        "/TestMaker/MainProgramWindow/Panes/JournalPane/PupilJournalPane/PupilJournalPane.fxml");
             }
         });
         tests_stackPane.setOnMouseClicked(event -> {
@@ -115,6 +131,13 @@ public class MainWindowController extends WindowConstants{
         });
         tests_stackPane.setOnMouseExited(event -> {
             tests_stackPane.setStyle("");
+        });
+
+        journal_stackPane.setOnMouseEntered(event -> {
+            journal_stackPane.setStyle("-fx-background-color: " + ACTIVE_ITEM_COLOR);
+        });
+        journal_stackPane.setOnMouseExited(event -> {
+            journal_stackPane.setStyle("");
         });
 
         settings_stackPane.setOnMouseEntered(event -> {

@@ -1,8 +1,9 @@
-package TestMaker.MainProgramWindow.Panes.TestsPane;
+package TestMaker.MainProgramWindow.Panes;
 
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.DOM.DOMxmlReader;
+import TestMaker.MainProgramWindow.Panes.TestsPane.Question;
 import javafx.collections.ObservableList;
 import org.xml.sax.SAXException;
 

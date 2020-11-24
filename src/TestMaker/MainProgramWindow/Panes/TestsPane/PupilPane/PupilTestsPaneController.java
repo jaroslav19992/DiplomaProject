@@ -3,7 +3,7 @@ package TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane;
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
 import TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane.PassingTestPaneController;
-import TestMaker.MainProgramWindow.Panes.TestsPane.TestMakerTest;
+import TestMaker.MainProgramWindow.Panes.TestMakerTest;
 import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
 import javafx.fxml.FXML;
