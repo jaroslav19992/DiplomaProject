@@ -38,7 +38,10 @@ public class LoadingAnimation extends Thread {
     private void createAnimation() {
         //create animation pane
         loadingPane.setStyle("-fx-background-color : " + BACKGROUND_COLOR);
-        loadingPane.setPrefSize(pane.getPrefWidth(), pane.getPrefHeight());
+        loadingPane.setPrefSize(pane.getWidth(), pane.getWidth());
+
+        //add animation pane to parent pane
+        pane.getChildren().add(loadingPane);
 
         AnchorPane.setRightAnchor(pane, 0.0);
         AnchorPane.setLeftAnchor(pane, 0.0);
@@ -49,11 +52,8 @@ public class LoadingAnimation extends Thread {
         AnchorPane.setBottomAnchor(loadingPane, 0.0);
         AnchorPane.setTopAnchor(loadingPane, 0.0);
 
-        //add animation pane to parent pane
-        pane.getChildren().add(loadingPane);
-
-        double startXPos = pane.getPrefWidth() / 2 + CIRCLE_RADIUS;
-        double startYPos = pane.getPrefHeight() / 2 - LOADING_RADIUS / 2.0;
+        double startXPos = pane.getWidth() / 2 + CIRCLE_RADIUS;
+        double startYPos = pane.getWidth() / 2 - LOADING_RADIUS;
 
         int localDelay = 0;
         //Create Circle and animate them

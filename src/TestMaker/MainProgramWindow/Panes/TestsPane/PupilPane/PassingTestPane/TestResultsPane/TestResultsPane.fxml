@@ -29,7 +29,7 @@
                               </ImageView>
                            </graphic>
                         </Label>
-                        <Label text="Спроб залишилось" textAlignment="RIGHT" underline="true" wrapText="true">
+                        <Label text="Спроб залишилось" textAlignment="RIGHT" underline="true">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -51,12 +51,12 @@
                   </VBox>
                   <VBox alignment="CENTER_LEFT" spacing="20.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label fx:id="score_Label" text="Score">
+                        <Label fx:id="score_Label" text="Score" textAlignment="CENTER">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Label fx:id="attempts_label" text="attempts">
+                        <Label fx:id="attempts_label" text="attempts" textAlignment="CENTER">
                            <font>
                               <Font size="24.0" />
                            </font>

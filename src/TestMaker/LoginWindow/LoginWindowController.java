@@ -16,10 +16,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 
-import java.io.IOException;
+import java.io.*;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,31 +44,57 @@ public class LoginWindowController {
     @FXML
     private TextField password_textField;
     @FXML
-    private StackPane login_pane;
+    private AnchorPane main_pane;
+    @FXML
+    private CheckBox rememberLogin_choiceBox;
 
     private static LoadingAnimation loadingAnimation;
     private static Thread loginThread;
     WindowTools windowTools = new WindowTools();
     private boolean isLogging;
+    private File lastLoginFile;
 
     @FXML
     void initialize() {
+        lastLoginActions();
         //Hide invalid sing in data label
         error_label.setVisible(false);
         //Set last saved configs
         getLastConfigs();
         //Enter pressed listener
-        setGlobalEventHandler(login_pane);
+        setGlobalEventHandler(main_pane);
         setButtonActions();
         setPasswordFieldBehavior();
         userName_textField.requestFocus();
-        Platform.runLater(() -> {
-            login_pane.getScene().getWindow().setOnCloseRequest(event -> {
-                System.exit(0);
-            });
-        });
+        Platform.runLater(() -> main_pane.getScene().getWindow().setOnCloseRequest(event -> {
+            rememberLastLogin();
+            System.exit(0);
+        }));
     }
 
+    /**
+     * Set last login
+     */
+    private void lastLoginActions() {
+        try {
+            lastLoginFile = new File("./configs/lastLogin.txt");
+            FileReader fileReader = new FileReader(lastLoginFile);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String lastLogin = bufferedReader.readLine();
+            if (lastLogin != null) {
+                rememberLogin_choiceBox.setSelected(true);
+                userName_textField.setText(lastLogin);
+            } else {
+                rememberLogin_choiceBox.setSelected(false);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Set up visibility of password field
+     */
     private void setPasswordFieldBehavior() {
         //Password visibility
         closedEye_imageView.setOnMouseClicked(event -> {
@@ -103,7 +129,7 @@ public class LoginWindowController {
             isLogging = true;
             //creating another Thread from UI, starting animation, login user, stopping animation
             loginThread = new Thread(() -> {
-                loadingAnimation = new LoadingAnimation(login_pane);
+                loadingAnimation = new LoadingAnimation(main_pane);
                 loadingAnimation.start();
                 loginButtonAction();
                 loadingAnimation.interrupt();
@@ -118,7 +144,7 @@ public class LoginWindowController {
             SingUpWindowController windowController;
             windowController = (SingUpWindowController) windowTools.openNewWindow("SingUpWindow/SingUpWindow.fxml", false, Modality.NONE);
             windowController.setOnCloseRequest();
-            login_pane.getScene().getWindow().hide();
+            main_pane.getScene().getWindow().hide();
         });
         /*----------------------------Registration button action-----------------------------*/
 
@@ -131,6 +157,9 @@ public class LoginWindowController {
         /*----------------------------networkSettings button action-----------------------------*/
     }
 
+    /**
+     *
+     */
     private void getLastConfigs() {
         NetworkSettingsConfigsReader properties = null;
         try {
@@ -150,53 +179,88 @@ public class LoginWindowController {
     /**
      * What is happens when login button is pressed
      */
-    private void loginButtonAction(){
+    private void loginButtonAction() {
         error_label.setVisible(false);
-
+        rememberLastLogin();
         /* LogIn and Password Checker from DB */
         UserDataLoader loader = new UserDataLoader();
-        try {
-            loader.getUserData(userName_textField.getText().hashCode(),
-                    password_passwordField.getText().hashCode());
-        if (loader.isAccessGained()) {
-            setLastVisitDate();
-            UserInfoHandler.userName = userName_textField.getText();
-            UserInfoHandler.password = password_passwordField.getText();
-            //Open main program window
-            Platform.runLater(() -> {
-                windowTools.openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
-                loadingAnimation.interrupt();
-                loginThread.interrupt();
-                //Hide LogIn window
-                login_pane.getScene().getWindow().hide();
-            });
+        if (!userName_textField.getText().isEmpty() && !password_textField.getText().isEmpty()) {
+            try {
+                loader.getUserData(userName_textField.getText().hashCode(),
+                        password_passwordField.getText().hashCode());
+                if (loader.isAccessGained()) {
+                    setLastVisitDate();
+                    UserInfoHandler.userName = userName_textField.getText();
+                    UserInfoHandler.password = password_passwordField.getText();
+                    //Open main program window
+                    Platform.runLater(() -> {
+                        windowTools.openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
+                        loadingAnimation.interrupt();
+                        loginThread.interrupt();
+                        //Hide LogIn window
+                        main_pane.getScene().getWindow().hide();
+                    });
 
-            System.out.println("----------------------------\n" +
-                    "connected via: \n" +
-                    "Host: " + Configs.dbHost +
-                    "; Port: " + Configs.dbPort +
-                    "; User: " + Configs.dbUser +
-                    "; Password: " + Configs.dbPassword +
-                    "; DBName: " + Configs.dbName +
-                    "\n----------------------------");
+                    System.out.println("----------------------------\n" +
+                            "connected via: \n" +
+                            "Host: " + Configs.dbHost +
+                            "; Port: " + Configs.dbPort +
+                            "; User: " + Configs.dbUser +
+                            "; Password: " + Configs.dbPassword +
+                            "; DBName: " + Configs.dbName +
+                            "\n----------------------------");
+                } else {
+                    Platform.runLater(() -> {
+                        error_label.setText("Не правильний логін та/або пароль");
+                        error_label.setVisible(true);
+                        loginThread.interrupt();
+                    });
+                }
+            } catch (Exception exception) {
+                error_label.setVisible(false);
+                Platform.runLater(() -> {
+                    exception.printStackTrace();
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Помилка");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Помилка з'єднання з сервером\nПричина:\n" + exception.getMessage());
+                    alert.show();
+                    loginThread.interrupt();
+                });
+            }
         } else {
             Platform.runLater(() -> {
-                error_label.setText("Не правильний логін та/або пароль");
+                error_label.setText("Заповніть поля");
                 error_label.setVisible(true);
-                loginThread.interrupt();
             });
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            loadingAnimation.interrupt();
+            loginThread.interrupt();
         }
-        } catch (Exception exception) {
-            error_label.setVisible(false);
-            Platform.runLater(() -> {
-                exception.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Помилка");
-                alert.setHeaderText(null);
-                alert.setContentText("Помилка з'єднання з сервером\nПричина:\n" + exception.getMessage());
-                alert.show();
-                loginThread.interrupt();
-            });
+
+    }
+
+    private void rememberLastLogin() {
+        try {
+            if (rememberLogin_choiceBox.isSelected()) {
+                FileOutputStream fooStream = new FileOutputStream(lastLoginFile, false); // true to append
+                byte[] myBytes = userName_textField.getText().getBytes();                       // false to overwrite.
+                fooStream.write(myBytes);
+                fooStream.close();
+
+            } else {
+                FileWriter fwOb = new FileWriter(lastLoginFile, false);
+                PrintWriter pwOb = new PrintWriter(fwOb, false);
+                pwOb.flush();
+                pwOb.close();
+                fwOb.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

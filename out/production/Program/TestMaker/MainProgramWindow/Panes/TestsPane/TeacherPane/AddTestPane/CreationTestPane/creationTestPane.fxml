@@ -13,9 +13,9 @@
    <children>
       <VBox alignment="TOP_CENTER" minWidth="590.0" spacing="10.0" StackPane.alignment="CENTER">
          <children>
-            <Label fx:id="testName_label" text="Назва тесту" textAlignment="CENTER" wrapText="true">
+            <Label fx:id="testName_label" alignment="CENTER" text="Назва тестуВСФУҐІМҐІАҐСФУАМУІЕКНТНКПЙЦВЯЕНГШНОПЕКЙІПН" textAlignment="CENTER" wrapText="true" VBox.vgrow="NEVER">
                <VBox.margin>
-                  <Insets top="10.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
                <font>
                   <Font size="24.0" />

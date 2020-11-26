@@ -14,6 +14,8 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import org.xml.sax.SAXException;
@@ -27,6 +29,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CreationTestPaneController implements TestsConstants {
     private static final String FILE_EXTENSION = ".xml";
@@ -56,6 +59,20 @@ public class CreationTestPaneController implements TestsConstants {
             main_pane.getScene().getWindow().setOnCloseRequest(this::onWindowClosed);
         });
         setButtonActions();
+        bindButtons();
+    }
+
+    private void bindButtons() {
+        AtomicInteger currentPage = new AtomicInteger();
+        main_pane.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
+            currentPage.set(pagination.getCurrentPageIndex());
+            if (ev.getCode() == KeyCode.LEFT) {
+                pagination.setCurrentPageIndex((currentPage.intValue() != 0) ? currentPage.intValue() : 0);
+            } else if (ev.getCode() == KeyCode.RIGHT) {
+                pagination.setCurrentPageIndex((currentPage.intValue() != pagination.getMaxPageIndicatorCount()) ?
+                        currentPage.intValue() : pagination.getMaxPageIndicatorCount());
+            }
+        });
     }
 
     public void setPageFactory() {
@@ -90,7 +107,7 @@ public class CreationTestPaneController implements TestsConstants {
             //remove question and show question previous to removed
             if (warningAnswer.equals(remove)) {
                 removeCurrentQuestion(pagination.getCurrentPageIndex());
-                pagination.setCurrentPageIndex(previousPageIndex-1);
+                pagination.setCurrentPageIndex(previousPageIndex - 1);
             } else {
                 event.consume();
             }
@@ -135,6 +152,7 @@ public class CreationTestPaneController implements TestsConstants {
 
     /**
      * Load test file to database and create record in teachers tests table to link teacher with test
+     *
      * @param file test file
      * @throws IOException
      */
@@ -142,8 +160,8 @@ public class CreationTestPaneController implements TestsConstants {
         try {
             //Try to insert file into table "tests list"
             String SQLQuery = "INSERT INTO `" + DBConstants.DB_NAME + "`.`" + DBConstants.TESTS_LIST_TABLE_NAME +
-                    "` (`" + DBConstants.TEST_NAME + "`, `" + DBConstants.TEST_FILE + "`, `" + DBConstants.EV_SYSTEM+ "`, `" +
-                    DBConstants.AMOUNT_OF_QUESTIONS+ "`, `" + DBConstants.TIME_LIMIT+ "`, `" +
+                    "` (`" + DBConstants.TEST_NAME + "`, `" + DBConstants.TEST_FILE + "`, `" + DBConstants.EV_SYSTEM + "`, `" +
+                    DBConstants.AMOUNT_OF_QUESTIONS + "`, `" + DBConstants.TIME_LIMIT + "`, `" +
                     DBConstants.NUMBER_OF_ATTEMPTS + "`) VALUES (?, ?, ?, ?, ?, ?);";
             PreparedStatement preparedStatement = DBHandler.getDbConnection().prepareStatement(SQLQuery);
             FileInputStream fileInputStream = new FileInputStream(file);
@@ -159,9 +177,9 @@ public class CreationTestPaneController implements TestsConstants {
             int testId = getCurrentTestId();
 
             // link teacher with test
-            SQLQuery = "INSERT INTO `"+DBConstants.DB_NAME+"`.`"+DBConstants.TEACHERS_TESTS_TABLE_NAME+
-                    "` (`"+DBConstants.USER_NAME_HASH+"`, `"+DBConstants.ID_TESTS_LIST+"`) VALUES ('"+
-                    UserInfoHandler.userName.hashCode() +"', '"+testId+"');";
+            SQLQuery = "INSERT INTO `" + DBConstants.DB_NAME + "`.`" + DBConstants.TEACHERS_TESTS_TABLE_NAME +
+                    "` (`" + DBConstants.USER_NAME_HASH + "`, `" + DBConstants.ID_TESTS_LIST + "`) VALUES ('" +
+                    UserInfoHandler.userName.hashCode() + "', '" + testId + "');";
             DBHandler.loadDataToDB(SQLQuery);
         } catch (SQLException e) {
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -182,8 +200,8 @@ public class CreationTestPaneController implements TestsConstants {
     }
 
     private int getCurrentTestId() throws SQLException {
-        String SQLQuery = "SELECT "+DBConstants.ID_TESTS_LIST+" FROM " + DBConstants.DB_NAME + "." +
-                DBConstants.TESTS_LIST_TABLE_NAME + " WHERE "+DBConstants.TEST_NAME+" = \""+testName+"\";";
+        String SQLQuery = "SELECT " + DBConstants.ID_TESTS_LIST + " FROM " + DBConstants.DB_NAME + "." +
+                DBConstants.TESTS_LIST_TABLE_NAME + " WHERE " + DBConstants.TEST_NAME + " = \"" + testName + "\";";
         ResultSet resultSet = DBHandler.getDataFromDB(SQLQuery);
         resultSet.next();
         return resultSet.getInt(DBConstants.ID_TESTS_LIST);
@@ -192,9 +210,9 @@ public class CreationTestPaneController implements TestsConstants {
     /**
      * Should be used before opening new window with this controller
      *
-     * @param testName           name of current test
-     * @param numberOfPages      number of pages in pagination/number of questions
-     * @param timeLimit          time limit dor test
+     * @param testName      name of current test
+     * @param numberOfPages number of pages in pagination/number of questions
+     * @param timeLimit     time limit dor test
      */
     public void setTestProperties(String testName, int evaluationSystem, int numberOfPages,
                                   int numberOfAttempts, Integer timeLimit) {

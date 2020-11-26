@@ -62,7 +62,7 @@ public class PupilTestsPaneController {
                 EMPTY_INFO_LABEL_TEXT, EMPTY_INFO_LABEL_TEXT, EMPTY_INFO_LABEL_TEXT);
         ResultSet testsDataSet;
         try {
-            testsDataSet = getTestsList();
+            testsDataSet = getTestsResultSet();
             showTestsList(testsDataSet);
         } catch (SQLException exception) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -171,7 +171,7 @@ public class PupilTestsPaneController {
      * @return result set with test information
      * @throws SQLException if cant connect to DB
      */
-    private ResultSet getTestsList() throws SQLException {
+    private ResultSet getTestsResultSet() throws SQLException {
         String SQLQuery = "SELECT " + DBConstants.ID_TESTS_LIST + ", " + DBConstants.TEST_NAME + ", " + DBConstants.EV_SYSTEM + ", "
                 + DBConstants.AMOUNT_OF_QUESTIONS + ", " + DBConstants.TIME_LIMIT + ", " + DBConstants.USED_ATTEMPTS + ", "
                 + DBConstants.NUMBER_OF_ATTEMPTS + ", " + DBConstants.MARK + " FROM " + DBConstants.DB_NAME + "."

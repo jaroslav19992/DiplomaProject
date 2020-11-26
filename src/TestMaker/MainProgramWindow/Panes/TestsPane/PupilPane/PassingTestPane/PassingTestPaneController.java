@@ -22,6 +22,7 @@ import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class PassingTestPaneController implements TestsConstants {
@@ -284,7 +285,9 @@ public class PassingTestPaneController implements TestsConstants {
     }
 
     private void finishTesting() {
-        stopTimer();
+        if (timerThread != null) {
+            stopTimer();
+        }
         //Get test score
         double score = 0;
         for (Question question : questionsList) {
@@ -304,6 +307,8 @@ public class PassingTestPaneController implements TestsConstants {
                 }
             }
         }
+        DecimalFormat decimalFormat = new DecimalFormat("###.##");
+        score = Double.parseDouble(decimalFormat.format(score));
         //Increment user used attempts
         currentTest.setCurrentUserUsedAttempts(currentTest.getCurrentUserUsedAttempts() + 1);
 

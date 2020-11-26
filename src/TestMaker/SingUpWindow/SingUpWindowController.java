@@ -287,7 +287,9 @@ public class SingUpWindowController {
             windowTools.openNewWindow("LoginWindow/LoginWindow.fxml", false, Modality.APPLICATION_MODAL);
             windowTools.closeCurrentWindow(main_pane);
             Thread.currentThread().interrupt();
-            singUpThread.interrupt();
+            if (singUpThread != null) {
+                singUpThread.interrupt();
+            }
             loadingAnimation.interrupt();
         });
     }

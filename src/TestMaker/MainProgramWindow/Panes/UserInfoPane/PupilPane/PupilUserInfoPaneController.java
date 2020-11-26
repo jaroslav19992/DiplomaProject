@@ -47,6 +47,8 @@ public class PupilUserInfoPaneController {
 
     @FXML
     private Label accessToken_label;
+    
+    private static final String PUPIL_AT_LABEL = "Учень";
 
     @FXML
     void initialize() {
@@ -65,7 +67,7 @@ public class PupilUserInfoPaneController {
         lastName_label.setText(UserInfoHandler.lastName);
         email_label.setText(UserInfoHandler.email);
         classRoom_label.setText(UserInfoHandler.classroom);
-        accessToken_label.setText(UserInfoHandler.accessToken);
+        accessToken_label.setText(PUPIL_AT_LABEL);
         regDate_label.setText(DBConstants.REG_DATE_LABEL_TEXT + UserInfoHandler.registrationDate);
         lastVisitDate_label.setText(DBConstants.LAST_VISIT_DATE_LABEL_TEXT + UserInfoHandler.lastVisitDate);
     }

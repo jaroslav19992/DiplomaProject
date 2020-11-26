@@ -54,6 +54,18 @@ public class TestMakerTest {
         this.currentUserMark = 0.0;
     }
 
+    public TestMakerTest(int idInTestsList, String testName, int evSystem, int currentUserUsedAttempts, double currentUserMark) {
+        this.idInTestsList = idInTestsList;
+        this.testName = testName;
+        this.evSystem = evSystem;
+        this.amountOfQuestions = 0;
+        this.timeLimit = 0;
+        this.numberOfAttempts = 0;
+        this.currentUserUsedAttempts = currentUserUsedAttempts;
+        testFile = null;
+        this.currentUserMark = currentUserMark;
+    }
+
     public ObservableList<Pupil> getAccessedPupils() {
         return accessedPupils;
     }
