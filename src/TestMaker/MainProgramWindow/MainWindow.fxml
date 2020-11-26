@@ -1,15 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.shape.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.*?>
+<?import java.lang.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.MainWindowController">
+<AnchorPane minWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.MainWindowController">
    <children>
-      <Label fx:id="nahui_text_field" layoutX="210.0" layoutY="190.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="180.0" text="ахахахаах нахуй блять" />
-      <Circle fx:id="circle" fill="DODGERBLUE" layoutX="477.0" layoutY="254.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+      <SplitPane fx:id="main_pane" dividerPositions="0.24569640062597808" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="400.0" prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <AnchorPane fx:id="leftSide_anchorPane" maxWidth="350.0">
+               <children>
+                  <VBox fx:id="leftSide_vBox" alignment="TOP_CENTER" layoutX="37.0" layoutY="74.0" maxWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <StackPane fx:id="userInfo_stackPane">
+                           <children>
+                              <Label fx:id="userInfo_label" text="Особиста інформація" StackPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="userinfo_icon" StackPane.alignment="CENTER_LEFT">
+                                 <image>
+                                    <Image url="@../Assets/Images/icons/user32.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets right="200.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </StackPane>
+                        <StackPane fx:id="tests_stackPane">
+                           <children>
+                              <Label fx:id="tests_label" text="Тести" StackPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="tests_icon" StackPane.alignment="CENTER_LEFT">
+                                 <image>
+                                    <Image url="@../Assets/Images/icons/linedpapercheck32.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets right="200.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </StackPane>
+                        <StackPane fx:id="journal_stackPane">
+                           <children>
+                              <Label fx:id="settings_label1" text="Журнал" StackPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="settings_icon1" StackPane.alignment="CENTER_LEFT">
+                                 <image>
+                                    <Image url="@../Assets/Images/icons/bargraph32.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets right="200.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </StackPane>
+                        <StackPane fx:id="settings_stackPane">
+                           <children>
+                              <Label fx:id="settings_label" text="Налаштування" StackPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="settings_icon" StackPane.alignment="CENTER_LEFT">
+                                 <image>
+                                    <Image url="@../Assets/Images/icons/spanner32.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets right="200.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </StackPane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="rightSide_anchorPane" minWidth="200.0">
+               <children>
+                  <BorderPane fx:id="main_borderPane" layoutX="380.0" layoutY="259.0" minWidth="200.0" prefHeight="720.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <center>
+                        <Label text="Оберіть пункт меню" BorderPane.alignment="CENTER">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </center>
+                  </BorderPane>
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
    </children>
 </AnchorPane>

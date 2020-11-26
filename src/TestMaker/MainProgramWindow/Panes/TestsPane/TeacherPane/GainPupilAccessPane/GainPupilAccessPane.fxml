@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.GainPupilAccessPane.GainPupilAccessPaneController">
+   <children>
+      <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Список доступних користувачів" textAlignment="CENTER" wrapText="true" />
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefViewportHeight="400.0" prefViewportWidth="202.0" prefWidth="550.0" VBox.vgrow="ALWAYS">
+                           <content>
+                              <VBox fx:id="classes_vBox" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefWidth="548.0" />
+                           </content>
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <Button fx:id="addUser_button" mnemonicParsing="false">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+                                    <Image url="@../../../../../Assets/Images/icons/arrowright32.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="removeUser_button" mnemonicParsing="false">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+                                    <Image url="@../../../../../Assets/Images/icons/leftarrow32.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Користувачі яким буде надано доступ" textAlignment="CENTER" wrapText="true" />
+                        <ListView fx:id="accessedPupils_listView" editable="true" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+                        <StackPane alignment="CENTER_RIGHT">
+                           <children>
+                              <Button fx:id="chooseAll_button" mnemonicParsing="false" text="Вибрати всіх" />
+                           </children>
+                        </StackPane>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <StackPane>
+               <children>
+                  <Button fx:id="cancel_button" mnemonicParsing="false" text="Скасувати" StackPane.alignment="CENTER_LEFT">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../../../../../Assets/Images/icons/minus32.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="gainAccess_button" contentDisplay="RIGHT" mnemonicParsing="false" text="Надати доступ" StackPane.alignment="CENTER_RIGHT">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../../../../../Assets/Images/icons/plus32.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Button>
+               </children>
+            </StackPane>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</AnchorPane>

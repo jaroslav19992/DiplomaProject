@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="main_pane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.TeacherTestsPaneController">
+   <children>
+      <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefHeight="718.0" prefWidth="969.0" StackPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="99.0" prefWidth="960.0" VBox.vgrow="NEVER">
+                     <children>
+                        <Label text="Меню тестів">
+                           <font>
+                              <Font name="System Bold" size="36.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0">
+                                 <image>
+                                    <Image url="@../../../../Assets/Images/icons/notecheck32.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="638.0" prefWidth="960.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="450.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="Мої тести">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <ListView fx:id="createdTests_listView" style="-fx-font-size: 20;" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor></ListView>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                                 <children>
+                                    <Button fx:id="addTest_button" mnemonicParsing="false" text="Створити">
+                                       <graphic>
+                                          <ImageView>
+                                             <image>
+                                                <Image url="@../../../../Assets/Images/icons/addTest.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="editTest_button" mnemonicParsing="false" text="Рудагувати">
+                                       <graphic>
+                                          <ImageView>
+                                             <image>
+                                                <Image url="@../../../../Assets/Images/icons/editTest.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="removeTest_button" mnemonicParsing="false" text="Видалити">
+                                       <graphic>
+                                          <ImageView>
+                                             <image>
+                                                <Image url="@../../../../Assets/Images/icons/removeTest.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="450.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="Доступ">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <ListView fx:id="testsAccess_listView" style="-fx-font-size: 20;" VBox.vgrow="ALWAYS" />
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                 <children>
+                                    <Button fx:id="gainAccess_button" mnemonicParsing="false" text="Надати доступ">
+                                       <graphic>
+                                          <ImageView>
+                                             <image>
+                                                <Image url="@../../../../Assets/Images/icons/userplus32.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="removeAccess_button" mnemonicParsing="false" text="Обмежити доступ">
+                                       <graphic>
+                                          <ImageView>
+                                             <image>
+                                                <Image url="@../../../../Assets/Images/icons/userminus32.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children></StackPane>
+      <Button fx:id="reload_button" layoutX="919.0" layoutY="-11.0" mnemonicParsing="false" text="Оновити" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <graphic>
+            <ImageView>
+               <image>
+                  <Image url="@../../../../Assets/Images/icons/exchange32.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</AnchorPane>

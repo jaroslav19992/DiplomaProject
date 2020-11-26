@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="mainPane" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane.PassingTestPaneController">
+   <children>
+      <StackPane fx:id="content_stackPane" layoutX="183.0" layoutY="210.0" prefHeight="650.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER">
+               <children>
+                  <StackPane prefHeight="50.0" prefWidth="200.0" VBox.vgrow="NEVER">
+                     <children>
+                        <Label fx:id="timer_label" text="time 60:00" textAlignment="CENTER" textFill="#00000080" StackPane.alignment="CENTER_RIGHT">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <tooltip>
+                              <Tooltip text="Залишок часу" />
+                           </tooltip>
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" opacity="0.5">
+                                 <image>
+                                    <Image url="@../../../../../Assets/Images/icons/clock32.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                        <Label fx:id="attempt_label" text="Attempt x from y" textAlignment="CENTER" textFill="#00000080" StackPane.alignment="CENTER_LEFT">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Label fx:id="testName_label" alignment="CENTER" text="TestName" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Pagination fx:id="pagination" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <Button fx:id="cancelTesting_button" maxWidth="125.0" mnemonicParsing="false" prefHeight="40.0" text="Скасувати" textAlignment="CENTER" StackPane.alignment="BOTTOM_LEFT">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@../../../../../Assets/Images/icons/stop32.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Скасувати проходження тесту" />
+               </tooltip>
+            </Button>
+            <Button fx:id="finishTesting_button" maxWidth="125.0" mnemonicParsing="false" prefHeight="40.0" text="Завершити" StackPane.alignment="BOTTOM_RIGHT">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0">
+                     <image>
+                        <Image url="@../../../../../Assets/Images/icons/check32.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Завершити проходження тесту" />
+               </tooltip>
+            </Button>
+         </children>
+      </StackPane>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</AnchorPane>

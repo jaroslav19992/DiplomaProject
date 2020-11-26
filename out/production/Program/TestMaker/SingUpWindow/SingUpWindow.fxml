@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="main_pane" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.SingUpWindow.SingUpWindowController">
+   <children>
+      <VBox alignment="CENTER" layoutY="5.0" spacing="20.0">
+         <children>
+            <VBox alignment="CENTER" layoutY="5.0">
+               <children>
+                  <ImageView fitHeight="76.0" fitWidth="260.0" layoutX="170.0" layoutY="5.0">
+                     <image>
+                        <Image url="@../Assets/Images/logo.png" />
+                     </image>
+                  </ImageView>
+                  <Label prefHeight="31.0" prefWidth="139.0" text="Реєстрація" textAlignment="CENTER">
+                     <font>
+                        <Font size="28.0" />
+                     </font>
+                  </Label>
+                  <StackPane layoutY="129.0" prefHeight="55.0" prefWidth="600.0" AnchorPane.bottomAnchor="416.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="129.0">
+                     <children>
+                        <Label fx:id="error_label" alignment="CENTER" prefHeight="52.0" prefWidth="572.0" text="Error" textAlignment="CENTER" textFill="RED" wrapText="true" StackPane.alignment="CENTER">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </StackPane>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER" layoutX="49.0" layoutY="211.0" spacing="50.0">
+               <children>
+                  <VBox layoutX="49.0" layoutY="211.0" spacing="10.0">
+                     <children>
+                        <Label layoutX="130.0" layoutY="211.0" text="Ім'я" />
+                        <TextField fx:id="firstName_textField" layoutX="49.0" layoutY="228.0" promptText="Ваше ім'я" text="test" AnchorPane.leftAnchor="49.0" />
+                        <Label layoutX="115.0" layoutY="291.0" text="Фамілія">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="lastName_textField" layoutX="49.0" layoutY="311.0" promptText="Ваша фамілія" text="test" AnchorPane.leftAnchor="49.0" />
+                        <Label layoutX="122.0" layoutY="370.0" text="E-mail" />
+                        <TextField fx:id="email_textField" layoutX="49.0" layoutY="391.0" promptText="Ваш e-mail" text="test@test.com" AnchorPane.leftAnchor="49.0" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="362.0" layoutY="211.0" spacing="10.0">
+                     <children>
+                        <Label layoutX="401.0" layoutY="211.0" text="Логін для входу" />
+                        <TextField fx:id="userName_textField" layoutX="362.0" layoutY="231.0" promptText="Логін коричтувача" text="LoginTest" AnchorPane.rightAnchor="51.0" />
+                        <Label fx:id="password_label" layoutX="430.0" layoutY="291.0" text="Пароль" />
+                        <TextField fx:id="password_textField" layoutX="362.0" layoutY="314.0" promptText="Пароль" text="password" AnchorPane.rightAnchor="51.0" />
+                        <Label fx:id="passwordRepeat_label" layoutX="394.0" layoutY="370.0" text="Повторіть пароль" />
+                        <TextField fx:id="passwordRepeat_textField" layoutX="362.0" layoutY="393.0" promptText="Повтор паролю" text="password" AnchorPane.rightAnchor="51.0" />
+                     </children>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets top="-20.0" />
+               </VBox.margin>
+            </HBox>
+            <VBox alignment="CENTER">
+               <children>
+                  <Label text="Клас" />
+                  <ChoiceBox fx:id="class_choiceBox" prefWidth="150.0" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" layoutX="179.0" layoutY="465.0" spacing="10.0">
+               <children>
+                  <Label fx:id="accessLevel_label" layoutX="249.0" layoutY="465.0" text="Рівень доступу" AnchorPane.rightAnchor="249.0" />
+                  <StackPane layoutX="210.0" layoutY="486.0" prefHeight="31.0" prefWidth="180.0">
+                     <children>
+                        <RadioButton fx:id="radioButton_pupil" mnemonicParsing="false" selected="true" text="Учень" StackPane.alignment="CENTER">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="access_level" />
+                           </toggleGroup>
+                           <StackPane.margin>
+                              <Insets left="100.0" />
+                           </StackPane.margin>
+                        </RadioButton>
+                        <RadioButton fx:id="radioButton_teacher" mnemonicParsing="false" text="Вчитель" toggleGroup="$access_level" StackPane.alignment="CENTER">
+                           <StackPane.margin>
+                              <Insets right="100.0" />
+                           </StackPane.margin>
+                        </RadioButton>
+                     </children>
+                  </StackPane>
+                  <Button fx:id="singUpButton" layoutX="179.0" layoutY="462.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="242.0" text="Увійти в систему" AnchorPane.bottomAnchor="14.0">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

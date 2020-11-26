@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="main_anchorPane" prefHeight="430.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.AddTestPane.CreationTestPane.QuestionsTypes.ComplianceQuestion.ComplianceQuestionController">
+   <children>
+      <StackPane alignment="TOP_LEFT" layoutX="21.0" layoutY="24.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT">
+               <children>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;">
+                     <content>
+                        <VBox fx:id="question_vBox" alignment="CENTER" spacing="10.0">
+                           <children>
+                              <Button fx:id="addQuestionVariant_button" mnemonicParsing="false">
+                                 <graphic>
+                                    <ImageView>
+                                       <image>
+                                          <Image url="@../../../../../../../../Assets/Images/icons/plus32.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+                  <Separator opacity="0.5" orientation="VERTICAL" prefHeight="200.0" />
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;">
+                     <content>
+                        <VBox fx:id="answer_vBox" alignment="CENTER" spacing="10.0">
+                           <children>
+                              <Button fx:id="addAnswerVariant_button" mnemonicParsing="false">
+                                 <graphic>
+                                    <ImageView>
+                                       <image>
+                                          <Image url="@../../../../../../../../Assets/Images/icons/plus32.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </HBox>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="main_pane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.JournalPane.PupilJournalPane.PupilJournalPaneController">
+   <children>
+      <HBox alignment="CENTER" layoutX="241.0" layoutY="169.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label text="Тести">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="tests_listView" style="-fx-font-size: 20;" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
+               <children>
+                  <VBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Статистика" underline="true">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <HBox>
+                           <children>
+                              <VBox alignment="TOP_CENTER" spacing="30.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="35.0" spacing="5.0" VBox.vgrow="NEVER">
+                                       <children>
+                                          <ImageView>
+                                             <image>
+                                                <Image url="@../../../../Assets/Images/icons/amountofquestions.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label text="Кількість доступних тестів:" underline="true">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="35.0" spacing="5.0" VBox.vgrow="NEVER">
+                                       <children>
+                                          <ImageView>
+                                             <image>
+                                                <Image url="@../../../../Assets/Images/icons/check32.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label text="Тестів пройдено:" underline="true">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="35.0" spacing="5.0" VBox.vgrow="NEVER">
+                                       <children>
+                                          <ImageView>
+                                             <image>
+                                                <Image url="@../../../../Assets/Images/icons/risegraph32.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label text="Успішність(%):" underline="true">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <tooltip>
+                                                <Tooltip text="Середнє значення отриманих за результатами  оцінок тестів у відсотках" />
+                                             </tooltip>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" left="20.0" top="20.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox alignment="TOP_CENTER" spacing="30.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="35.0" VBox.vgrow="NEVER">
+                                       <children>
+                                          <Label fx:id="testsAmount_label" text="testsAmount">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="35.0" VBox.vgrow="NEVER">
+                                       <children>
+                                          <Label fx:id="completedTests_label" text="compleatedTests">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="35.0" VBox.vgrow="NEVER">
+                                       <children>
+                                          <Label fx:id="success_label" text="testMark">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" right="20.0" top="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</AnchorPane>
