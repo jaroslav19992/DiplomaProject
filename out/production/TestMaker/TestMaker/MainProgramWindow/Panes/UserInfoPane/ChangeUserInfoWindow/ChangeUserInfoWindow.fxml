@@ -50,7 +50,7 @@
                      <children>
                         <Label layoutX="130.0" layoutY="211.0" text="Ім'я" />
                         <TextField fx:id="firstName_textField" layoutX="49.0" layoutY="228.0" promptText="Ваше ім'я" AnchorPane.leftAnchor="49.0" />
-                        <Label layoutX="115.0" layoutY="291.0" text="Фамілія">
+                        <Label layoutX="115.0" layoutY="291.0" text="Прізвище">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>

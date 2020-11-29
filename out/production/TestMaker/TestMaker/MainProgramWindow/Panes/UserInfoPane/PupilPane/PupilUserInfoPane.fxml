@@ -42,7 +42,7 @@
                               <Insets />
                            </VBox.margin>
                         </Label>
-                        <Label text="Фамілія">
+                        <Label text="Прізвище">
                            <font>
                               <Font size="36.0" />
                            </font>
