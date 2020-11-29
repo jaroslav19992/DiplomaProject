@@ -67,7 +67,8 @@ public class WindowTools {
 
     /**
      * Set new pane as a child of parent pane
-     * @param rootPane parent pane, in witch child will be located
+     *
+     * @param rootPane         parent pane, in witch child will be located
      * @param fxmlFileLocation location to fxml file of child pane
      * @return class controller
      */
@@ -87,6 +88,7 @@ public class WindowTools {
 
     /**
      * Close window
+     *
      * @param node child window element
      */
     public void closeCurrentWindow(Node node) {

@@ -1,5 +1,6 @@
 package TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane.TestResultsPane;
 
+import TestMaker.Main;
 import TestMaker.MainProgramWindow.Panes.TestsPane.PupilPane.PassingTestPane.PassingTestPaneController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -7,10 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -25,7 +24,7 @@ public class TestResultsPaneController {
     private Button showResults_button;
     @FXML
     private Label proverb_label;
-    private Pane parentPane;
+    private final Pane parentPane;
     private PassingTestPaneController parentController;
 
     //TODO: завантажити сюди фхмл якось
@@ -48,16 +47,20 @@ public class TestResultsPaneController {
         ArrayList<String> proverbs = new ArrayList<>();
         //read proverbs from file line by line
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(new File("./src/TestMaker/Assets/proverbs.txt")));
+            InputStream inStream = Main.class.getResourceAsStream("/TestMaker/Assets/proverbs.txt");
+            File tempFile = File.createTempFile("proverbs", "txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inStream, StandardCharsets.UTF_8));
             String line = reader.readLine();
+
             while (line != null) {
                 proverbs.add(line);
                 line = reader.readLine();
             }
+            proverb_label.setText(proverbs.get(new Random().nextInt(proverbs.size())));
+            tempFile.delete();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        proverb_label.setText(proverbs.get(new Random().nextInt(proverbs.size())));
     }
 
     private void setButtonActions() {

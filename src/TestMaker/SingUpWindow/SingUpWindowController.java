@@ -5,6 +5,7 @@ import TestMaker.Assets.Animation.LoadingAnimation;
 import TestMaker.ClassRooms;
 import TestMaker.DBTools.DBConstants;
 import TestMaker.DBTools.DBHandler;
+import TestMaker.SingUpWindow.AccessWindow.AccessWindowController;
 import TestMaker.UserInfoHandler;
 import TestMaker.WindowTools;
 import javafx.application.Platform;
@@ -47,11 +48,12 @@ public class SingUpWindowController {
     @FXML
     public AnchorPane main_pane;
 
-    private static Thread singUpThread;
-    private static LoadingAnimation loadingAnimation;
+    public Thread singUpThread;
+    public LoadingAnimation loadingAnimation;
     private final WindowTools windowTools = new WindowTools();
     private boolean isSingingUp = false;
 
+    //TODO: Animation cause not javafx thread exception
     @FXML
     public void initialize() {
         loadingAnimation = new LoadingAnimation(main_pane);
@@ -75,29 +77,47 @@ public class SingUpWindowController {
         });
     }
 
+
+    //TODO побутися windowsTools. відкрити тут самому вікно получаючи екземпляр класу і в нього
+    // передати дії кнопки які реєструють юзера
     private void singUpNewUser() {
         try {
             if (checkForCorrectInfo()) {
                 error_label.setVisible(false);
                 if (radioButton_teacher.isSelected()) {
-                    windowTools.openNewWindowAndWait("SingUpWindow/AccessWindow/AccessWindow.fxml",
-                            false, Modality.APPLICATION_MODAL);
+                    Platform.runLater(() -> {
+                            AccessWindowController controller = (AccessWindowController) windowTools.openNewWindow("SingUpWindow/AccessWindow/AccessWindow.fxml",
+                                    false, Modality.APPLICATION_MODAL);
+                            controller.giveAccess(this);
+                    });
                 } else {
                     UserInfoHandler.isAccessGained = true;
-                }
-                if (UserInfoHandler.isAccessGained) {
-                    transferUserInfo();
-                    createUserInDB();
-                    Platform.runLater(()->{
+//                    loadingAnimation.start();
+                    Platform.runLater(() -> {
+                        transferUserInfo();
+                        try {
+                            createUserInDB();
+                        } catch (SQLException exception) {
+                            exception.printStackTrace();
+                        }
+                        WindowTools windowTools = new WindowTools();
                         windowTools.openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
                         main_pane.getScene().getWindow().hide();
-
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        loadingAnimation.interrupt();
+                        singUpThread.interrupt();
                     });
                 }
-            }
+
+            } else {
             Thread.sleep(100);
             loadingAnimation.interrupt();
             singUpThread.interrupt();
+            }
         } catch (SQLException | InterruptedException exception) {
             Platform.runLater(() -> {
                 error_label.setVisible(false);
@@ -108,6 +128,7 @@ public class SingUpWindowController {
                 alert.setContentText("Помилка з'єднання з сервером\nПричина:\n" + exception.getMessage());
                 alert.showAndWait();
                 loadingAnimation.interrupt();
+                singUpThread.interrupt();
             });
         }
     }
@@ -115,7 +136,7 @@ public class SingUpWindowController {
     /**
      * Register user with pupil or teacher access token
      */
-    private void createUserInDB() throws SQLException {
+    public void createUserInDB() throws SQLException {
         if (UserInfoHandler.isAccessGained) {
             //get register and visit date
             Date date = new Date();
@@ -129,7 +150,7 @@ public class SingUpWindowController {
     }
 
     //get user info snd give it to transfer info class
-    private void transferUserInfo() {
+    public void transferUserInfo() {
         UserInfoHandler.userName = userName_textField.getText();
         UserInfoHandler.password = password_textField.getText();
         UserInfoHandler.firstName = firstName_textField.getText();
@@ -208,6 +229,10 @@ public class SingUpWindowController {
             showError("Не вірний формат E-mail");
             return false;
         }
+        if (validateText(email_textField.getText())) {
+            showError("Не вірний формат E-mail");
+            return false;
+        }
         /*-------------------------------E-mail check-----------------------------*/
 
         /*----------------------------Check if no user data duplicates-----------------------------*/
@@ -236,7 +261,6 @@ public class SingUpWindowController {
             error_label.setText(msg);
             error_label.setVisible(true);
         });
-
     }
 
     //check is there is no bad symbols
@@ -250,14 +274,14 @@ public class SingUpWindowController {
     //check is there is only Latin alphabet letters or not
     public boolean isOnlyLatLetters(String str) {
         for (char c : str.toCharArray()) {
-            if (c == ' ') {
-                return true;
+            if (c != ' ') {
+                return false;
             }
-            if (String.valueOf(c).matches("([а-я]|[А-Я])")) {
-                return true;
+            if (!String.valueOf(c).matches("([а-я]|[А-Я])")) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
 

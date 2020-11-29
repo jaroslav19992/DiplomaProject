@@ -11,7 +11,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,10 +19,10 @@ public class TestMakerTest {
     private final Integer idInTestsList;
     private final String testName;
     private File testFile;
-    private int evSystem;
-    private int amountOfQuestions;
-    private int timeLimit;
-    private int numberOfAttempts;
+    private final int evSystem;
+    private final int amountOfQuestions;
+    private final int timeLimit;
+    private final int numberOfAttempts;
     private double currentUserMark;
     private int currentUserUsedAttempts;
     private ObservableList<Pupil> accessedPupils;
@@ -119,7 +118,7 @@ public class TestMakerTest {
             ResultSet resultSet = DBHandler.getDataFromDB("SELECT " + DBConstants.TEST_FILE + " FROM " + DBConstants.DB_NAME + "."
                     + DBConstants.TESTS_LIST_TABLE_NAME + " WHERE " + DBConstants.ID_TESTS_LIST + " = '" + idInTestsList + "';");
             resultSet.next();
-            Blob testFileInBlob = resultSet.getBlob(DBConstants.TEST_FILE);
+
             File tempFile = null;
             try {
                 tempFile = File.createTempFile("tempFile", "xml");

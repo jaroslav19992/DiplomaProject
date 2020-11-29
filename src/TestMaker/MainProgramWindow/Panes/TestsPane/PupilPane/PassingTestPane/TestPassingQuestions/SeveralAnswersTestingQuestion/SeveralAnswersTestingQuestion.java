@@ -98,10 +98,8 @@ public class SeveralAnswersTestingQuestion implements QuestionControllerInterfac
                 for (String answer : answerVariants) {
                     if (Objects.equals(((TextField) hBox.getChildren().get(1)).getText(), answer)) {
                         ((CheckBox) hBox.getChildren().get(0)).setSelected(true);
-                        if (isAnswersShown) {
-                            if (!correctAnswers.contains(answer)) {
-                                hBox.setStyle("-fx-background-color:" + WRONG_ANSWER_COLOR);
-                            }
+                        if (isAnswersShown && !correctAnswers.contains(answer)) {
+                            hBox.setStyle("-fx-background-color:" + WRONG_ANSWER_COLOR);
                         }
                     }
                 }

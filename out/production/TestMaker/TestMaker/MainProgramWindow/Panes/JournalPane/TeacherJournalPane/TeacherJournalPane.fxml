@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="main_pane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.JournalPane.TeacherJournalPane.TeacherJournalPaneController">
+   <children>
+      <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ScrollPane fx:id="table_scrollPane" fitToHeight="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+               <content>
+                  <HBox fx:id="tables_hBox" alignment="CENTER">
+                     <children>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <TableView fx:id="tests_tableView" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                           <children>
+                              <TableView fx:id="marks_tableView" editable="true" HBox.hgrow="ALWAYS" SplitPane.resizableWithParent="false" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </content>
+            </ScrollPane>
+            <HBox alignment="CENTER">
+               <children>
+                  <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Оберіть тест" textOverrun="CLIP" />
+                        <ChoiceBox fx:id="tests_choiceBox" prefWidth="150.0" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Оберіть Клас" />
+                        <ChoiceBox fx:id="classrooms_choiceBox" prefWidth="150.0" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

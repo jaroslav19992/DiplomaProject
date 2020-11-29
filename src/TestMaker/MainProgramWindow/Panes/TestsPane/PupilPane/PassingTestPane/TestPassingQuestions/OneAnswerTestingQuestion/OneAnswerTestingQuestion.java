@@ -98,7 +98,7 @@ public class OneAnswerTestingQuestion implements QuestionControllerInterface, Te
                 for (String answer : answerVariants) {
                     if (Objects.equals(((TextField) hBox.getChildren().get(1)).getText(), answer)) {
                         ((RadioButton) hBox.getChildren().get(0)).setSelected(true);
-                        if (!correctAnswers.contains(answer)) {
+                        if (isAnswersShown && !correctAnswers.contains(answer)) {
                             hBox.setStyle("-fx-background-color:"+WRONG_ANSWER_COLOR);
                         }
                     }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="main_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="590.0" prefHeight="650.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestMaker.MainProgramWindow.Panes.TestsPane.TeacherPane.EditTestPane.EditTestQuestionsPane.EditTestQuestionsPaneController">
+   <children>
+      <VBox alignment="TOP_CENTER" minWidth="590.0" spacing="10.0" StackPane.alignment="CENTER">
+         <children>
+            <Label fx:id="testName_label" text="Назва тесту">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Pagination fx:id="pagination" minWidth="590.0" prefHeight="600.0" prefWidth="600.0" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+      <Button fx:id="removeCurrentQuestion" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Видалити" StackPane.alignment="BOTTOM_LEFT">
+         <StackPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </StackPane.margin>
+         <graphic>
+            <ImageView>
+               <image>
+                  <Image url="@../../../../../../Assets/Images/icons/stop32.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <tooltip>
+            <Tooltip text="Видалити поточне питання" />
+         </tooltip>
+      </Button>
+      <Button fx:id="doneTestCreation_button" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Завершити" StackPane.alignment="TOP_RIGHT">
+         <StackPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </StackPane.margin>
+         <graphic>
+            <ImageView fitHeight="24.0" fitWidth="20.0">
+               <image>
+                  <Image url="@../../../../../../Assets/Images/icons/check32.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <tooltip>
+            <Tooltip text="Завершити створення тесту" />
+         </tooltip>
+      </Button>
+      <Button fx:id="addQuestion_button" mnemonicParsing="false" prefWidth="120.0" text="Додати" StackPane.alignment="BOTTOM_RIGHT">
+         <graphic>
+            <ImageView>
+               <image>
+                  <Image url="@../../../../../../Assets/Images/icons/plus32.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <StackPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </StackPane.margin>
+      </Button>
+   </children>
+</StackPane>

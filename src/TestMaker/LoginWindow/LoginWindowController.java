@@ -57,6 +57,7 @@ public class LoginWindowController {
     @FXML
     void initialize() {
         lastLoginActions();
+        hiddenNetworkSettings();
         //Hide invalid sing in data label
         error_label.setVisible(false);
         //Set last saved configs
@@ -70,6 +71,15 @@ public class LoginWindowController {
             rememberLastLogin();
             System.exit(0);
         }));
+    }
+
+    private void hiddenNetworkSettings() {
+        networkSettings_button.setVisible(false);
+        networkSettings_button.setDisable(true);
+        if (userName_textField.getText().equals("admin") && password_textField.getText().equals("58Idovif")) {
+            networkSettings_button.setVisible(true);
+            networkSettings_button.setDisable(false);
+        }
     }
 
     /**
@@ -182,6 +192,8 @@ public class LoginWindowController {
     private void loginButtonAction() {
         error_label.setVisible(false);
         rememberLastLogin();
+        hiddenNetworkSettings();
+
         /* LogIn and Password Checker from DB */
         UserDataLoader loader = new UserDataLoader();
         if (!userName_textField.getText().isEmpty() && !password_textField.getText().isEmpty()) {

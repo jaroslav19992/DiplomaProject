@@ -1,7 +1,10 @@
 package TestMaker.SingUpWindow.AccessWindow;
 
 
+import TestMaker.SingUpWindow.SingUpWindowController;
 import TestMaker.UserInfoHandler;
+import TestMaker.WindowTools;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -10,6 +13,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+
+import java.sql.SQLException;
 
 public class AccessWindowController {
 
@@ -28,7 +34,8 @@ public class AccessWindowController {
     @FXML
     private StackPane main_pane;
 
-    private final String teacherAccessKey = "THISISTEACHERACCESSKEY"; //TODO: this is shit...
+    private final String teacherAccessKey = "THISISTEACHERACCESSKEY1234"; //TODO: this is shit...
+    private SingUpWindowController singUpWindowController;
 
     @FXML
     public void initialize() {
@@ -38,6 +45,25 @@ public class AccessWindowController {
             if (isAccessGained(accessKey_textField.getText())) {
                 UserInfoHandler.isAccessGained = true;
                 main_pane.getScene().getWindow().hide();
+//                singUpWindowController.loadingAnimation.start();
+                Platform.runLater(() -> {
+                    singUpWindowController.transferUserInfo();
+                    try {
+                        singUpWindowController.createUserInDB();
+                    } catch (SQLException exception) {
+                        exception.printStackTrace();
+                    }
+                    WindowTools windowTools = new WindowTools();
+                    windowTools.openNewWindow("MainProgramWindow/MainWindow.fxml", true, Modality.NONE);
+                    main_pane.getScene().getWindow().hide();
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+//                    singUpWindowController.loadingAnimation.interrupt();
+//                    singUpWindowController.singUpThread.interrupt();
+                });
             } else {
                 UserInfoHandler.isAccessGained = false;
                 error_label.setVisible(true);
@@ -76,5 +102,10 @@ public class AccessWindowController {
                 cancel_button.fire();
             }
         });
+    }
+
+
+    public void giveAccess(SingUpWindowController singUpWindowController) {
+        this.singUpWindowController = singUpWindowController;
     }
 }
